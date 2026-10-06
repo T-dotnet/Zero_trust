@@ -1,0 +1,203 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: features
+// Document ID: featureId (e.g., F1, F2)
+// Fields:
+//   - id: string (required)
+//   - title: string (required)
+//   - epic: string
+//   - type: string
+//   - effort: number (required)
+//   - need: number (required)
+//   - description: string
+//   - capabilities: list
+//
+// Collection: userStories
+// Document ID: storyId (e.g., US1.1)
+// Fields:
+//   - id: string (required)
+//   - title: string (required)
+//   - epic: string
+//   - type: string
+//   - asA: string
+//   - iWant: string
+//   - soThat: string
+//   - ac: list
+//
+// Collection: settings
+// Document ID: global
+// Fields:
+//   - visibleColumns: list
+//   - isGuideMinimized: bool
+//   - showPipelineSidebarDetails: bool
+//   - showPipelineTypeDropdown: bool
+//   - showDraftUpdates: bool
+//   - showDryRunUpdates: bool
+//   - showReviewerDashboard: bool
+//   - showErrorClustering: bool
+//
+// Document ID: overview
+// Fields:
+//   - introduction: string
+//   - designPrinciples: string
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "lagpostadi@gmail.com" && request.auth.token.email_verified == true));
+    }
+    
+    function isValidId(id) {
+       return id is string && id.size() > 0 && id.size() < 64 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+    
+    function isValidFeature(data) {
+      return data.id is string && data.id.size() > 0 && data.id.size() < 50 &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 200 &&
+             (!('effort' in data) || (data.effort is number && data.effort >= 0 && data.effort <= 10)) &&
+             (!('need' in data) || (data.need is number && data.need >= 0 && data.need <= 10));
+    }
+    
+    function isValidUserStory(data) {
+      return data.id is string && data.id.size() > 0 && data.id.size() < 50 &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 200;
+    }
+    
+    function isValidSettings(data) {
+      return (!('visibleColumns' in data) || data.visibleColumns is list) &&
+             (!('isGuideMinimized' in data) || data.isGuideMinimized is bool) &&
+             (!('showPipelineSidebarDetails' in data) || data.showPipelineSidebarDetails is bool) &&
+             (!('showPipelineTypeDropdown' in data) || data.showPipelineTypeDropdown is bool) &&
+             (!('showDraftUpdates' in data) || data.showDraftUpdates is bool) &&
+             (!('showDryRunUpdates' in data) || data.showDryRunUpdates is bool) &&
+             (!('showReviewerDashboard' in data) || data.showReviewerDashboard is bool) &&
+             (!('showErrorClustering' in data) || data.showErrorClustering is bool) &&
+             (!('introduction' in data) || (data.introduction is string && data.introduction.size() < 50000)) &&
+             (!('productExplanation' in data) || (data.productExplanation is string && data.productExplanation.size() < 50000)) &&
+             (!('userJourney' in data) || (data.userJourney is string && data.userJourney.size() < 50000)) &&
+             (!('pipelineErrors' in data) || (data.pipelineErrors is string && data.pipelineErrors.size() < 50000)) &&
+             (!('pipelineUpdates' in data) || (data.pipelineUpdates is string && data.pipelineUpdates.size() < 50000)) &&
+             (!('dryRunSyntheticData' in data) || (data.dryRunSyntheticData is string && data.dryRunSyntheticData.size() < 50000)) &&
+             (!('resources' in data) || (data.resources is string && data.resources.size() < 50000)) &&
+             (!('designPrinciples' in data) || (data.designPrinciples is string && data.designPrinciples.size() < 50000)) &&
+             (!('journeyIntroduction' in data) || (data.journeyIntroduction is string && data.journeyIntroduction.size() < 50000)) &&
+             (!('journeyUserJourney' in data) || (data.journeyUserJourney is string && data.journeyUserJourney.size() < 50000)) &&
+             (!('journeyPipelineErrors' in data) || (data.journeyPipelineErrors is string && data.journeyPipelineErrors.size() < 50000)) &&
+             (!('journeyPipelineUpdates' in data) || (data.journeyPipelineUpdates is string && data.journeyPipelineUpdates.size() < 50000)) &&
+             (!('journeyContainerArchitecture' in data) || (data.journeyContainerArchitecture is string && data.journeyContainerArchitecture.size() < 50000)) &&
+             (!('journeyDryRunSyntheticData' in data) || (data.journeyDryRunSyntheticData is string && data.journeyDryRunSyntheticData.size() < 50000)) &&
+             (!('journeyHumanSupport' in data) || (data.journeyHumanSupport is string && data.journeyHumanSupport.size() < 50000)) &&
+             (!('journeyTicketing' in data) || (data.journeyTicketing is string && data.journeyTicketing.size() < 50000));
+    }
+
+    function isValidFeatureConfiguration(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.timestamp is string &&
+             data.features is list &&
+             data.toggles is map;
+    }
+
+    function isValidArtifact(data) {
+      return data.id is string && data.id.size() > 0 && data.id.size() < 100 &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 200;
+    }
+
+    function isValidDataset(data) {
+      return data.id is string && data.id.size() > 0 && data.id.size() < 100 &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 200;
+    }
+
+    function isValidPipeline(data) {
+      return data.id is string && data.id.size() > 0 && data.id.size() < 100 &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 200;
+    }
+
+    function isValidJob(data) {
+      return data.id is string && data.id.size() > 0 && data.id.size() < 100 &&
+             data.status is string;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /features/{featureId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidId(featureId) && isValidFeature(request.resource.data);
+      allow update: if isAuthenticated() && isValidFeature(request.resource.data) && request.resource.data.id == resource.data.id;
+      allow delete: if isAdmin();
+    }
+    
+    match /userStories/{storyId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidId(storyId) && isValidUserStory(request.resource.data);
+      allow update: if isAuthenticated() && isValidUserStory(request.resource.data) && request.resource.data.id == resource.data.id;
+      allow delete: if isAdmin();
+    }
+    
+    match /settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidSettings(request.resource.data);
+    }
+
+    match /featureConfigurations/{configId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidFeatureConfiguration(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    match /datasets/{datasetId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidDataset(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /pipelines/{pipelineId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidPipeline(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /jobs/{jobId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidJob(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /artifacts/{artifactId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidArtifact(request.resource.data);
+      allow delete: if isAdmin();
+    }
+    
+    match /users/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow create, update: if isAuthenticated() && request.auth.uid == userId && 
+                            (!('role' in request.resource.data) || request.resource.data.role == resource.data.role || isAdmin());
+    }
+
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

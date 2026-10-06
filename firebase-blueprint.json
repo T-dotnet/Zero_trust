@@ -1,0 +1,260 @@
+{
+  "entities": {
+    "Feature": {
+      "title": "Feature",
+      "description": "A platform feature with effort and need scores.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "epic": { "type": "string" },
+        "type": { "type": "string" },
+        "toggle": { "type": "string" },
+        "effort": { "type": "number" },
+        "need": { "type": "number" },
+        "description": { "type": "string" },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["id", "title", "effort", "need"]
+    },
+    "UserStory": {
+      "title": "User Story",
+      "description": "A user story associated with an epic.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "epic": { "type": "string" },
+        "type": { "type": "string" },
+        "toggle": { "type": "string" },
+        "asA": { "type": "string" },
+        "iWant": { "type": "string" },
+        "soThat": { "type": "string" },
+        "ac": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["id", "title"]
+    },
+    "FeatureConfiguration": {
+      "title": "Feature Configuration",
+      "description": "A saved state of feature scores and toggles.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "effort": { "type": "number" },
+              "need": { "type": "number" }
+            }
+          }
+        },
+        "toggles": {
+          "type": "object",
+          "properties": {
+            "showSupportTickets": { "type": "boolean" },
+            "showSupportPerformance": { "type": "boolean" },
+            "showJiraIntegration": { "type": "boolean" },
+            "showAutomatedChangeLog": { "type": "boolean" },
+            "showContainerPipelines": { "type": "boolean" },
+            "showContainerRegistry": { "type": "boolean" },
+            "showVulnerabilityHeatmap": { "type": "boolean" },
+            "showOrphanedDetection": { "type": "boolean" },
+            "showVulnerabilityScan": { "type": "boolean" },
+            "showAdvancedArchitecture": { "type": "boolean" },
+            "showArchitectureDiff": { "type": "boolean" },
+            "showPipelineSidebarDetails": { "type": "boolean" },
+            "showDryRunUpdates": { "type": "boolean" },
+            "isFeatureDryRunLogEnabled": { "type": "boolean" },
+            "showReviewerDashboard": { "type": "boolean" },
+            "showErrorClustering": { "type": "boolean" },
+            "isInternalTeamView": { "type": "boolean" }
+          }
+        }
+      },
+      "required": ["name", "timestamp", "features", "toggles"]
+    },
+    "AppSettings": {
+      "title": "App Settings",
+      "description": "User preferences and feature toggles.",
+      "type": "object",
+      "properties": {
+        "visibleColumns": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "isGuideMinimized": { "type": "boolean" },
+        "showPipelineSidebarDetails": { "type": "boolean" },
+        "showPipelineTypeDropdown": { "type": "boolean" },
+        "showDraftUpdates": { "type": "boolean" },
+        "showDryRunUpdates": { "type": "boolean" },
+        "showReviewerDashboard": { "type": "boolean" },
+        "showErrorClustering": { "type": "boolean" }
+      }
+    },
+    "ProjectOverview": {
+      "title": "Project Overview",
+      "description": "Introduction and design principles for the project.",
+      "type": "object",
+      "properties": {
+        "introduction": { "type": "string" },
+        "productExplanation": { "type": "string" },
+        "userJourney": { "type": "string" },
+        "pipelineErrors": { "type": "string" },
+        "pipelineUpdates": { "type": "string" },
+        "dryRunSyntheticData": { "type": "string" },
+        "resources": { "type": "string" },
+        "designPrinciples": { "type": "string" }
+      }
+    },
+    "JourneysContent": {
+      "title": "Journeys Content",
+      "description": "User journey content and lifecycle details.",
+      "type": "object",
+      "properties": {
+        "journeyIntroduction": { "type": "string" },
+        "journeyUserJourney": { "type": "string" },
+        "journeyPipelineErrors": { "type": "string" },
+        "journeyPipelineUpdates": { "type": "string" },
+        "journeyContainerArchitecture": { "type": "string" },
+        "journeyDryRunSyntheticData": { "type": "string" },
+        "journeyHumanSupport": { "type": "string" },
+        "journeyTicketing": { "type": "string" }
+      }
+    },
+    "Dataset": {
+      "title": "Dataset",
+      "description": "A collection of raw data to be processed.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "owner": { "type": "string" },
+        "type": { "type": "string" },
+        "accessType": { "type": "string" },
+        "lastUpdated": { "type": "string" },
+        "created": { "type": "string" },
+        "size": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "name", "owner"]
+    },
+    "Pipeline": {
+      "title": "Pipeline",
+      "description": "A processing pipeline definition.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "description": { "type": "string" },
+        "version": { "type": "string" },
+        "isUserGenerated": { "type": "boolean" },
+        "submissionStatus": { "type": "string" },
+        "created": { "type": "string" },
+        "gitRepo": { "type": "string" },
+        "gitBranch": { "type": "string" },
+        "isArchived": { "type": "boolean" },
+        "baseImage": { "type": "string" },
+        "gitSha": { "type": "string" },
+        "mergeStatus": { "type": "string" }
+      },
+      "required": ["id", "name", "type"]
+    },
+    "Job": {
+      "title": "Job",
+      "description": "A metadata processing job.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "dataset": { "type": "string" },
+        "pipeline": { "type": "string" },
+        "version": { "type": "string" },
+        "status": { "type": "string" },
+        "progress": { "type": "number" },
+        "time": { "type": "string" },
+        "artifactName": { "type": "string" },
+        "isUserGenerated": { "type": "boolean" },
+        "isArchived": { "type": "boolean" },
+        "error": { "type": "string" },
+        "errorType": { "type": "string" }
+      },
+      "required": ["id", "dataset", "pipeline", "status"]
+    },
+    "Artifact": {
+      "title": "Artifact",
+      "description": "An output artifact from a processing job.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "source": { "type": "string" },
+        "pipeline": { "type": "string" },
+        "version": { "type": "string" },
+        "type": { "type": "string" },
+        "status": { "type": "string" },
+        "date": { "type": "string" },
+        "results": {
+          "type": "object",
+          "properties": {
+            "summary": { "type": "string" },
+            "preview": { "type": "string" }
+          }
+        }
+      },
+      "required": ["id", "name", "source"]
+    }
+  },
+  "firestore": {
+    "/features/{featureId}": {
+      "schema": "Feature",
+      "description": "Collection of platform features."
+    },
+    "/userStories/{storyId}": {
+      "schema": "UserStory",
+      "description": "Collection of user stories."
+    },
+    "/featureConfigurations/{configId}": {
+      "schema": "FeatureConfiguration",
+      "description": "Saved feature configurations."
+    },
+    "/settings/global": {
+      "schema": "AppSettings",
+      "description": "Global application settings and preferences."
+    },
+    "/settings/overview": {
+      "schema": "ProjectOverview",
+      "description": "Project overview content."
+    },
+    "/settings/journeys_content": {
+      "schema": "JourneysContent",
+      "description": "Detailed user journey content."
+    },
+    "/datasets/{datasetId}": {
+      "schema": "Dataset",
+      "description": "Collection of datasets."
+    },
+    "/pipelines/{pipelineId}": {
+      "schema": "Pipeline",
+      "description": "Collection of processing pipelines."
+    },
+    "/jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Collection of processing jobs."
+    },
+    "/artifacts/{artifactId}": {
+      "schema": "Artifact",
+      "description": "Collection of process artifacts."
+    }
+  }
+}

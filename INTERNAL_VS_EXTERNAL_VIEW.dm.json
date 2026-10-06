@@ -1,0 +1,9 @@
+{
+  "feature": "Internal vs External User View",
+  "description": "Explains the difference between internal team users and external users, and the functionality controlled by the 'Internal Team View' toggle.",
+  "status": "Implemented",
+  "files_modified": [
+    "/src/App.tsx"
+  ],
+  "explanation": "The 'Internal Team View' toggle in the header controls the visibility of administrative actions and specific pipeline status information for reviewers. When enabled, it provides access to administrative actions like submitting drafts and advancing reviews, and shows detailed status/progress information. When disabled, the interface is simplified for standard users, hiding administrative actions and JIRA links."
+}

@@ -1,0 +1,23 @@
+{
+  "feature": "Data Pipeline Management Platform",
+  "description": "A comprehensive platform for managing data pipelines, jobs, artifacts, and datasets with administrative review workflows.",
+  "status": "Implemented",
+  "files_modified": [
+    "/src/App.tsx",
+    "/USER_STORIES.md",
+    "/FEATURE_LIST.md"
+  ],
+  "explanation": "The Data Pipeline Management Platform is a full-stack application designed to streamline the entire lifecycle of data processing pipelines. It enables data engineers to manage data, develop and submit pipelines for review, monitor job executions, and inspect generated artifacts.\n\nKey Workflows:\n1. Dataset Management: Users can import and inventory datasets, associating them with pipelines for processing.\n2. Pipeline Management: A robust lifecycle system where pipelines move from 'Draft' to 'Approved' through a multi-stage review process (Technical, Privacy, Security). It supports versioning, Git integration, and administrative review.\n3. Job Monitoring: Real-time tracking of pipeline executions, with detailed error diagnostics (Code, Data, System, Output issues) and recovery actions like retries and human support escalation.\n4. Artifact Management: A centralized inventory for inspecting and downloading generated outputs (datasets, models, reports), including data previews and PHI proportion highlighting.\n5. Container Registry: A specialized management view for container images, featuring vulnerability heatmaps, tag comparison tools, and detailed image metadata with build layer visualization.\n6. Global Controls & Security: Administrative features include an 'Internal Team View' toggle for reviewers to manage the review lifecycle, and a comprehensive settings menu with feature toggles and presets (e.g., Baseline, Container, Dry-run, Pipeline Creation) to customize the user experience. The platform features standardized pagination across all tables and toggles for Support Tickets, Support Performance, Jira Integration, Automated Change Log, Pipeline Sidebar Details, Pipeline Type Dropdown, Container-based Pipelines, Container Registry, Vulnerability Scan, Architecture Diff Tool, Draft Status for Updates, Dry Run Simulations, Dry Run Log Feature, and Readiness Analysis & Score.\n7. Readiness Analysis & Guided Resolution: Pipelines lacking container builds must pass a Readiness Gate. The system evaluates their repository and returns a score alongside specific issues (e.g., missing dependencies). The system provides context-aware resolution actions: 'Go to Decision/Action' triggers for tab-switching, 'Run Automation' for one-click environment fixes, and 'Acknowledge & Override' for administrative bypasses with mandatory justification. Developers can also use the Guided Solutions AI Chat modal for conversational debugging with rich issue context.",
+  "external_gaps_and_misalignments": {
+    "tables": [
+      "Inconsistent implementation of spacing: Some table cells use `px-6 py-3` while the updated design system recommends `px-4 py-3`.",
+      "Inconsistent background headers: Some headers use `bg-slate-50/50` while others use `bg-slate-50`."
+    ],
+    "buttons": [
+      "Application is currently using inline RAW <button> variants throughout App.tsx instead of the unified <Button /> component defined in DESIGN_SYSTEM.md"
+    ],
+    "surfaces": [
+      "Bug Fix Details Section is using deprecated `bg-red-50 border-red-100` colors instead of the standard alert/feedback banner style `bg-rose-50 border-rose-200` defined in DESIGN_SYSTEM.md."
+    ]
+  }
+}

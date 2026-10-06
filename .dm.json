@@ -1,0 +1,13 @@
+{
+  "feature": "Git Integration",
+  "description": "Git-integrated versioning and review features for MRFF Pipeline Review.",
+  "status": "Implemented",
+  "markers": {
+    "start": "/* GIT_INTEGRATION_START */",
+    "end": "/* GIT_INTEGRATION_END */"
+  },
+  "files_modified": [
+    "/src/App.tsx"
+  ],
+  "removal_instructions": "See /GIT_REMOVAL_GUIDE.md for detailed steps. Remove all blocks wrapped in the integration markers and cleanup unused lucide-react icons."
+}
