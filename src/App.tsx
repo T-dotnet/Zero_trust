@@ -1,10 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { motion, AnimatePresence } from 'motion/react';
-import { GoogleGenAI, Type as GeminiType } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 const readinessStructureSchema = {
   type: "OBJECT",
   properties: {
