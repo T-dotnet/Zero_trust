@@ -409,6 +409,9 @@ test("evidence limits, removal, same-file reattachment, and cancel do not leak d
   await expect(
     page.getByRole("button", { name: "Remove same.md" }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Attach files", exact: true }),
+  ).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeHidden();
   await expect(

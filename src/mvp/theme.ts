@@ -1,18 +1,23 @@
 import { createTheme } from "@mui/material/styles";
+import { colors, cssTokens, fontFamily } from "./designTokens";
 
 export const theme = createTheme({
   palette: {
-    primary: { main: "#214b3e", dark: "#15392d", light: "#edf4f2" },
-    secondary: { main: "#536477" },
+    primary: {
+      main: colors.primary,
+      dark: colors.primaryDark,
+      light: colors.primarySoft,
+    },
+    secondary: { main: colors.body },
     background: { default: "#ffffff", paper: "#ffffff" },
-    text: { primary: "#171b1a", secondary: "#626966" },
-    divider: "#d2d6d3",
-    success: { main: "#299643", light: "#e9f7eb" },
-    warning: { main: "#b47715", light: "#fff5df" },
-    error: { main: "#c54646", light: "#fff0ef" },
+    text: { primary: colors.ink, secondary: colors.muted },
+    divider: colors.line,
+    success: { main: colors.success, light: colors.successSoft },
+    warning: { main: colors.warning, light: colors.warningSoft },
+    error: { main: colors.error, light: colors.errorSoft },
   },
   typography: {
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily,
     fontSize: 14,
     h1: {
       fontSize: 50,
@@ -23,16 +28,24 @@ export const theme = createTheme({
     h2: { fontSize: 24, fontWeight: 700, letterSpacing: "-.6px" },
     h3: { fontSize: 19, fontWeight: 700, letterSpacing: "-.35px" },
     button: { textTransform: "none", fontWeight: 600, fontSize: 14 },
-    body2: { fontSize: 13, lineHeight: 1.5 },
+    body2: { fontSize: 14, lineHeight: 1.6 },
   },
-  shape: { borderRadius: 5 },
+  shape: { borderRadius: 7 },
   components: {
+    MuiCssBaseline: { styleOverrides: { ":root": cssTokens } },
     MuiButton: {
       defaultProps: { disableElevation: true },
       styleOverrides: {
-        root: { minHeight: 38, paddingInline: 18 },
-        sizeSmall: { minHeight: 30, fontSize: 12, paddingInline: 12 },
-        outlined: { borderColor: "#b6c8bd" },
+        root: { minHeight: 42, paddingInline: 18, letterSpacing: "-.1px" },
+        sizeSmall: { minHeight: 34, fontSize: 13, paddingInline: 12 },
+        outlined: {
+          borderColor: colors.inputBorder,
+          color: colors.ink,
+          "&:hover": {
+            borderColor: colors.primary,
+            background: colors.primarySoft,
+          },
+        },
       },
     },
     MuiPaper: { defaultProps: { elevation: 0 } },
@@ -48,14 +61,14 @@ export const theme = createTheme({
       },
     },
     MuiTabs: {
-      styleOverrides: { indicator: { height: 3 }, root: { minHeight: 49 } },
+      styleOverrides: { indicator: { height: 2 }, root: { minHeight: 49 } },
     },
     MuiTableCell: {
       styleOverrides: {
-        root: { borderColor: "#d5d9d6", fontSize: 13 },
+        root: { borderColor: colors.line, fontSize: 14 },
         head: {
           backgroundColor: "#ffffff",
-          color: "#171b1a",
+          color: colors.muted,
           fontSize: 12,
           fontWeight: 600,
           paddingBlock: 12,
@@ -67,10 +80,14 @@ export const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: { background: "#fff", fontSize: 14 },
-        notchedOutline: { borderColor: "#b9c0bc" },
+        notchedOutline: { borderColor: colors.inputBorder },
       },
     },
-    MuiDialog: { styleOverrides: { paper: { borderRadius: 5 } } },
+    MuiDialog: {
+      styleOverrides: {
+        paper: { borderRadius: 12, boxShadow: "0 24px 80px #0a254029" },
+      },
+    },
     MuiDialogTitle: {
       styleOverrides: {
         root: {
@@ -83,12 +100,24 @@ export const theme = createTheme({
     },
     MuiDialogActions: {
       styleOverrides: {
-        root: { padding: "18px 24px", borderTop: "1px solid #e4eaf0", gap: 8 },
+        root: {
+          padding: "18px 24px",
+          borderTop: `1px solid ${colors.line}`,
+          gap: 8,
+        },
       },
     },
     MuiChip: {
-      styleOverrides: { root: { height: 25, borderRadius: 5, fontSize: 12 } },
+      styleOverrides: { root: { height: 27, borderRadius: 6, fontSize: 12 } },
     },
-    MuiAlert: { styleOverrides: { root: { fontSize: 13, borderRadius: 5 } } },
+    MuiAlert: { styleOverrides: { root: { fontSize: 14, borderRadius: 8 } } },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          border: `1px solid ${colors.line}`,
+          boxShadow: "0 8px 30px #0a254014",
+        },
+      },
+    },
   },
 });

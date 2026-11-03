@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -23,16 +23,20 @@ export function AttachmentPicker({
   const [busy, setBusy] = useState(false);
   const picker = useRef<HTMLLabelElement>(null);
   const restoreFocus = useRef(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!busy && restoreFocus.current) {
+      const active = document.activeElement;
       if (
-        document.activeElement === document.body ||
-        picker.current?.contains(document.activeElement)
+        active === document.body ||
+        active === picker.current?.closest('[role="dialog"]') ||
+        picker.current?.contains(active)
       )
-        picker.current?.focus();
+        picker.current?.focus({ preventScroll: true });
       restoreFocus.current = false;
     }
-  }, [busy]);
+    // Fast file reads can batch busy=true/false into one render. The new
+    // attachment list must also restore focus before the next keyboard event.
+  }, [busy, attachments]);
   const read = async (files: FileList | null) => {
     if (!files || busy) return;
     const list = Array.from(files);

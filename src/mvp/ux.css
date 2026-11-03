@@ -3,13 +3,13 @@
   min-width: 0;
   margin: 12px 0;
   padding: 6px 0;
-  border-bottom: 1px solid #e0e6e2;
+  border-bottom: 1px solid var(--zt-line);
   font-size: 13px;
 }
 .disclosure > summary {
   cursor: pointer;
   padding: 9px 2px;
-  color: #315d4c;
+  color: var(--zt-primary-dark);
   font-weight: 600;
   line-height: 1.5;
   overflow-wrap: anywhere;
@@ -17,7 +17,7 @@
 .disclosure > summary:focus-visible,
 .simulation-link:focus-visible,
 .entity-name:focus-visible {
-  outline: 2px solid #2d7464;
+  outline: 2px solid var(--zt-primary);
   outline-offset: 4px;
   border-radius: 3px;
 }
@@ -30,8 +30,8 @@
   justify-content: space-between;
   gap: 20px;
   padding: 16px 20px;
-  background: #f5f8f6;
-  border: 1px solid #e0e8e2;
+  background: var(--zt-primary-soft);
+  border: 1px solid var(--zt-primary-border);
   border-radius: 7px;
 }
 .compact-review-status strong {
@@ -41,11 +41,11 @@
 }
 .compact-review-status > span {
   font-size: 12px;
-  color: #536459;
+  color: var(--zt-body);
 }
 .eyebrow {
   display: block;
-  color: #5b695f;
+  color: var(--zt-muted);
   font-size: 11px;
   letter-spacing: 0.7px;
   text-transform: uppercase;
@@ -63,7 +63,7 @@
 .review-workspace > .plain-panel {
   margin: 0;
   padding: 24px;
-  border: 1px solid #dce5de;
+  border: 1px solid var(--zt-line);
   border-radius: 8px;
 }
 .review-task {
@@ -95,7 +95,7 @@
 }
 .criteria-count {
   font-size: 12px;
-  color: #315d4c;
+  color: var(--zt-primary-dark);
   white-space: nowrap;
 }
 .review-criteria .MuiFormControlLabel-root {
@@ -140,13 +140,13 @@
   margin-top: 24px;
 }
 .demo-handoff {
-  border-top: 1px solid #e0e6e2;
+  border-top: 1px solid var(--zt-line);
   margin-top: 22px;
   padding-top: 16px;
 }
 .demo-handoff p {
   font-size: 12px;
-  color: #5b695f;
+  color: var(--zt-muted);
   margin: 5px 0 10px;
 }
 .demo-handoff .MuiButton-root {
@@ -157,16 +157,15 @@
   border: 0;
   padding: 7px 0;
   cursor: pointer;
-  color: #626e65;
+  color: var(--zt-muted);
   font:
-    11px Arial,
-    sans-serif;
+    11px var(--zt-font);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-align: left;
 }
 .simulation-link:hover {
-  color: #214b3e;
+  color: var(--zt-primary-dark);
 }
 .simulation-section {
   padding: 16px 0;
@@ -180,17 +179,17 @@
 }
 .simulation-feedback,
 .draft-saved-note {
-  background: #edf4f0;
+  background: var(--zt-success-soft);
   border-radius: 5px;
   padding: 12px 14px;
-  color: #214b3e;
+  color: var(--zt-success);
   font-size: 13px;
 }
 .revision-context {
-  border-left: 3px solid #b47715;
+  border-left: 3px solid var(--zt-warning);
   padding: 12px 16px;
   margin: 16px 0;
-  background: #fbf8f1;
+  background: var(--zt-warning-soft);
   font-size: 13px;
 }
 .revision-context p {
@@ -205,7 +204,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: #f0f6f2;
+  background: var(--zt-primary-soft);
   padding: 14px 16px;
   border-radius: 5px;
   font-size: 13px;
@@ -221,7 +220,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px solid #dce5de;
+  border: 1px solid var(--zt-line);
   padding: 14px;
   border-radius: 6px;
   margin: 20px 0 8px;
@@ -237,7 +236,7 @@
 }
 .selected-file span {
   display: block;
-  color: #5b695f;
+  color: var(--zt-muted);
   font-size: 12px;
   margin-top: 4px;
 }
@@ -252,8 +251,8 @@
 }
 .dataset-contract {
   padding: 12px 14px;
-  background: #f7faf8;
-  border: 1px solid #e0e8e2;
+  background: var(--zt-surface);
+  border: 1px solid var(--zt-line);
   border-radius: 6px;
   font-size: 13px;
 }
@@ -263,7 +262,7 @@
 .output-state {
   display: block;
   max-width: 160px;
-  color: #5b695f;
+  color: var(--zt-muted);
   font-size: 11px;
   line-height: 1.5;
   margin-top: 7px;
@@ -271,9 +270,9 @@
 .validation-receipt {
   padding: 16px;
   margin-top: 20px;
-  border: 1px solid #dce5de;
+  border: 1px solid var(--zt-line);
   border-radius: 6px;
-  background: #f7faf8;
+  background: var(--zt-surface);
   font-size: 13px;
 }
 .validation-receipt p {
@@ -297,7 +296,7 @@
   text-underline-offset: 3px;
 }
 .micro-copy {
-  color: #56645b;
+  color: var(--zt-body);
   font-size: 12px;
   line-height: 1.6;
 }
@@ -305,7 +304,7 @@
 .workspace-footer,
 .stage-path small,
 .history-item time {
-  color: #5b695f;
+  color: var(--zt-muted);
 }
 .history-item time {
   font-size: 11px;

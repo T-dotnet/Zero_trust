@@ -24,6 +24,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { STAGES, type Page, type Role, actorFor } from "./model";
+import { colors } from "./designTokens";
 const NAV = [
   ["Overview", House],
   ["Datasets", Database],
@@ -66,7 +67,7 @@ export function Shell({
     <>
       <div className="brand">
         <Shield size={31} strokeWidth={2} />
-        <span>ZERO TRUST</span>
+        <span>Zero Trust</span>
       </div>
       <div className="workspace-label">Research workspace</div>
       <nav aria-label="Main navigation">
@@ -157,13 +158,13 @@ export function Shell({
                 size="small"
               >
                 <Avatar
-                  variant="square"
+                  variant="circular"
                   sx={{
                     height: 31,
                     width: 31,
-                    background: "#fff",
-                    border: "1px solid #171b1a",
-                    color: "#171b1a",
+                    background: colors.primarySoft,
+                    border: `1px solid ${colors.primaryBorder}`,
+                    color: colors.primaryDark,
                     fontSize: 13,
                     fontWeight: 700,
                   }}
