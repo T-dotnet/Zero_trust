@@ -21,9 +21,11 @@ Open **http://localhost:3000**. The MVP is the default view; `/?view=full` prese
 
 New versions and revisions repeat all four stages. Previous approved versions remain usable. The app also demonstrates drafts, support requests/resolution, cancellation/retry, evidence previews, log export, and activity-history export.
 
-For a solo walkthrough, use the small **Simulation controls** link below the sidebar guide, or click **Demo mode** in the header. Simulate one approval or all remaining reviews, publish as the author, finish waiting runs, or accept an output. Each required review is recorded separately; publication stays a distinct event. Run and artifact dialogs also expose the link. These shortcuts affect only the local prototype.
+For a solo walkthrough, use the small **Simulation controls** link below the sidebar guide, or click **Demo mode** in the header. On phones, **Workspace options → Simulation controls** opens the same panel. Simulate one approval or all remaining reviews, publish as the author, finish waiting runs, or accept an output. Each required review is recorded separately; publication stays a distinct event. Run and artifact dialogs also expose the link. These shortcuts affect only the local prototype.
 
 Reviewer queues default to **My tasks**. Authors see a submission receipt and next owner. Source settings, the full approval path and history expand on demand. Named drafts can be incomplete; revision drafts preserve the reviewed version until explicit resubmission. Output previews use synthetic fixtures for the declared contract, and downloads require either a deliberate Privacy reviewer decision or an explicitly simulated acceptance.
+
+Phone and portrait-tablet layouts use **16px body/input text, 14px secondary labels, and 44px touch targets**. Lists and output samples become labelled cards, keeping their actions visible without sideways scrolling.
 
 **Prototype boundary:** role switching and processing are local simulations. There is no production authentication, backend execution, PHI detection, or external support integration. Use synthetic data. Dataset file contents are not uploaded; metadata and column names, attached text evidence, and workflow decisions are saved in browser storage. Import sample rows are discarded when the dialog closes. Run setup checks format compatibility only; it does not verify field mappings.
 

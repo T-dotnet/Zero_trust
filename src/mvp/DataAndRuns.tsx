@@ -87,7 +87,11 @@ export function Datasets({
           />
         </div>
         <TableContainer>
-          <Table aria-label="Datasets">
+          <Table
+            aria-label="Datasets"
+            role="table"
+            className="mobile-card-table"
+          >
             <TableHead>
               <TableRow>
                 {[
@@ -103,10 +107,14 @@ export function Datasets({
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody role="rowgroup">
               {rows.map((d) => (
-                <TableRow hover key={d.id}>
-                  <TableCell className="name-cell">
+                <TableRow role="row" hover key={d.id}>
+                  <TableCell
+                    className="name-cell"
+                    role="cell"
+                    data-label="Dataset"
+                  >
                     <button
                       className="entity-name"
                       onClick={() => setSelected(d)}
@@ -115,14 +123,30 @@ export function Datasets({
                     </button>
                     <p>{d.description}</p>
                   </TableCell>
-                  <TableCell className="mono">{d.format}</TableCell>
-                  <TableCell>{d.rows.toLocaleString()}</TableCell>
-                  <TableCell className="nowrap">{d.size}</TableCell>
-                  <TableCell>
+                  <TableCell className="mono" role="cell" data-label="Format">
+                    {d.format}
+                  </TableCell>
+                  <TableCell role="cell" data-label="Records">
+                    {d.rows.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="nowrap" role="cell" data-label="Size">
+                    {d.size}
+                  </TableCell>
+                  <TableCell role="cell" data-label="Access">
                     <Status>Restricted</Status>
                   </TableCell>
-                  <TableCell className="nowrap">{formatDate(d.date)}</TableCell>
-                  <TableCell>
+                  <TableCell
+                    className="nowrap"
+                    role="cell"
+                    data-label="Imported"
+                  >
+                    {formatDate(d.date)}
+                  </TableCell>
+                  <TableCell
+                    role="cell"
+                    data-label="Action"
+                    className="mobile-card-actions"
+                  >
                     <Button
                       size="small"
                       variant="outlined"
@@ -279,7 +303,7 @@ export function RunsAndResults({
         </div>
         <TableContainer>
           {tab === "runs" ? (
-            <Table aria-label="Runs">
+            <Table aria-label="Runs" role="table" className="mobile-card-table">
               <TableHead>
                 <TableRow>
                   {[
@@ -294,10 +318,14 @@ export function RunsAndResults({
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody role="rowgroup">
                 {runs.map((r) => (
-                  <TableRow hover key={r.id}>
-                    <TableCell className="name-cell">
+                  <TableRow role="row" hover key={r.id}>
+                    <TableCell
+                      className="name-cell"
+                      role="cell"
+                      data-label="Run / pipeline"
+                    >
                       <button
                         className="entity-name"
                         onClick={() => setSelectedRun(r.id)}
@@ -308,8 +336,10 @@ export function RunsAndResults({
                         {r.id} / {r.version}
                       </p>
                     </TableCell>
-                    <TableCell>{r.datasetName}</TableCell>
-                    <TableCell>
+                    <TableCell role="cell" data-label="Dataset">
+                      {r.datasetName}
+                    </TableCell>
+                    <TableCell role="cell" data-label="Progress">
                       <div className="run-progress">
                         <LinearProgress
                           variant="determinate"
@@ -319,7 +349,7 @@ export function RunsAndResults({
                         <small>{r.progress}%</small>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell role="cell" data-label="Status">
                       <Status
                         kind={
                           r.status === "Completed"
@@ -344,10 +374,18 @@ export function RunsAndResults({
                         </span>
                       )}
                     </TableCell>
-                    <TableCell className="nowrap">
+                    <TableCell
+                      className="nowrap"
+                      role="cell"
+                      data-label="Started"
+                    >
                       {formatDate(r.date)}
                     </TableCell>
-                    <TableCell>
+                    <TableCell
+                      role="cell"
+                      data-label="Action"
+                      className="mobile-card-actions"
+                    >
                       {r.artifactId && (
                         <Button
                           size="small"
@@ -388,7 +426,11 @@ export function RunsAndResults({
               </TableBody>
             </Table>
           ) : (
-            <Table aria-label="Results">
+            <Table
+              aria-label="Results"
+              role="table"
+              className="mobile-card-table"
+            >
               <TableHead>
                 <TableRow>
                   {[
@@ -403,10 +445,14 @@ export function RunsAndResults({
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody role="rowgroup">
                 {artifacts.map((a) => (
-                  <TableRow hover key={a.id}>
-                    <TableCell className="name-cell">
+                  <TableRow role="row" hover key={a.id}>
+                    <TableCell
+                      className="name-cell"
+                      role="cell"
+                      data-label="Artifact"
+                    >
                       <button
                         className="entity-name"
                         onClick={() => onArtifact(a)}
@@ -417,9 +463,13 @@ export function RunsAndResults({
                         {a.runId} / {a.version}
                       </p>
                     </TableCell>
-                    <TableCell>{a.datasetName}</TableCell>
-                    <TableCell>{a.rows.toLocaleString()}</TableCell>
-                    <TableCell>
+                    <TableCell role="cell" data-label="Source dataset">
+                      {a.datasetName}
+                    </TableCell>
+                    <TableCell role="cell" data-label="Records">
+                      {a.rows.toLocaleString()}
+                    </TableCell>
+                    <TableCell role="cell" data-label="Validation">
                       <Status
                         kind={
                           a.status === "Validated"
@@ -432,10 +482,18 @@ export function RunsAndResults({
                         {a.status}
                       </Status>
                     </TableCell>
-                    <TableCell className="nowrap">
+                    <TableCell
+                      className="nowrap"
+                      role="cell"
+                      data-label="Created"
+                    >
                       {formatDate(a.date)}
                     </TableCell>
-                    <TableCell>
+                    <TableCell
+                      role="cell"
+                      data-label="Action"
+                      className="mobile-card-actions"
+                    >
                       <Button
                         variant="outlined"
                         size="small"

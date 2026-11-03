@@ -904,7 +904,12 @@ export function ArtifactDialog({
         </dl>
         <h3>Output preview</h3>
         <TableContainer className="artifact-preview">
-          <Table size="small" aria-label="Synthetic output preview">
+          <Table
+            size="small"
+            aria-label="Synthetic output preview"
+            role="table"
+            className="mobile-card-table"
+          >
             <TableHead>
               <TableRow>
                 {preview.labels.map((label) => (
@@ -912,11 +917,18 @@ export function ArtifactDialog({
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody role="rowgroup">
               {preview.rows.map((row) => (
-                <TableRow key={row[0]}>
+                <TableRow key={row[0]} role="row">
                   {row.map((cell, index) => (
-                    <TableCell key={index}>{cell}</TableCell>
+                    <TableCell
+                      key={index}
+                      role="cell"
+                      data-label={preview.labels[index]}
+                      className={index === 1 ? "mobile-card-wide" : undefined}
+                    >
+                      {cell}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))}

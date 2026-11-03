@@ -200,6 +200,14 @@ export function Shell({
         <MenuItem
           onClick={() => {
             setAnchor(null);
+            onSimulation();
+          }}
+        >
+          Simulation controls
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAnchor(null);
             onHelp();
           }}
         >

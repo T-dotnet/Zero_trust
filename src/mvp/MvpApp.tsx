@@ -38,6 +38,7 @@ import { useWorkspace } from "./useWorkspace";
 import { theme } from "./theme";
 import "./mvp.css";
 import "./ux.css";
+import "./mobile.css";
 
 export default function MvpApp() {
   const { state, dispatch, storageAvailable } = useWorkspace();

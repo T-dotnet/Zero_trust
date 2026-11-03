@@ -1,0 +1,707 @@
+/* Phone and portrait-tablet layouts use readable type rather than shrinking tables. */
+@media (max-width: 900px) {
+  .mvp-app {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .desktop-sidebar {
+    display: none;
+  }
+  .workspace-body {
+    margin-left: 0;
+  }
+  .mvp-app main {
+    padding: 24px 20px 0;
+  }
+  .utility-bar {
+    height: 64px;
+    padding-inline: 16px;
+    gap: 8px;
+  }
+  .utility-left {
+    flex: none;
+  }
+  .breadcrumb {
+    display: none;
+  }
+  .utility-actions {
+    min-width: 0;
+    flex: 1;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .mobile-menu.MuiIconButton-root {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+  }
+  .utility-actions > .MuiIconButton-root {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+  .role-select {
+    min-width: 0;
+    max-width: 220px;
+    height: 44px;
+    flex: 1;
+    font-size: 14px !important;
+    text-transform: none;
+  }
+  .role-select .MuiSelect-select {
+    padding-block: 10px;
+  }
+  .demo-mode {
+    min-height: 44px;
+    font-size: 13px !important;
+  }
+
+  .mobile-sidebar {
+    width: 100%;
+  }
+  .mobile-sidebar .workspace-label {
+    font:
+      13px/1.5 Arial,
+      sans-serif;
+    letter-spacing: 0.5px;
+  }
+  .mobile-sidebar .nav-item {
+    min-height: 48px;
+    font-size: 16px;
+  }
+  .mobile-sidebar .sidebar-bottom > strong {
+    font-size: 15px;
+  }
+  .mobile-sidebar .sidebar-bottom > span {
+    font-size: 13px;
+  }
+  .mobile-sidebar .sidebar-help {
+    min-height: 44px;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  .mobile-sidebar .simulation-link {
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .page-heading h1 {
+    font-size: 34px;
+    line-height: 1.15;
+    letter-spacing: -1px;
+  }
+  .page-heading p,
+  .mvp-app p,
+  .mvp-app .muted {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .heading-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .heading-actions .MuiButton-root {
+    min-height: 44px;
+    font-size: 15px;
+    padding-inline: 16px;
+  }
+  .mvp-app h2 {
+    font-size: 23px;
+    line-height: 1.3;
+  }
+  .mvp-app h3 {
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  .mvp-app .MuiButton-root,
+  .MuiDialog-root .MuiButton-root {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .mvp-app .MuiInputBase-root,
+  .MuiDialog-root .MuiInputBase-root {
+    font-size: 16px;
+  }
+  .mvp-app .MuiOutlinedInput-input,
+  .MuiDialog-root .MuiOutlinedInput-input {
+    padding-block: 12px;
+  }
+  .MuiDialog-root .MuiInputLabel-root {
+    font-size: 16px;
+  }
+  .MuiDialog-root .MuiInputLabel-shrink {
+    font-size: 19px;
+  }
+  .MuiDialog-root .MuiOutlinedInput-notchedOutline legend {
+    font-size: 14px;
+  }
+  .MuiDialog-root .MuiFormHelperText-root {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .MuiDialog-root .MuiFormControlLabel-label {
+    font-size: 16px;
+  }
+  .MuiDialog-root .MuiFormControlLabel-root {
+    min-height: 48px;
+  }
+  .MuiDialog-root .MuiRadio-root,
+  .MuiDialog-root .MuiCheckbox-root,
+  .review-criteria .MuiCheckbox-root {
+    padding: 12px;
+  }
+  .MuiPopover-root .MuiMenuItem-root {
+    min-height: 48px;
+    font-size: 16px;
+    white-space: normal;
+  }
+  .MuiAlert-root .MuiAlert-message {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .metrics-row {
+    flex-wrap: nowrap;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .metrics-row > div {
+    min-width: 0;
+    flex: 1 1 0;
+    max-width: none;
+    padding: 0 12px;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .metrics-row > div:first-child {
+    padding-left: 0;
+  }
+  .metrics-row > div:last-child {
+    padding-right: 0;
+  }
+  .metrics-row strong {
+    font-size: 30px;
+  }
+  .metrics-row span {
+    font-size: 14px;
+    line-height: 1.45;
+    white-space: normal;
+  }
+  .section-note {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .table-panel .MuiTab-root {
+    min-height: 48px;
+    min-width: 100px;
+    font-size: 14px;
+    line-height: 1.4;
+    padding-inline: 16px;
+  }
+  .filter-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 0.55fr);
+    gap: 12px;
+    padding: 16px 0;
+  }
+  .filter-bar > :only-child {
+    grid-column: 1 / -1;
+  }
+  .filter-bar > .MuiInputBase-root {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+  }
+  .filter-bar .MuiInputBase-root {
+    font-size: 16px;
+    min-height: 48px;
+    height: auto;
+  }
+
+  .table-panel .mobile-card-table,
+  .artifact-preview .mobile-card-table {
+    display: block;
+    min-width: 0;
+    width: 100%;
+  }
+  .mobile-card-table .MuiTableHead-root {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .mobile-card-table .MuiTableBody-root {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    padding: 2px 0 16px;
+  }
+  .mobile-card-table .MuiTableBody-root .MuiTableRow-root {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 16px;
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid #dce5de;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .mobile-card-table .MuiTableBody-root .MuiTableCell-root {
+    display: block;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding: 0;
+    border: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .mobile-card-table .MuiTableCell-root::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #5b695f;
+    font-weight: 400;
+  }
+  .mobile-card-table .MuiTableBody-root .MuiTableCell-root:first-child,
+  .mobile-card-table .MuiTableBody-root .mobile-card-wide,
+  .mobile-card-table .MuiTableBody-root [data-label="Dataset"],
+  .mobile-card-table .MuiTableBody-root [data-label="Source dataset"] {
+    grid-column: 1 / -1;
+  }
+  .mobile-card-table .name-cell::before,
+  .mobile-card-table .mobile-card-actions::before {
+    display: none;
+  }
+  .mobile-card-table .entity-name {
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: -0.2px;
+  }
+  .mobile-card-table .name-cell p {
+    margin: 7px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .mobile-card-table .mono,
+  .mobile-card-table .category-text {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .mobile-card-table .pipeline-progress {
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .mobile-card-table .MuiTableBody-root .mobile-card-actions {
+    display: flex;
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 4px;
+  }
+  .mobile-card-table .mobile-card-actions .MuiButton-root {
+    min-height: 44px;
+    font-size: 15px;
+  }
+  .status-label {
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: normal;
+  }
+  .output-state {
+    max-width: none;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .run-progress {
+    gap: 10px;
+  }
+  .run-progress small {
+    font-size: 14px;
+  }
+  .table-footer {
+    font-size: 14px;
+    line-height: 1.5;
+    gap: 12px;
+  }
+  .table-footer > span:last-child {
+    max-width: none;
+  }
+
+  .disclosure {
+    font-size: 16px;
+  }
+  .disclosure > summary {
+    min-height: 44px;
+    padding-block: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .micro-copy,
+  .MuiDialog-paper .micro-copy {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .eyebrow {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .compact-review-status {
+    padding: 14px 16px;
+    gap: 8px;
+  }
+  .compact-review-status strong {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  .compact-review-status > span {
+    font-size: 14px;
+  }
+  .review-workspace h2 {
+    font-size: 23px;
+  }
+  .review-workspace > .plain-panel {
+    padding: 20px 16px;
+  }
+  .review-task .section-title {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .review-task .assigned,
+  .review-task .review-purpose {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .criteria-count {
+    font-size: 14px;
+  }
+  .review-criteria .MuiFormControlLabel-root {
+    min-height: 48px;
+    padding-block: 6px;
+  }
+  .review-criteria .MuiFormControlLabel-label {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .review-task .decision-note {
+    font-size: 14px;
+  }
+  .back-link.MuiButton-root {
+    min-height: 44px;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+  .metadata-list > div,
+  .review-details .metadata-list > div {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 12px;
+    font-size: 16px;
+  }
+  .metadata-list dt {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .metadata-list dd {
+    line-height: 1.55;
+  }
+  .mvp-app .mono,
+  .MuiDialog-root .mono {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .demo-handoff p {
+    font-size: 14px;
+  }
+  .simulation-link {
+    min-height: 44px;
+    font-size: 14px;
+  }
+  .stage-path strong {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .stage-path small {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .stage-number {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .history-item strong {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .history-item p,
+  .history-item time,
+  .history-context,
+  .history-item .history-context .entity-name {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .attention-row strong {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .attention-row small {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .workspace-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 28px 20px;
+    font:
+      14px/1.5 Arial,
+      sans-serif;
+    text-transform: none;
+  }
+  .workspace-footer > span {
+    max-width: 100%;
+  }
+  .workspace-footer > span:last-child {
+    text-align: left;
+  }
+
+  .MuiDialog-paper {
+    margin: 12px !important;
+    width: calc(100% - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+  }
+  .MuiDialogTitle-root {
+    padding: 20px 20px 12px !important;
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+  }
+  .MuiDialogContent-root {
+    padding-inline: 20px !important;
+  }
+  .MuiDialog-paper p {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .MuiDialog-paper h3 {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  .MuiDialogActions-root {
+    gap: 8px;
+    padding: 14px 20px !important;
+    flex-wrap: wrap;
+  }
+  .MuiDialogActions-root > .MuiButton-contained {
+    flex: 1 1 100%;
+    order: 2;
+  }
+  .MuiDialogActions-root .dialog-action-spacer {
+    display: none;
+  }
+  .MuiDialogActions-root .MuiButton-root {
+    font-size: 16px;
+    min-height: 44px;
+    padding-inline: 14px;
+  }
+  .dialog-close {
+    min-width: 44px;
+    min-height: 44px;
+    top: 10px;
+    right: 10px;
+  }
+  .form-stepper {
+    margin: 20px 0 24px;
+  }
+  .form-stepper .MuiStep-root {
+    flex: 1;
+    min-width: 0;
+    padding-inline: 4px;
+  }
+  .form-stepper .MuiStepLabel-root {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .form-stepper .MuiStepLabel-iconContainer {
+    padding: 0;
+  }
+  .form-stepper .MuiStepLabel-labelContainer {
+    text-align: center;
+  }
+  .form-stepper .MuiStepLabel-label {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .form-stepper .MuiStepConnector-root {
+    display: none;
+  }
+  .form-stack {
+    gap: 24px;
+  }
+  .form-section-heading .MuiButton-root {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding-inline: 10px;
+  }
+  .requirements-block,
+  .requirements-block p,
+  .guidance-list,
+  .revision-context,
+  .next-owner,
+  .dataset-contract,
+  .selected-file span,
+  .simulation-section p,
+  .validation-receipt {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .selected-file strong {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .attachment-row {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .attachment-row small {
+    font-size: 14px;
+  }
+  .evidence-preview {
+    font-size: 14px;
+  }
+  .support-block p,
+  .execution-timeline strong {
+    font-size: 16px;
+  }
+  .execution-timeline small,
+  .field-error {
+    font-size: 14px;
+  }
+  .MuiDialog-root .MuiTableCell-root {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .MuiDialog-root .MuiTableCell-head {
+    font-size: 14px;
+  }
+  .artifact-preview .mobile-card-table .MuiTableBody-root {
+    padding-top: 12px;
+  }
+  .MuiSnackbar-root {
+    top: calc(76px + env(safe-area-inset-top, 0px)) !important;
+    bottom: auto !important;
+    left: 12px !important;
+    right: 12px !important;
+    transform: none !important;
+  }
+  .MuiSnackbar-root .MuiAlert-root {
+    width: 100%;
+    max-width: none;
+  }
+  .MuiAlert-action .MuiIconButton-root {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+  .table-panel .mobile-card-table .MuiTableBody-root {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+@media (max-width: 599px) {
+  .mvp-app main {
+    padding: 20px 16px 0;
+  }
+  .utility-bar {
+    padding-inline: 12px;
+  }
+  .demo-mode {
+    display: none;
+  }
+  .page-heading h1 {
+    font-size: 32px;
+  }
+  .filter-bar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .metrics-row > div {
+    padding-inline: 8px;
+  }
+  .table-panel .mobile-card-table .MuiTableRow-root {
+    padding: 16px;
+    gap: 12px 16px;
+  }
+  .table-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .table-footer > span:last-child {
+    text-align: left;
+  }
+  .compact-review-status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .review-workspace > .plain-panel {
+    padding: 18px 14px;
+  }
+  .review-actions {
+    flex-direction: column;
+  }
+  .review-actions .MuiButton-root {
+    width: 100%;
+  }
+  .metadata-list > div,
+  .review-details .metadata-list > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .review-details .metadata-list > div {
+    padding-block: 12px;
+  }
+  .stage-path {
+    flex-direction: column;
+  }
+  .stage-path small {
+    display: block;
+    margin: 4px 0 0;
+  }
+  .MuiDialogTitle-root {
+    padding-inline: 16px !important;
+    padding-right: 48px !important;
+  }
+  .MuiDialog-paper {
+    max-width: calc(100% - 24px) !important;
+  }
+  .MuiDialogContent-root {
+    padding-inline: 16px !important;
+  }
+  .MuiDialogActions-root {
+    padding-inline: 16px !important;
+  }
+  .simulation-actions {
+    flex-direction: column;
+  }
+  .MuiDialog-paper .form-two-col,
+  .activity-filter-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

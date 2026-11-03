@@ -134,7 +134,11 @@ export function PipelineCatalog({
           </Select>
         </div>
         <TableContainer>
-          <Table aria-label="Pipelines">
+          <Table
+            aria-label="Pipelines"
+            role="table"
+            className="mobile-card-table"
+          >
             <TableHead>
               <TableRow>
                 {[
@@ -149,28 +153,40 @@ export function PipelineCatalog({
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody role="rowgroup">
               {rows.map((p) => (
-                <TableRow key={p.id} hover>
-                  <TableCell className="name-cell">
+                <TableRow role="row" key={p.id} hover>
+                  <TableCell
+                    className="name-cell"
+                    role="cell"
+                    data-label="Pipeline"
+                  >
                     <button className="entity-name" onClick={() => onOpen(p)}>
                       {p.name}
                     </button>
                     <p>{p.description}</p>
                   </TableCell>
-                  <TableCell>
+                  <TableCell role="cell" data-label="Version">
                     <span className="mono version">{p.version}</span>
                   </TableCell>
-                  <TableCell>
+                  <TableCell role="cell" data-label="Category">
                     <span className="category-text">{p.category}</span>
                   </TableCell>
-                  <TableCell>
+                  <TableCell role="cell" data-label="Review progress">
                     <PipelineProgress pipeline={p} />
                   </TableCell>
-                  <TableCell className="nowrap">
+                  <TableCell
+                    className="nowrap"
+                    role="cell"
+                    data-label="Updated"
+                  >
                     {formatDate(p.updated)}
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    role="cell"
+                    data-label="Action"
+                    className="mobile-card-actions"
+                  >
                     <Button
                       size="small"
                       variant={
@@ -263,7 +279,11 @@ export function Approvals({
           />
         </div>
         <TableContainer>
-          <Table aria-label="Approval queue">
+          <Table
+            aria-label="Approval queue"
+            role="table"
+            className="mobile-card-table"
+          >
             <TableHead>
               <TableRow>
                 {[
@@ -277,25 +297,35 @@ export function Approvals({
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody role="rowgroup">
               {rows.map((p) => (
-                <TableRow key={p.id} hover>
-                  <TableCell className="name-cell">
+                <TableRow role="row" key={p.id} hover>
+                  <TableCell
+                    className="name-cell"
+                    role="cell"
+                    data-label="Submission"
+                  >
                     <button className="entity-name" onClick={() => onOpen(p)}>
                       {p.name}
                     </button>
                     <p>{p.author}</p>
                   </TableCell>
-                  <TableCell className="mono">{p.version}</TableCell>
-                  <TableCell>
+                  <TableCell className="mono" role="cell" data-label="Version">
+                    {p.version}
+                  </TableCell>
+                  <TableCell role="cell" data-label="Review progress">
                     <PipelineProgress pipeline={p} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell role="cell" data-label="Next actor">
                     {p.status === "In review"
                       ? `${["Ethical", "Technical", "Privacy", "Security"][p.stage]} reviewer`
                       : "Researcher"}
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    role="cell"
+                    data-label="Action"
+                    className="mobile-card-actions"
+                  >
                     <Button
                       variant="outlined"
                       size="small"
