@@ -37,20 +37,25 @@ import { EmptyState, PageHeader, SearchField, Status } from "./ui";
 import { RunSupport } from "./RunSupport";
 import { downloadRunLog, downloadText } from "./files";
 import { encodeCsv } from "./csv";
+import { artifactPreview } from "./artifactPreview";
 
 export function Datasets({
   state,
   onImport,
   onRun,
   researcher,
+  initialDatasetId,
 }: {
   state: Workspace;
   onImport: () => void;
   onRun: (d: Dataset) => void;
   researcher: boolean;
+  initialDatasetId?: string;
 }) {
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<Dataset | null>(null);
+  const [selected, setSelected] = useState<Dataset | null>(
+    () => state.datasets.find((d) => d.id === initialDatasetId) || null,
+  );
   const rows = state.datasets.filter((d) =>
     `${d.name} ${d.description}`.toLowerCase().includes(search.toLowerCase()),
   );
@@ -170,6 +175,12 @@ export function Datasets({
             The prototype stores file metadata locally. It does not upload
             research data or enforce access permissions.
           </p>
+          {selected?.columns && (
+            <details className="disclosure">
+              <summary>Dataset columns · {selected.columns.length}</summary>
+              <p>{selected.columns.join(", ")}</p>
+            </details>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setSelected(null)}>Close</Button>
@@ -194,8 +205,10 @@ interface RunsProps {
   onNewRun: () => void;
   onArtifact: (a: Artifact) => void;
   onRetry: (r: Run) => void;
+  onSimulation: () => void;
   researcher: boolean;
   initialTab?: string;
+  initialRunId?: string;
   role: Role;
   setRole: (role: Role) => void;
   onCancel: (run: Run) => void;
@@ -207,8 +220,10 @@ export function RunsAndResults({
   onNewRun,
   onArtifact,
   onRetry,
+  onSimulation,
   researcher,
   initialTab = "runs",
+  initialRunId,
   role,
   setRole,
   onCancel,
@@ -217,7 +232,9 @@ export function RunsAndResults({
 }: RunsProps) {
   const [tab, setTab] = useState(initialTab);
   const [search, setSearch] = useState("");
-  const [selectedRun, setSelectedRun] = useState<string | null>(null);
+  const [selectedRun, setSelectedRun] = useState<string | null>(
+    initialRunId || null,
+  );
   const run = state.runs.find((r) => r.id === selectedRun);
   const runs = state.runs.filter((r) =>
     `${r.id} ${r.pipelineName} ${r.datasetName}`
@@ -314,11 +331,50 @@ export function RunsAndResults({
                       >
                         {r.status}
                       </Status>
+                      {r.artifactId && (
+                        <span className="output-state">
+                          Output:{" "}
+                          {state.artifacts.find((a) => a.id === r.artifactId)
+                            ?.status === "Validated"
+                            ? "Ready to download"
+                            : state.artifacts.find((a) => a.id === r.artifactId)
+                                  ?.status === "Not acceptable"
+                              ? "Rejected"
+                              : "Awaiting validation"}
+                        </span>
+                      )}
                     </TableCell>
                     <TableCell className="nowrap">
                       {formatDate(r.date)}
                     </TableCell>
                     <TableCell>
+                      {r.artifactId && (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          onClick={() => {
+                            const output = state.artifacts.find(
+                              (a) => a.id === r.artifactId,
+                            );
+                            if (output) onArtifact(output);
+                          }}
+                        >
+                          {role === "Privacy reviewer" &&
+                          state.artifacts.find((a) => a.id === r.artifactId)
+                            ?.status === "Pending review"
+                            ? "Review output"
+                            : "View output"}
+                        </Button>
+                      )}
+                      {r.status === "Failed" && (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={() => setSelectedRun(r.id)}
+                        >
+                          Fix input
+                        </Button>
+                      )}
                       <Button
                         variant="outlined"
                         size="small"
@@ -385,7 +441,10 @@ export function RunsAndResults({
                         size="small"
                         onClick={() => onArtifact(a)}
                       >
-                        {a.status === "Pending review" ? "Review" : "Inspect"}
+                        {a.status === "Pending review" &&
+                        role === "Privacy reviewer"
+                          ? "Review output"
+                          : "View output"}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -436,31 +495,41 @@ export function RunsAndResults({
               <p className="muted">
                 {run.datasetName} / {run.version}
               </p>
-              <div className="execution-timeline">
-                {[
-                  "Validate input",
-                  "Prepare environment",
-                  "Process records",
-                  "Write output",
-                ].map((label, i) => {
-                  const status = executionStepStatus(run, i);
-                  return (
-                    <div key={label}>
-                      <span className={status === "Complete" ? "done" : ""}>
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <strong>{label}</strong>
-                      <small>{status}</small>
-                    </div>
-                  );
-                })}
-              </div>
               {run.error && (
                 <div className="error-message">
                   <strong>Data error</strong>
                   <p>{run.error}</p>
+                  <p className="micro-copy">
+                    Retry uses a synthetic example mapping. Your source dataset
+                    is not changed.
+                  </p>
                 </div>
               )}
+              <details
+                className="disclosure execution-details"
+                open={run.status === "Running" || run.status === "Completed"}
+              >
+                <summary>Execution steps</summary>
+                <div className="execution-timeline">
+                  {[
+                    "Validate input",
+                    "Prepare environment",
+                    "Process records",
+                    "Write output",
+                  ].map((label, i) => {
+                    const status = executionStepStatus(run, i);
+                    return (
+                      <div key={label}>
+                        <span className={status === "Complete" ? "done" : ""}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <strong>{label}</strong>
+                        <small>{status}</small>
+                      </div>
+                    );
+                  })}
+                </div>
+              </details>
               {(run.status === "Failed" || run.support) && (
                 <RunSupport
                   key={run.id}
@@ -480,6 +549,15 @@ export function RunsAndResults({
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setSelectedRun(null)}>Close</Button>
+          <button
+            className="simulation-link"
+            onClick={() => {
+              setSelectedRun(null);
+              onSimulation();
+            }}
+          >
+            Simulation controls
+          </button>
           {run && (
             <Button
               startIcon={<Download size={15} />}
@@ -507,7 +585,7 @@ export function RunsAndResults({
               }}
             >
               {run.status === "Failed"
-                ? "Correct mapping & retry"
+                ? "Retry demo with example mapping"
                 : "Restart demo run"}
             </Button>
           )}
@@ -530,20 +608,11 @@ export function RunsAndResults({
   );
 }
 
-export const PREVIEW_ROWS = [
-  ["REC-001", "[PERSON] attended a follow-up visit. Symptoms improved.", "Low"],
-  ["REC-002", "Medication review completed. [DATE] removed.", "Medium"],
-  ["REC-003", "No adverse events reported during this encounter.", "Low"],
-  [
-    "REC-004",
-    "[LOCATION] generalized. Further assessment recommended.",
-    "Medium",
-  ],
-];
 export function downloadArtifact(artifact: Artifact) {
+  const preview = artifactPreview(artifact);
   const content = encodeCsv([
-    ["record_id", "processed_text", "risk", "run_id", "pipeline_version"],
-    ...PREVIEW_ROWS.map((row) => [...row, artifact.runId, artifact.version]),
+    [...preview.headers, "run_id", "pipeline_version"],
+    ...preview.rows.map((row) => [...row, artifact.runId, artifact.version]),
   ]);
   downloadText(
     `${artifact.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-sample.csv`,

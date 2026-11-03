@@ -13,7 +13,15 @@ import {
   TableRow,
 } from "@mui/material";
 import { ArrowRight, FileText, Plus } from "lucide-react";
-import { formatDate, stageLabel, type Pipeline, type Workspace } from "./model";
+import {
+  formatDate,
+  stageLabel,
+  pipelineNeedsAction,
+  pipelineActionLabel,
+  type Pipeline,
+  type Workspace,
+  type Role,
+} from "./model";
 import {
   EmptyState,
   HistoryList,
@@ -29,6 +37,8 @@ interface Props {
   onNew: () => void;
   onRun: (p: Pipeline) => void;
   onApprovals: () => void;
+  role: Role;
+  onOutputs: () => void;
 }
 export function PipelineCatalog({
   state,
@@ -36,10 +46,12 @@ export function PipelineCatalog({
   onNew,
   onRun,
   onApprovals,
+  role,
 }: Props) {
   const [tab, setTab] = useState("all");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const tasks = state.pipelines.filter((p) => pipelineNeedsAction(p, role));
   const approved = state.pipelines.filter(
     (p) => p.status === "Approved",
   ).length;
@@ -49,9 +61,11 @@ export function PipelineCatalog({
   const rows = state.pipelines.filter(
     (p) =>
       (tab === "all" ||
-        (tab === "approved"
-          ? p.status === "Approved"
-          : p.status === "In review")) &&
+        (tab === "tasks"
+          ? pipelineNeedsAction(p, role)
+          : tab === "approved"
+            ? p.status === "Approved"
+            : p.status === "In review")) &&
       (category === "all" || p.category === category) &&
       `${p.name} ${p.description}`.toLowerCase().includes(search.toLowerCase()),
   );
@@ -67,9 +81,9 @@ export function PipelineCatalog({
         <Button
           variant="contained"
           startIcon={<Plus size={17} />}
-          onClick={onNew}
+          onClick={role === "Researcher" ? onNew : onApprovals}
         >
-          New pipeline
+          {role === "Researcher" ? "New pipeline" : "View my tasks"}
         </Button>
       </PageHeader>
       <div className="metrics-row">
@@ -93,6 +107,7 @@ export function PipelineCatalog({
           scrollButtons="auto"
         >
           <Tab value="all" label={`All pipelines ${state.pipelines.length}`} />
+          <Tab value="tasks" label={`Needs your action ${tasks.length}`} />
           <Tab value="approved" label={`Approved ${approved}`} />
           <Tab value="review" label={`In review ${pending}`} />
         </Tabs>
@@ -162,16 +177,12 @@ export function PipelineCatalog({
                         p.status === "Approved" ? "contained" : "outlined"
                       }
                       onClick={() =>
-                        p.status === "Approved" ? onRun(p) : onOpen(p)
+                        p.status === "Approved" && role === "Researcher"
+                          ? onRun(p)
+                          : onOpen(p)
                       }
                     >
-                      {p.status === "Approved"
-                        ? "Run"
-                        : p.status === "Ready to publish"
-                          ? "Publish"
-                          : p.status === "Draft"
-                            ? "Edit"
-                            : "Review"}
+                      {pipelineActionLabel(p, role)}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -210,11 +221,19 @@ export function PipelineCatalog({
   );
 }
 
-export function Approvals({ state, onOpen }: Pick<Props, "state" | "onOpen">) {
+export function Approvals({
+  state,
+  onOpen,
+  role,
+}: Pick<Props, "state" | "onOpen" | "role">) {
   const [search, setSearch] = useState("");
+  const [scope, setScope] = useState(role === "Researcher" ? "all" : "mine");
+  const submissions = state.pipelines.filter((p) => p.status !== "Approved");
+  const tasks = submissions.filter((p) => pipelineNeedsAction(p, role));
   const rows = state.pipelines.filter(
     (p) =>
       p.status !== "Approved" &&
+      (scope === "all" || pipelineNeedsAction(p, role)) &&
       p.name.toLowerCase().includes(search.toLowerCase()),
   );
   return (
@@ -228,6 +247,14 @@ export function Approvals({ state, onOpen }: Pick<Props, "state" | "onOpen">) {
         Publication remains an author action.
       </div>
       <section className="table-panel">
+        <Tabs
+          value={scope}
+          onChange={(_, value) => setScope(value)}
+          aria-label="Approval scope"
+        >
+          <Tab value="mine" label={`My tasks ${tasks.length}`} />
+          <Tab value="all" label={`All submissions ${submissions.length}`} />
+        </Tabs>
         <div className="filter-bar">
           <SearchField
             value={search}
@@ -275,7 +302,7 @@ export function Approvals({ state, onOpen }: Pick<Props, "state" | "onOpen">) {
                       onClick={() => onOpen(p)}
                       endIcon={<ArrowRight size={14} />}
                     >
-                      Open
+                      {pipelineActionLabel(p, role)}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -286,7 +313,25 @@ export function Approvals({ state, onOpen }: Pick<Props, "state" | "onOpen">) {
         {!rows.length && (
           <EmptyState
             title="All caught up"
-            description="New submissions and required author actions will appear here."
+            description={
+              search
+                ? "Try another search or view all submissions."
+                : scope === "mine"
+                  ? "No submissions currently require your action. View all submissions to track other stages."
+                  : "New submissions and required author actions will appear here."
+            }
+            action={
+              scope === "mine" ? (
+                <Button
+                  onClick={() => {
+                    setScope("all");
+                    setSearch("");
+                  }}
+                >
+                  View all submissions
+                </Button>
+              ) : undefined
+            }
           />
         )}
       </section>
@@ -294,10 +339,17 @@ export function Approvals({ state, onOpen }: Pick<Props, "state" | "onOpen">) {
   );
 }
 
-export function Overview({ state, onNew, onApprovals, onOpen, onRun }: Props) {
-  const pending = state.pipelines.filter((p) => p.status === "In review");
+export function Overview({
+  state,
+  onNew,
+  onApprovals,
+  onOpen,
+  onRun,
+  role,
+  onOutputs,
+}: Props) {
   const attention = state.pipelines
-    .filter((p) => p.status !== "Approved")
+    .filter((p) => pipelineNeedsAction(p, role))
     .sort(
       (a, b) =>
         Number(a.status === "In review") - Number(b.status === "In review") ||
@@ -311,16 +363,16 @@ export function Overview({ state, onNew, onApprovals, onOpen, onRun }: Props) {
       >
         <Button
           variant="contained"
-          onClick={onNew}
+          onClick={role === "Researcher" ? onNew : onApprovals}
           startIcon={<Plus size={17} />}
         >
-          New pipeline
+          {role === "Researcher" ? "New pipeline" : "View my tasks"}
         </Button>
       </PageHeader>
       <div className="metrics-row">
         {[
           [state.datasets.length, "Datasets"],
-          [pending.length, "In review"],
+          [attention.length, "Your pipeline tasks"],
           [
             state.runs.filter((r) => r.status === "Running").length,
             "Active runs",
@@ -364,8 +416,28 @@ export function Overview({ state, onNew, onApprovals, onOpen, onRun }: Props) {
               <ArrowRight size={18} />
             </button>
           ))}
+          {role === "Privacy reviewer" &&
+            state.artifacts.some((a) => a.status === "Pending review") && (
+              <button className="attention-row" onClick={onOutputs}>
+                <FileText size={19} />
+                <span>
+                  <strong>Validate research outputs</strong>
+                  <small>
+                    {
+                      state.artifacts.filter(
+                        (a) => a.status === "Pending review",
+                      ).length
+                    }{" "}
+                    awaiting your decision
+                  </small>
+                </span>
+                <ArrowRight size={18} />
+              </button>
+            )}
           {!attention.length && (
-            <p className="muted">No submissions need attention.</p>
+            <p className="muted">
+              No pipeline submissions currently require your action.
+            </p>
           )}
         </section>
         <section className="plain-panel">
@@ -389,9 +461,9 @@ export function Overview({ state, onNew, onApprovals, onOpen, onRun }: Props) {
                 <Button
                   size="small"
                   variant="contained"
-                  onClick={() => onRun(p)}
+                  onClick={() => (role === "Researcher" ? onRun(p) : onOpen(p))}
                 >
-                  Run
+                  {role === "Researcher" ? "Run" : "View"}
                 </Button>
               </div>
             ))}

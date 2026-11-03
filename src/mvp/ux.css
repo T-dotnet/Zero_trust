@@ -1,0 +1,372 @@
+/* Task hierarchy and progressive disclosure for the MVP walkthrough. */
+.disclosure {
+  min-width: 0;
+  margin: 12px 0;
+  padding: 6px 0;
+  border-bottom: 1px solid #e0e6e2;
+  font-size: 13px;
+}
+.disclosure > summary {
+  cursor: pointer;
+  padding: 9px 2px;
+  color: #315d4c;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.disclosure > summary:focus-visible,
+.simulation-link:focus-visible,
+.entity-name:focus-visible {
+  outline: 2px solid #2d7464;
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+.disclosure-content {
+  padding: 16px 0 8px;
+}
+.compact-review-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 20px;
+  background: #f5f8f6;
+  border: 1px solid #e0e8e2;
+  border-radius: 7px;
+}
+.compact-review-status strong {
+  display: block;
+  font-size: 17px;
+  margin-top: 5px;
+}
+.compact-review-status > span {
+  font-size: 12px;
+  color: #536459;
+}
+.eyebrow {
+  display: block;
+  color: #5b695f;
+  font-size: 11px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+.review-path-disclosure {
+  margin-top: 2px;
+  margin-bottom: 20px;
+}
+.review-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.review-workspace > .plain-panel {
+  margin: 0;
+  padding: 24px;
+  border: 1px solid #dce5de;
+  border-radius: 8px;
+}
+.review-task {
+  min-width: 0;
+}
+.review-task > p {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.review-workspace h2 {
+  font-size: 22px;
+  margin-bottom: 14px;
+}
+.review-task .assigned {
+  margin: 0 0 8px;
+}
+.review-task .review-purpose {
+  margin: 6px 0 16px;
+}
+.review-task .section-title {
+  margin-bottom: 8px;
+}
+.review-task .section-title h2,
+.review-task .section-title h3 {
+  margin: 0;
+}
+.review-criteria {
+  margin: 20px 0;
+}
+.criteria-count {
+  font-size: 12px;
+  color: #315d4c;
+  white-space: nowrap;
+}
+.review-criteria .MuiFormControlLabel-root {
+  display: flex;
+  align-items: flex-start;
+  margin: 0;
+  padding: 5px 0;
+}
+.review-criteria .MuiCheckbox-root {
+  margin-left: -8px;
+}
+.review-criteria .MuiFormControlLabel-label {
+  font-size: 14px;
+  line-height: 1.5;
+  padding-top: 7px;
+}
+.review-actions,
+.simulation-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 18px 0 0;
+}
+.review-actions .MuiButton-root {
+  min-height: 40px;
+}
+.review-task .decision-note {
+  margin-top: 18px;
+  font-size: 12px;
+}
+.review-details {
+  min-width: 0;
+}
+.review-details .metadata-list > div {
+  grid-template-columns: 75px minmax(0, 1fr);
+  font-size: 13px;
+}
+.compact-metadata > div {
+  padding-block: 9px;
+}
+.review-history {
+  margin-top: 24px;
+}
+.demo-handoff {
+  border-top: 1px solid #e0e6e2;
+  margin-top: 22px;
+  padding-top: 16px;
+}
+.demo-handoff p {
+  font-size: 12px;
+  color: #5b695f;
+  margin: 5px 0 10px;
+}
+.demo-handoff .MuiButton-root {
+  margin-top: 8px;
+}
+.simulation-link {
+  background: transparent;
+  border: 0;
+  padding: 7px 0;
+  cursor: pointer;
+  color: #626e65;
+  font:
+    11px Arial,
+    sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-align: left;
+}
+.simulation-link:hover {
+  color: #214b3e;
+}
+.simulation-section {
+  padding: 16px 0;
+}
+.simulation-section p {
+  margin: 14px 0;
+  font-size: 13px;
+}
+.simulation-actions .MuiButton-root {
+  font-size: 12px;
+}
+.simulation-feedback,
+.draft-saved-note {
+  background: #edf4f0;
+  border-radius: 5px;
+  padding: 12px 14px;
+  color: #214b3e;
+  font-size: 13px;
+}
+.revision-context {
+  border-left: 3px solid #b47715;
+  padding: 12px 16px;
+  margin: 16px 0;
+  background: #fbf8f1;
+  font-size: 13px;
+}
+.revision-context p {
+  margin: 5px 0 0;
+}
+.guidance-list {
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.next-owner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #f0f6f2;
+  padding: 14px 16px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.submission-summary .section-title {
+  margin: 0;
+  align-items: center;
+}
+.submission-summary .section-title h3 {
+  margin: 0;
+}
+.selected-file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dce5de;
+  padding: 14px;
+  border-radius: 6px;
+  margin: 20px 0 8px;
+}
+.selected-file > div:first-of-type {
+  min-width: 0;
+  flex: 1;
+}
+.selected-file strong {
+  display: block;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.selected-file span {
+  display: block;
+  color: #5b695f;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.file-actions {
+  display: flex;
+  gap: 2px;
+}
+.import-preview .MuiTableCell-root {
+  min-width: 120px;
+  max-width: 280px;
+  overflow-wrap: anywhere;
+}
+.dataset-contract {
+  padding: 12px 14px;
+  background: #f7faf8;
+  border: 1px solid #e0e8e2;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.dataset-contract > .status-label {
+  margin-left: 14px;
+}
+.output-state {
+  display: block;
+  max-width: 160px;
+  color: #5b695f;
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 7px;
+}
+.validation-receipt {
+  padding: 16px;
+  margin-top: 20px;
+  border: 1px solid #dce5de;
+  border-radius: 6px;
+  background: #f7faf8;
+  font-size: 13px;
+}
+.validation-receipt p {
+  margin: 6px 0 12px;
+}
+.validation-receipt p:last-child {
+  margin-bottom: 0;
+}
+.activity-search {
+  margin: 16px 0 4px;
+}
+.activity-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.history-context .entity-name {
+  font-size: 12px;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.micro-copy {
+  color: #56645b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.table-footer,
+.workspace-footer,
+.stage-path small,
+.history-item time {
+  color: #5b695f;
+}
+.history-item time {
+  font-size: 11px;
+}
+@media (max-width: 900px) {
+  .review-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .compact-review-status {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 13px 14px;
+  }
+  .compact-review-status strong {
+    font-size: 16px;
+  }
+  .review-workspace > .plain-panel {
+    padding: 18px 14px;
+  }
+  .review-workspace h2 {
+    font-size: 21px;
+  }
+  .review-task > p {
+    font-size: 13px;
+  }
+  .review-task .section-title {
+    gap: 10px;
+  }
+  .review-criteria .MuiFormControlLabel-label {
+    font-size: 13px;
+  }
+  .review-actions {
+    flex-direction: column;
+  }
+  .review-actions .MuiButton-root {
+    width: 100%;
+  }
+  .review-path-disclosure .stage-path {
+    margin-top: 10px;
+  }
+  .selected-file {
+    flex-wrap: wrap;
+  }
+  .file-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .activity-filter-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .simulation-actions {
+    flex-direction: column;
+  }
+  .history-item .history-context .entity-name {
+    font-size: 11px;
+  }
+  .MuiDialog-paper .form-two-col {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

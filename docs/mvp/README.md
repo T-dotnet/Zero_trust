@@ -10,11 +10,11 @@ Use the header role selector to switch between Researcher and the four stage rev
 
 The [primary design reference](design-concept.png) established the monochrome structure. The final user direction softens it to **modern and clean**: white canvas, 224px sidebar, 60px utility header, lighter structural lines, title-case headings, dark green actions, and modest 4–5px corner rounding. No decorative graphics, gradients, shadows, or rasterized UI are used. The final direction intentionally changes the reference's heavier rules, all-caps headings, and square buttons.
 
-Typography: Arial/sans-serif; main headings 34px on mobile and 42–46px on desktop, section headings 23px, readable 12–14px controls/body text, and 10–11px metadata. MUI supplies accessible controls and focus behavior. Lucide outline icons match the restrained navigation and action icons. Tables retain horizontal scrolling within their own container on mobile; review stages and columns stack.
+Typography: Arial/sans-serif; main headings 34px on mobile and 42–46px on desktop, section headings 23px, readable 12–14px controls/body text, and 10–11px metadata. MUI supplies accessible controls and focus behavior. Lucide outline icons match the restrained navigation and action icons. Tables retain horizontal scrolling within their own container on mobile. The current review stage and required criteria appear first; the full sequence and history expand on demand, and submission details follow the task on mobile.
 
 Component structure: `MvpApp` composes Shell and page components; `model` owns types, seed data, lifecycle rules, and reducer; `useWorkspace` owns local persistence and simulated execution; reusable UI primitives enforce status and stepper consistency. Pipeline tables remain tables at narrow widths with local horizontal scrolling; navigation becomes a mobile drawer and review columns stack.
 
-Allowed primary copy follows the pipeline concept: Zero Trust, Research workspace, Overview, Datasets, Pipelines, Runs & results, Approvals, Activity log, Clinical Research, MVP prototype, Workspace, Demo mode, Researcher, Pipelines, From research code to approved, reproducible workflows., View approvals, New pipeline, Total pipelines, Approved, In review, All pipelines, All categories, Search pipelines..., Pipeline, Version, Category, Review progress, Updated, Actions, Run, Review, Every pipeline follows a clear path, Explore the review process, Your work is saved in this browser.
+The original catalog reference used the following primary copy; task-specific actions now adapt to the acting role: Zero Trust, Research workspace, Overview, Datasets, Pipelines, Runs & results, Approvals, Activity log, Clinical Research, MVP prototype, Workspace, Demo mode, Researcher, Pipelines, From research code to approved, reproducible workflows., View approvals, New pipeline, Total pipelines, Approved, In review, All pipelines, All categories, Search pipelines..., Pipeline, Version, Category, Review progress, Updated, Actions, Run, Review, Every pipeline follows a clear path, Explore the review process, Your work is saved in this browser.
 
 Intentional extensions: dialogs, dataset/run/output pages, responsive mobile navigation, reset/help controls, review-role guidance, and required-comment validation implement the requested interactive workflow in the same visual system. Review checklist items start unchecked to demonstrate explicit reviewer acknowledgment. Counters derive from actual demo state. Status dots reflect completed stages correctly even where the generated concept's dots are inconsistent. Publication remains a separate author action after all four approvals.
 
@@ -28,5 +28,26 @@ Every new submission, new version, and resubmitted revision demonstrates all fou
 Run `npm run lint`, `npm run build`, and `npm run test:mvp`. The automated browser suite uses local Chromium (`/usr/bin/chromium` by default; override with `CHROMIUM_PATH`) and port 3000. Model checks cover stage order, reviewer restrictions, author publication, revision history, support, cancellation, and artifact validation. Browser tests cover the complete submission-to-download journey, feedback/resubmission, mobile import/reset, new versions with evidence preview, and failure recovery. Role switching, execution, and external integrations remain simulated.
 
 The expanded audit suite also covers invalid CSV replacement, quoted multiline records, mismatched columns, missing requirements, reserved version numbers, saved-data corruption, CSV export contents, evidence limits and reattachment, keyboard dialog dismissal, run recovery after reload, storage warning recovery, and all six screens on narrow phone/tablet widths. Pipeline and version context is retained in decision history; exports use a standard CSV header with provenance columns.
+
+## Walkthrough shortcuts and task-focused UX
+
+A discreet **Simulation controls** link sits below the sidebar guide. **Demo mode** in the header opens the same panel on desktop or mobile; run and artifact dialogs provide it too. This lets a single person demonstrate events that normally require another participant or a system:
+
+- Simulate the current stage approval, or every remaining required review. Each stage receives its own history entry marked as simulated.
+- Simulate author publication as a separate event after all four approvals.
+- Complete waiting simulated runs; their outputs still await validation.
+- Simulate Privacy reviewer acceptance of a pending output to demonstrate sample download.
+
+The controls change local demo state only. Normal review actions still require the assigned role and all three evidence confirmations. Draft/revision completeness rules are enforced at submission. Reviewer queues default to **My tasks**, with **All submissions** available for oversight. The Approvals badge counts current pipeline tasks for the acting role.
+
+Authors see a tracking receipt, named next owner and expected next step. Reviewers see a compact current-stage summary and a single criteria/comment/decision sequence. Source metadata, the full path and history are disclosed on demand. Rejection asks for confirmation with the affected pipeline/version and reason.
+
+Named working drafts can omit submission fields. Revision drafts persist separately from the reviewed version; saving one keeps its status, version, approvals and requested changes. Explicit resubmission advances the version, restarts all four stages and retains history. Requested changes remain visible throughout the revision wizard. The final summary includes branch, category, evidence names, destination reviewer and section-specific Edit actions.
+
+Import switches to a compact selected-file row, with Replace/Remove and an expandable column/sample preview. Only column names and metadata persist; sample rows are discarded on close. Run setup shows dataset columns and checks format compatibility, explicitly identifying that schema mapping is not verified. Failed-run retry is labelled **Retry demo with example mapping** and does not claim to edit source data.
+
+Completed runs distinguish execution status from output validation and offer a direct output action. Artifact decisions start without a preselected outcome. Synthetic fixtures follow recognized output contracts; unsupported contracts get an explicit generic-preview notice. Accepted/rejected outputs display a reviewer/time/comment receipt. Activity supports search, entity/event/date filtering, entity navigation, and export of the filtered events.
+
+Additional regression coverage verifies incomplete draft persistence, working revisions, role-aware queues, first-viewport mobile criteria, neutral artifact decisions, disclaimer contrast, output-contract snapshots, all simulation shortcuts, and filtered activity exports. Browser evidence is captured separately during verification; it does not establish full WCAG compliance or real backend authorization.
 
 Current UI previews: [pipeline catalog](screenshots/pipelines.png) and [review screen](screenshots/approval.png). These are rendered prototype screenshots rather than the earlier design concept.

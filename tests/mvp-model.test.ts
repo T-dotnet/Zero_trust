@@ -9,6 +9,7 @@ import {
 import { nextAvailableVersion, executionStepStatus } from "../src/mvp/model";
 import { parseDatasetCsv, encodeCsv } from "../src/mvp/csv";
 import { isWorkspace } from "../src/mvp/storage";
+import { artifactPreview } from "../src/mvp/artifactPreview";
 
 test("all four stage-specific approvals are needed before author publication", () => {
   let state = seedWorkspace();
@@ -302,4 +303,159 @@ test("run steps identify the failed stage and incompatible data cannot be queued
     },
   });
   assert.equal(result, state);
+});
+
+test("named incomplete drafts survive persistence but cannot enter review", () => {
+  let state = seedWorkspace();
+  const draft = {
+    ...state.pipelines[0],
+    id: "working-draft",
+    name: "Working draft",
+    description: "",
+    repo: "",
+    input: "",
+    output: "",
+    stage: 0,
+    status: "Draft" as const,
+    history: [],
+  };
+  state = workspaceReducer(state, {
+    type: "SUBMIT",
+    pipeline: draft,
+    draft: true,
+  });
+  assert.ok(isWorkspace(JSON.parse(JSON.stringify(state))));
+  assert.equal(state.pipelines[0].status, "Draft");
+  assert.equal(
+    workspaceReducer(state, { type: "REVISE", id: draft.id, fields: draft }),
+    state,
+  );
+  state = workspaceReducer(state, {
+    type: "SAVE_DRAFT",
+    id: draft.id,
+    fields: { ...draft, description: "Partial purpose" },
+  });
+  assert.equal(state.pipelines[0].description, "Partial purpose");
+  assert.equal(state.pipelines[0].status, "Draft");
+  assert.ok(isWorkspace(JSON.parse(JSON.stringify(state))));
+});
+
+test("saving a working revision preserves the reviewed submission until explicit resubmission", () => {
+  let state = seedWorkspace();
+  state = workspaceReducer(state, {
+    type: "REVIEW",
+    id: "pipe-2",
+    role: "Technical reviewer",
+    decision: "changes",
+    note: "Add output evidence.",
+  });
+  const reviewed = state.pipelines.find((p) => p.id === "pipe-2")!;
+  const fields = {
+    description: "Working revised purpose",
+    repo: reviewed.repo,
+    branch: "fix/schema",
+    category: reviewed.category,
+    input: reviewed.input,
+    output: reviewed.output,
+    attachments: [
+      {
+        id: "evidence",
+        name: "schema.md",
+        size: 20,
+        content: "Synthetic evidence",
+      },
+    ],
+  };
+  state = workspaceReducer(state, {
+    type: "SAVE_DRAFT",
+    id: reviewed.id,
+    fields,
+  });
+  const saved = state.pipelines.find((p) => p.id === reviewed.id)!;
+  assert.equal(saved.description, reviewed.description);
+  assert.equal(saved.status, "Changes requested");
+  assert.equal(saved.stage, 1);
+  assert.equal(saved.version, reviewed.version);
+  assert.equal(saved.revisionDraft?.branch, "fix/schema");
+  assert.ok(isWorkspace(JSON.parse(JSON.stringify(state))));
+  state = workspaceReducer(state, { type: "REVISE", id: saved.id, fields });
+  const resubmitted = state.pipelines.find((p) => p.id === saved.id)!;
+  assert.equal(resubmitted.version, "v1.0.1");
+  assert.equal(resubmitted.stage, 0);
+  assert.equal(resubmitted.status, "In review");
+  assert.equal(resubmitted.revisionDraft, undefined);
+  assert.ok(
+    resubmitted.history.some((event) => event.note === "Add output evidence."),
+  );
+});
+
+test("output contracts are captured for a run and validation records its reviewer", () => {
+  let state = seedWorkspace();
+  state.pipelines[0].output = "Outcome classification (CSV)";
+  state = workspaceReducer(state, {
+    type: "START_RUN",
+    run: {
+      ...state.runs[0],
+      id: "run-snapshot",
+      artifactId: undefined,
+      status: "Running",
+      progress: 96,
+    },
+  });
+  state = {
+    ...state,
+    pipelines: state.pipelines.map((p, index) =>
+      index === 0 ? { ...p, output: "New contract" } : p,
+    ),
+  };
+  state = workspaceReducer(state, { type: "TICK" });
+  const artifact = state.artifacts.find((a) => a.runId === "run-snapshot")!;
+  assert.equal(artifact.output, "Outcome classification (CSV)");
+  state = workspaceReducer(state, {
+    type: "REVIEW_ARTIFACT",
+    id: artifact.id,
+    role: "Privacy reviewer",
+    accept: true,
+    comment: "Synthetic sample checked.",
+  });
+  const accepted = state.artifacts.find((a) => a.id === artifact.id)!;
+  assert.equal(accepted.reviewedBy, "Dr. Olivia Reed");
+  assert.ok(Number.isFinite(Date.parse(accepted.reviewedAt!)));
+  assert.ok(isWorkspace(JSON.parse(JSON.stringify(state))));
+});
+
+test("synthetic previews follow declared outputs and disclose unsupported schemas", () => {
+  const artifact = seedWorkspace().artifacts[0];
+  const classification = artifactPreview({
+    ...artifact,
+    output: "Outcome classification (CSV)",
+  });
+  assert.ok(classification.headers.includes("predicted_outcome"));
+  assert.ok(
+    !classification.headers.includes("processed_text"),
+    "an older pipeline name cannot override the declared output",
+  );
+  assert.ok(
+    artifactPreview({
+      ...artifact,
+      output: "Patient risk stratification (CSV)",
+    }).headers.includes("predicted_risk"),
+  );
+  assert.ok(
+    artifactPreview({
+      ...artifact,
+      output: "Imaging metadata (CSV)",
+    }).headers.includes("acquisition_month"),
+  );
+  assert.ok(
+    artifactPreview({
+      ...artifact,
+      output: "Normalized cohort (CSV)",
+    }).headers.includes("standard_outcome"),
+  );
+  assert.match(
+    artifactPreview({ ...artifact, output: "Custom graph (XML)" }).note,
+    /Generic illustrative preview/,
+  );
+  assert.ok(artifactPreview(artifact).headers.includes("processed_text"));
 });

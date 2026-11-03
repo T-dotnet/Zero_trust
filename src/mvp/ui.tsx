@@ -120,7 +120,7 @@ export function StagePath({
 }) {
   return (
     <ol className={`stage-path ${illustrative ? "illustrative" : ""}`}>
-      {[...STAGES.map((s) => `${s} review`), "Published"].map((label, i) => {
+      {[...STAGES.map((s) => `${s} review`), "Publication"].map((label, i) => {
         const complete =
           pipeline &&
           (i < pipeline.stage || (i === 4 && pipeline.status === "Approved"));
@@ -139,12 +139,16 @@ export function StagePath({
               {pipeline && (
                 <small>
                   {complete
-                    ? "Completed"
+                    ? i === 4
+                      ? "Published"
+                      : "Completed"
                     : current
                       ? pipeline.status === "Draft"
                         ? "Not submitted"
                         : pipeline.status !== "In review"
-                          ? "Author action"
+                          ? i === 4
+                            ? "Ready to publish"
+                            : "Author action"
                           : "Current review"
                       : "Upcoming"}
                 </small>
@@ -159,9 +163,11 @@ export function StagePath({
 export function HistoryList({
   events,
   compact = false,
+  onOpen,
 }: {
   events: Event[];
   compact?: boolean;
+  onOpen?: (event: Event) => void;
 }) {
   return (
     <div className={`history-list ${compact ? "compact" : ""}`}>
@@ -174,8 +180,17 @@ export function HistoryList({
             <strong>{event.title}</strong>
             {event.entityName && (
               <small className="history-context">
-                {event.entityName}
-                {event.version ? ` · ${event.version}` : ""}
+                {onOpen && event.entityId ? (
+                  <button className="entity-name" onClick={() => onOpen(event)}>
+                    {event.entityName}
+                    {event.version ? ` · ${event.version}` : ""}
+                  </button>
+                ) : (
+                  <>
+                    {event.entityName}
+                    {event.version ? ` · ${event.version}` : ""}
+                  </>
+                )}
               </small>
             )}
             <p>
@@ -212,8 +227,10 @@ export function EmptyState({
 }
 export function ReviewGuide({ onExplore }: { onExplore: () => void }) {
   return (
-    <section className="review-guide">
-      <h2>Every pipeline follows a clear path</h2>
+    <details className="review-guide disclosure">
+      <summary>
+        How pipeline approval works · four reviews and author publication
+      </summary>
       <StagePath illustrative />
       <Button
         onClick={onExplore}
@@ -222,6 +239,6 @@ export function ReviewGuide({ onExplore }: { onExplore: () => void }) {
       >
         Explore the review process
       </Button>
-    </section>
+    </details>
   );
 }

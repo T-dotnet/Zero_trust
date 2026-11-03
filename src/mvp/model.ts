@@ -58,6 +58,7 @@ export interface Pipeline {
   history: Event[];
   attachments?: Attachment[];
   basedOn?: string;
+  revisionDraft?: PipelineFields;
 }
 export interface Dataset {
   id: string;
@@ -67,6 +68,7 @@ export interface Dataset {
   size: string;
   format: string;
   date: string;
+  columns?: string[];
 }
 export interface Run {
   id: string;
@@ -81,6 +83,7 @@ export interface Run {
   error?: string;
   artifactId?: string;
   failedStep?: number;
+  output?: string;
   support?: {
     id: string;
     message: string;
@@ -100,6 +103,9 @@ export interface Artifact {
   status: "Pending review" | "Validated" | "Not acceptable";
   date: string;
   comment?: string;
+  output?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
 }
 export interface Workspace {
   schema: 1;
@@ -122,6 +128,47 @@ export const actorFor = (role: Role) =>
 export const uid = (prefix: string) =>
   `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
 export const now = () => new Date().toISOString();
+export const pipelineNeedsAction = (pipeline: Pipeline, role: Role) =>
+  role === "Researcher"
+    ? ["Draft", "Changes requested", "Rejected", "Ready to publish"].includes(
+        pipeline.status,
+      )
+    : pipeline.status === "In review" &&
+      role === `${STAGES[pipeline.stage]} reviewer`;
+export const pipelineActionLabel = (pipeline: Pipeline, role: Role) => {
+  if (pipeline.status === "Approved")
+    return role === "Researcher" ? "Run" : "View pipeline";
+  if (!pipelineNeedsAction(pipeline, role)) return "Track submission";
+  if (role !== "Researcher") return "Review";
+  return pipeline.status === "Ready to publish"
+    ? "Publish"
+    : pipeline.status === "Draft"
+      ? "Edit draft"
+      : "Revise";
+};
+export function submissionComplete(
+  pipeline: Pick<
+    Pipeline,
+    "name" | "description" | "repo" | "branch" | "input" | "output"
+  >,
+) {
+  try {
+    const url = new URL(pipeline.repo.trim());
+    return (
+      ["http:", "https:"].includes(url.protocol) &&
+      Boolean(url.hostname) &&
+      [
+        pipeline.name,
+        pipeline.description,
+        pipeline.branch,
+        pipeline.input,
+        pipeline.output,
+      ].every((value) => Boolean(value.trim()))
+    );
+  } catch {
+    return false;
+  }
+}
 export function nextVersion(version: string, kind: "minor" | "patch") {
   const [major = 1, minor = 0, patch = 0] = version
     .replace(/^v/, "")
@@ -319,6 +366,7 @@ export function seedWorkspace(): Workspace {
         rows: 1248,
         size: "2.4 MB",
         format: "CSV",
+        columns: ["record_id", "clinical_note", "visit_date"],
         date: "2026-11-03T09:00:00Z",
       },
       {
@@ -328,6 +376,7 @@ export function seedWorkspace(): Workspace {
         rows: 864,
         size: "1.6 MB",
         format: "CSV",
+        columns: ["record_id", "outcome", "site"],
         date: "2026-11-02T11:00:00Z",
       },
       {
@@ -378,6 +427,7 @@ export function seedWorkspace(): Workspace {
         datasetName: "Clinical notes · November cohort",
         rows: 1248,
         status: "Pending review",
+        output: "De-identified clinical notes (CSV)",
         date: "2026-11-03T10:22:00Z",
       },
     ],
@@ -398,6 +448,7 @@ export type Action =
       note: string;
     }
   | { type: "REVISE"; id: string; fields: PipelineFields }
+  | { type: "SAVE_DRAFT"; id: string; fields: PipelineFields }
   | { type: "PUBLISH"; id: string; role: Role }
   | { type: "START_RUN"; run: Run }
   | { type: "RETRY"; id: string }
@@ -453,6 +504,11 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
       ),
     );
   if (action.type === "SUBMIT") {
+    if (
+      !action.pipeline.name.trim() ||
+      (!action.draft && !submissionComplete(action.pipeline))
+    )
+      return state;
     if (
       state.pipelines.some(
         (p) =>
@@ -530,10 +586,42 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
       event,
     );
   }
+  if (action.type === "SAVE_DRAFT") {
+    const pipeline = state.pipelines.find((p) => p.id === action.id);
+    if (
+      !pipeline ||
+      !["Draft", "Rejected", "Changes requested"].includes(pipeline.status)
+    )
+      return state;
+    const event = makeEvent(
+      pipeline.status === "Draft" ? "Draft saved" : "Revision draft saved",
+      "Dr. Sarah Chen",
+      pipeline.id,
+    );
+    return withEvent(
+      {
+        ...state,
+        pipelines: state.pipelines.map((p) =>
+          p.id === pipeline.id
+            ? {
+                ...p,
+                ...(p.status === "Draft"
+                  ? action.fields
+                  : { revisionDraft: action.fields }),
+                updated: now(),
+                history: [event, ...p.history],
+              }
+            : p,
+        ),
+      },
+      event,
+    );
+  }
   if (action.type === "REVISE") {
     const p = state.pipelines.find((p) => p.id === action.id);
     if (!p || !["Draft", "Rejected", "Changes requested"].includes(p.status))
       return state;
+    if (!submissionComplete({ ...p, ...action.fields })) return state;
     const version =
       p.status === "Draft"
         ? p.version
@@ -552,6 +640,7 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
             ? {
                 ...p,
                 ...action.fields,
+                revisionDraft: undefined,
                 version,
                 stage: 0,
                 status: "In review",
@@ -609,7 +698,10 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
     )
       return state;
     return withEvent(
-      { ...state, runs: [action.run, ...state.runs] },
+      {
+        ...state,
+        runs: [{ ...action.run, output: pipeline.output }, ...state.runs],
+      },
       makeEvent(
         "Run started",
         "Dr. Sarah Chen",
@@ -646,7 +738,7 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
         "Dr. Sarah Chen",
         action.id,
         state.runs.find((r) => r.id === action.id)?.status === "Failed"
-          ? "Demo input mapping corrected."
+          ? "Retried with a synthetic example mapping; no source data changed."
           : "Cancelled demo restarted.",
       ),
     );
@@ -739,6 +831,9 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
         datasetName: r.datasetName,
         rows: dataset?.rows || 100,
         status: "Pending review",
+        output:
+          r.output ||
+          state.pipelines.find((p) => p.id === r.pipelineId)?.output,
         date: now(),
       });
       events.push(
@@ -786,6 +881,8 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
                 ...a,
                 status: action.accept ? "Validated" : "Not acceptable",
                 comment: action.comment,
+                reviewedBy: actorFor(action.role),
+                reviewedAt: now(),
               }
             : a,
         ),

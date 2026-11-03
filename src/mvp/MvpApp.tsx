@@ -22,9 +22,12 @@ import {
   PipelineForm,
   RunDialog,
 } from "./Dialogs";
-import { HistoryList, PageHeader } from "./ui";
+import { ActivityView } from "./ActivityView";
+import { SimulationControls } from "./SimulationControls";
 import {
   now,
+  pipelineNeedsAction,
+  type Event,
   uid,
   type Dataset,
   type Page,
@@ -32,9 +35,9 @@ import {
   type Role,
 } from "./model";
 import { useWorkspace } from "./useWorkspace";
-import { downloadText } from "./files";
 import { theme } from "./theme";
 import "./mvp.css";
+import "./ux.css";
 
 export default function MvpApp() {
   const { state, dispatch, storageAvailable } = useWorkspace();
@@ -45,8 +48,18 @@ export default function MvpApp() {
   );
   const [artifactId, setArtifactId] = useState<string | null>(null);
   const [dialog, setDialog] = useState<
-    "pipeline" | "import" | "run" | "help" | "reset" | null
+    "pipeline" | "import" | "run" | "help" | "reset" | "simulation" | null
   >(null);
+  const [datasetContextId, setDatasetContextId] = useState<
+    string | undefined
+  >();
+  const [runsView, setRunsView] = useState<{ tab?: string; runId?: string }>(
+    {},
+  );
+  const [simulationContext, setSimulationContext] = useState<{
+    pipelineId?: string | null;
+    artifactId?: string | null;
+  }>({});
   const [versionSourceId, setVersionSourceId] = useState<string | null>(null);
   const [reviseId, setReviseId] = useState<string | null>(null);
   const [runContext, setRunContext] = useState<{
@@ -66,10 +79,40 @@ export default function MvpApp() {
   const navigate = (next: Page) => {
     setPage(next);
     setSelectedPipelineId(null);
+    setDatasetContextId(undefined);
+    setRunsView({});
   };
   const openPipeline = (p: Pipeline) => {
     setSelectedPipelineId(p.id);
     setPage("Approvals");
+  };
+  const openSimulation = () => {
+    setSimulationContext({ pipelineId: selectedPipelineId, artifactId });
+    setArtifactId(null);
+    setDialog("simulation");
+  };
+  const openEvent = (event: Event) => {
+    const pipeline = state.pipelines.find((p) => p.id === event.entityId);
+    if (pipeline) {
+      openPipeline(pipeline);
+      return;
+    }
+    const run = state.runs.find((r) => r.id === event.entityId);
+    if (run) {
+      navigate("Runs & results");
+      setRunsView({ runId: run.id });
+      return;
+    }
+    const artifact = state.artifacts.find((a) => a.id === event.entityId);
+    if (artifact) {
+      setArtifactId(artifact.id);
+      return;
+    }
+    const dataset = state.datasets.find((d) => d.id === event.entityId);
+    if (dataset) {
+      navigate("Datasets");
+      setDatasetContextId(dataset.id);
+    }
   };
   const openRun = (p?: Pipeline, d?: Dataset) => {
     if (role !== "Researcher") {
@@ -93,6 +136,11 @@ export default function MvpApp() {
   };
   const catalogProps = {
     state,
+    role,
+    onOutputs: () => {
+      navigate("Runs & results");
+      setRunsView({ tab: "results" });
+    },
     onOpen: openPipeline,
     onNew: createPipeline,
     onRun: (p: Pipeline) => openRun(p),
@@ -107,16 +155,19 @@ export default function MvpApp() {
         role={role}
         setRole={setRole}
         approvalCount={
-          state.pipelines.filter((p) => p.status === "In review").length
+          state.pipelines.filter((p) => pipelineNeedsAction(p, role)).length
         }
         onReset={() => setDialog("reset")}
         onHelp={() => setDialog("help")}
+        onSimulation={openSimulation}
         storageAvailable={storageAvailable}
       >
         {page === "Pipelines" && <PipelineCatalog {...catalogProps} />}
         {page === "Overview" && <Overview {...catalogProps} />}
         {page === "Datasets" && (
           <Datasets
+            key={datasetContextId || "datasets"}
+            initialDatasetId={datasetContextId}
             state={state}
             onImport={openImport}
             onRun={(d) => openRun(undefined, d)}
@@ -163,10 +214,19 @@ export default function MvpApp() {
               onRun={() => openRun(selectedPipeline)}
             />
           ) : (
-            <Approvals state={state} onOpen={openPipeline} />
+            <Approvals
+              key={role}
+              state={state}
+              onOpen={openPipeline}
+              role={role}
+            />
           ))}
         {page === "Runs & results" && (
           <RunsAndResults
+            key={`${runsView.tab || "runs"}-${runsView.runId || ""}`}
+            initialTab={runsView.tab}
+            initialRunId={runsView.runId}
+            onSimulation={openSimulation}
             state={state}
             onNewRun={() => openRun()}
             onArtifact={(a) => setArtifactId(a.id)}
@@ -174,7 +234,7 @@ export default function MvpApp() {
               dispatch({ type: "RETRY", id: r.id });
               setToast(
                 r.status === "Failed"
-                  ? "Demo mapping corrected. Run restarted."
+                  ? "Demo run restarted with a synthetic example mapping. Source data is unchanged."
                   : "Demo run restarted.",
               );
             }}
@@ -191,36 +251,7 @@ export default function MvpApp() {
           />
         )}
         {page === "Activity log" && (
-          <>
-            <PageHeader
-              title="Activity log"
-              description="The decisions and actions behind every research output."
-            >
-              <Button
-                variant="outlined"
-                onClick={() =>
-                  downloadText(
-                    "zero-trust-activity.json",
-                    JSON.stringify(
-                      { generatedAt: now(), events: state.events },
-                      null,
-                      2,
-                    ),
-                    "application/json",
-                  )
-                }
-              >
-                Export history
-              </Button>
-            </PageHeader>
-            <section className="plain-panel">
-              <div className="section-title">
-                <h2>Workspace history</h2>
-                <span className="mono muted">{state.events.length} events</span>
-              </div>
-              <HistoryList events={state.events} />
-            </section>
-          </>
+          <ActivityView state={state} onOpen={openEvent} />
         )}
       </Shell>
       {dialog === "pipeline" && (
@@ -235,10 +266,19 @@ export default function MvpApp() {
             openPipeline(pipeline);
             setToast(draft ? "Draft saved." : "Submitted for Ethical review.");
           }}
-          onRevise={(fields) => {
-            if (reviseId) dispatch({ type: "REVISE", id: reviseId, fields });
+          onRevise={(fields, draft) => {
+            if (reviseId)
+              dispatch({
+                type: draft ? "SAVE_DRAFT" : "REVISE",
+                id: reviseId,
+                fields,
+              });
             setDialog(null);
-            setToast("Revision submitted. All four reviews are required.");
+            setToast(
+              draft
+                ? "Working draft saved. The previous submission and decisions are retained."
+                : "Revision submitted. All four reviews are required.",
+            );
           }}
         />
       )}
@@ -284,6 +324,8 @@ export default function MvpApp() {
       )}
       {artifact && (
         <ArtifactDialog
+          key={artifact.id}
+          onSimulation={openSimulation}
           artifact={artifact}
           role={role}
           setRole={setRole}
@@ -303,6 +345,15 @@ export default function MvpApp() {
             );
           }}
           notify={setToast}
+        />
+      )}
+      {dialog === "simulation" && (
+        <SimulationControls
+          state={state}
+          pipelineId={simulationContext.pipelineId}
+          artifactId={simulationContext.artifactId}
+          dispatch={dispatch}
+          onClose={() => setDialog(null)}
         />
       )}
       {dialog === "help" && (

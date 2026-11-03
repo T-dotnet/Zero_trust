@@ -41,6 +41,7 @@ interface Props {
   children: ReactNode;
   onReset: () => void;
   onHelp: () => void;
+  onSimulation: () => void;
   storageAvailable: boolean;
 }
 export function Shell({
@@ -52,6 +53,7 @@ export function Shell({
   children,
   onReset,
   onHelp,
+  onSimulation,
   storageAvailable,
 }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -90,6 +92,9 @@ export function Shell({
         <button className="sidebar-help" onClick={onHelp}>
           <FileText size={14} /> Walkthrough guide <ArrowUpRight size={13} />
         </button>
+        <button className="simulation-link" onClick={onSimulation}>
+          Simulation controls
+        </button>
       </div>
     </>
   );
@@ -121,8 +126,11 @@ export function Shell({
             </span>
           </div>
           <div className="utility-actions">
-            <Tooltip title="Interactive UX prototype. Data and permissions are simulated locally.">
-              <button className="demo-mode" onClick={onHelp}>
+            <Tooltip
+              describeChild
+              title="Interactive UX prototype. Open simulation controls to advance the walkthrough."
+            >
+              <button className="demo-mode" onClick={onSimulation}>
                 Demo mode
               </button>
             </Tooltip>

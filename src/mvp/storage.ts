@@ -20,6 +20,22 @@ const event = (v: unknown) =>
   );
 const uniqueIds = (rows: RecordValue[]) =>
   new Set(rows.map((r) => r.id)).size === rows.length;
+const attachments = (v: unknown) =>
+  v === undefined ||
+  (Array.isArray(v) &&
+    v.every(
+      (a) =>
+        object(a) &&
+        strings(a, ["id", "name"]) &&
+        integer(a.size, 50_000) &&
+        optionalString(a.content),
+    ));
+const draftFields = (v: unknown) =>
+  object(v) &&
+  ["description", "repo", "branch", "category", "input", "output"].every(
+    (key) => string(v[key]),
+  ) &&
+  attachments(v.attachments);
 
 export function isWorkspace(value: unknown): value is Workspace {
   if (!object(value) || value.schema !== 1) return false;
@@ -51,16 +67,10 @@ export function isWorkspace(value: unknown): value is Workspace {
   if (
     !pipelines.every((p) => {
       if (
-        !strings(p, [
-          "id",
-          "name",
-          "description",
-          "version",
-          "category",
-          "repo",
-          "branch",
-          "author",
-        ]) ||
+        !strings(p, ["id", "name", "version", "category", "author"]) ||
+        !["description", "repo", "branch"].every(
+          (key) => string(p[key]) && (p.status === "Draft" || text(p[key])),
+        ) ||
         !string(p.input) ||
         !string(p.output) ||
         (p.status !== "Draft" && (!text(p.input) || !text(p.output))) ||
@@ -93,15 +103,10 @@ export function isWorkspace(value: unknown): value is Workspace {
       )
         return false;
       return (
-        p.attachments === undefined ||
-        (Array.isArray(p.attachments) &&
-          p.attachments.every(
-            (a) =>
-              object(a) &&
-              strings(a, ["id", "name"]) &&
-              integer(a.size, 50_000) &&
-              optionalString(a.content),
-          ))
+        attachments(p.attachments) &&
+        (p.revisionDraft === undefined ||
+          (["Changes requested", "Rejected"].includes(p.status as string) &&
+            draftFields(p.revisionDraft)))
       );
     })
   )
@@ -111,7 +116,9 @@ export function isWorkspace(value: unknown): value is Workspace {
       (d) =>
         strings(d, ["id", "name", "description", "size", "format"]) &&
         integer(d.rows) &&
-        date(d.date),
+        date(d.date) &&
+        (d.columns === undefined ||
+          (Array.isArray(d.columns) && d.columns.every(text))),
     )
   )
     return false;
@@ -141,7 +148,8 @@ export function isWorkspace(value: unknown): value is Workspace {
         !["Running", "Completed", "Failed", "Cancelled"].includes(
           r.status as string,
         ) ||
-        !optionalString(r.error)
+        !optionalString(r.error) ||
+        !optionalString(r.output)
       )
         return false;
       if (!pipelineIds.has(r.pipelineId) || !datasetIds.has(r.datasetId))
@@ -178,6 +186,9 @@ export function isWorkspace(value: unknown): value is Workspace {
           a.status as string,
         ) &&
         optionalString(a.comment) &&
+        optionalString(a.output) &&
+        optionalString(a.reviewedBy) &&
+        (a.reviewedAt === undefined || date(a.reviewedAt)) &&
         runIds.has(a.runId) &&
         pipelineIds.has(a.pipelineId),
     )

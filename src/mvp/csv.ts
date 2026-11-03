@@ -1,6 +1,10 @@
 import Papa from "papaparse";
 
-export function parseDatasetCsv(text: string): { rows: number } {
+export function parseDatasetCsv(text: string): {
+  rows: number;
+  columns: string[];
+  preview: string[][];
+} {
   const parsed = Papa.parse<string[]>(text, {
     delimiter: ",",
     skipEmptyLines: "greedy",
@@ -19,7 +23,7 @@ export function parseDatasetCsv(text: string): { rows: number } {
     throw new Error(
       "Every CSV row must have the same number of fields as the header.",
     );
-  return { rows: records.length };
+  return { rows: records.length, columns: names, preview: records.slice(0, 3) };
 }
 
 export function encodeCsv(rows: string[][]): string {

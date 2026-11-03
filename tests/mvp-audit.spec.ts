@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { parseDatasetCsv } from "../src/mvp/csv";
 
 async function nav(page: Page, name: string) {
-  await expect(page.locator('h1')).toBeVisible();
+  await expect(page.locator("h1")).toBeVisible();
   const menu = page.getByRole("button", { name: "Open navigation" });
   const mobile = await menu.isVisible();
   if (mobile) await menu.click();
@@ -159,6 +159,7 @@ test("drafts retain requirements and attachments across editing and reload", asy
   await page.goto("/");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
   await page.getByRole("button", { name: "Use example" }).click();
+  await page.locator("summary").filter({ hasText: "Source settings" }).click();
   await page.getByLabel("Branch or tag").fill("release/audit");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByLabel("Expected output").fill("Audited outcome data (CSV)");
@@ -204,7 +205,7 @@ test("reviewers cannot approve out of order and rejection needs a reason", async
   await role(page, "Security reviewer");
   await expect(
     page.getByRole("button", { name: "Approve ethical review" }),
-  ).toBeDisabled();
+  ).toBeHidden();
   await role(page, "Ethical reviewer");
   await page
     .getByRole("button", { name: "Reject submission", exact: true })
@@ -221,6 +222,9 @@ test("reviewers cannot approve out of order and rejection needs a reason", async
   await expect(
     page.getByText("Clarify consent scope.", { exact: true }).first(),
   ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Confirm rejection", exact: true })
+    .click();
   await role(page, "Researcher");
   await page
     .getByRole("button", { name: "Revise & resubmit", exact: true })
@@ -228,12 +232,17 @@ test("reviewers cannot approve out of order and rejection needs a reason", async
   await page
     .getByLabel("Repository URL")
     .fill("https://github.com/research/revised");
+  await page.locator("summary").filter({ hasText: "Source settings" }).click();
   await page.getByLabel("Branch or tag").fill("fix/consent");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByLabel("Input specification").fill("Revised CSV input");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
     .getByRole("button", { name: "Resubmit for review", exact: true })
+    .click();
+  await page
+    .locator("summary")
+    .filter({ hasText: "Source and version" })
     .click();
   await expect(page.getByText("fix/consent", { exact: true })).toBeVisible();
   await expect(
@@ -301,8 +310,11 @@ test("validated CSV download has a standard header, sample records, and provenan
   await page
     .getByRole("button", { name: "De-identified clinical notes", exact: true })
     .click();
-  await page.getByRole("button", { name: "Switch role", exact: true }).click();
-  await page.getByRole("button", { name: "Submit validation" }).click();
+  await page
+    .getByRole("button", { name: "Continue as Privacy reviewer", exact: true })
+    .click();
+  await page.getByRole("radio", { name: "Acceptable", exact: true }).check();
+  await page.getByRole("button", { name: "Accept output" }).click();
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download sample CSV" }).click();
   const file = await download;
@@ -320,11 +332,15 @@ test("incompatible dataset formats and non-researcher creation are blocked", asy
 }) => {
   await page.goto("/");
   await role(page, "Privacy reviewer");
-  await page.getByRole("button", { name: "New pipeline", exact: true }).click();
-  await expect(page.getByRole("dialog")).toBeHidden();
   await expect(
-    page.getByRole("alert").filter({ hasText: "Switch to Researcher" }),
-  ).toBeVisible();
+    page.getByRole("button", { name: "New pipeline", exact: true }),
+  ).toBeHidden();
+  await page
+    .getByRole("button", { name: "View my tasks", exact: true })
+    .click();
+  await expect(
+    page.getByRole("tab", { name: "My tasks 1", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
   await nav(page, "Datasets");
   await expect(
     page.getByRole("button", { name: "Import dataset", exact: true }),
