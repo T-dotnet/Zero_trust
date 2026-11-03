@@ -26,3 +26,7 @@ Every new submission, new version, and resubmitted revision demonstrates all fou
 ## Verification
 
 Run `npm run lint`, `npm run build`, and `npm run test:mvp`. The automated browser suite uses local Chromium (`/usr/bin/chromium` by default; override with `CHROMIUM_PATH`) and port 3000. Model checks cover stage order, reviewer restrictions, author publication, revision history, support, cancellation, and artifact validation. Browser tests cover the complete submission-to-download journey, feedback/resubmission, mobile import/reset, new versions with evidence preview, and failure recovery. Role switching, execution, and external integrations remain simulated.
+
+The expanded audit suite also covers invalid CSV replacement, quoted multiline records, mismatched columns, missing requirements, reserved version numbers, saved-data corruption, CSV export contents, evidence limits and reattachment, keyboard dialog dismissal, run recovery after reload, storage warning recovery, and all six screens on narrow phone/tablet widths. Pipeline and version context is retained in decision history; exports use a standard CSV header with provenance columns.
+
+Current UI previews: [pipeline catalog](screenshots/pipelines.png) and [review screen](screenshots/approval.png). These are rendered prototype screenshots rather than the earlier design concept.

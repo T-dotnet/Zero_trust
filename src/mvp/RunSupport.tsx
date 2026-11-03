@@ -81,7 +81,10 @@ export function RunSupport({
             <Button
               variant="outlined"
               disabled={!message.trim()}
-              onClick={() => onReport(message)}
+              onClick={() => {
+                onReport(message);
+                setMessage("");
+              }}
             >
               Create support request
             </Button>

@@ -26,6 +26,7 @@ import {
 import {
   formatDate,
   formatTime,
+  executionStepStatus,
   type Artifact,
   type Dataset,
   type Run,
@@ -34,7 +35,8 @@ import {
 } from "./model";
 import { EmptyState, PageHeader, SearchField, Status } from "./ui";
 import { RunSupport } from "./RunSupport";
-import { downloadRunLog } from "./files";
+import { downloadRunLog, downloadText } from "./files";
+import { encodeCsv } from "./csv";
 
 export function Datasets({
   state,
@@ -440,23 +442,18 @@ export function RunsAndResults({
                   "Prepare environment",
                   "Process records",
                   "Write output",
-                ].map((label, i) => (
-                  <div key={label}>
-                    <span
-                      className={run.progress >= (i + 1) * 25 ? "done" : ""}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <strong>{label}</strong>
-                    <small>
-                      {run.progress >= (i + 1) * 25
-                        ? "Complete"
-                        : run.status === "Failed" && i === 1
-                          ? "Failed"
-                          : "Pending"}
-                    </small>
-                  </div>
-                ))}
+                ].map((label, i) => {
+                  const status = executionStepStatus(run, i);
+                  return (
+                    <div key={label}>
+                      <span className={status === "Complete" ? "done" : ""}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <strong>{label}</strong>
+                      <small>{status}</small>
+                    </div>
+                  );
+                })}
               </div>
               {run.error && (
                 <div className="error-message">
@@ -466,6 +463,7 @@ export function RunsAndResults({
               )}
               {(run.status === "Failed" || run.support) && (
                 <RunSupport
+                  key={run.id}
                   run={run}
                   role={role}
                   setRole={setRole}
@@ -543,24 +541,13 @@ export const PREVIEW_ROWS = [
   ],
 ];
 export function downloadArtifact(artifact: Artifact) {
-  const content = [
-    "record_id,processed_text,risk",
-    ...PREVIEW_ROWS.map((row) =>
-      row.map((value) => `"${value.replaceAll('"', '""')}"`).join(","),
-    ),
-  ].join("\n");
-  const blob = new Blob(
-    [
-      `# Synthetic preview export; 4 sample rows\n# Run: ${artifact.runId}; pipeline version: ${artifact.version}\n${content}`,
-    ],
-    { type: "text/csv;charset=utf-8" },
+  const content = encodeCsv([
+    ["record_id", "processed_text", "risk", "run_id", "pipeline_version"],
+    ...PREVIEW_ROWS.map((row) => [...row, artifact.runId, artifact.version]),
+  ]);
+  downloadText(
+    `${artifact.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-sample.csv`,
+    content,
+    "text/csv;charset=utf-8",
   );
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${artifact.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-sample.csv`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

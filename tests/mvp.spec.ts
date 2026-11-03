@@ -150,7 +150,9 @@ test("feedback requires a comment and revised pipeline restarts the four-stage p
     page.getByRole("heading", { name: "Ethical review", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("Patient risk stratification · v1.0.1", { exact: true }),
+    page
+      .locator(".page-heading")
+      .getByText("Patient risk stratification · v1.0.1", { exact: true }),
   ).toBeVisible();
 });
 
@@ -214,21 +216,21 @@ test("new versions retain the approved version and expose attached evidence to r
   await page
     .getByLabel("Expected output")
     .fill("Validated synthetic notes (CSV)");
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "validation-evidence.md",
-      mimeType: "text/markdown",
-      buffer: Buffer.from(
-        "# Validation evidence\nSynthetic schema and output checked.",
-      ),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "validation-evidence.md",
+    mimeType: "text/markdown",
+    buffer: Buffer.from(
+      "# Validation evidence\nSynthetic schema and output checked.",
+    ),
+  });
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
     .getByRole("button", { name: "Submit for review", exact: true })
     .click();
   await expect(
-    page.getByText("Clinical note de-identification · v2.2.0", { exact: true }),
+    page
+      .locator(".page-heading")
+      .getByText("Clinical note de-identification · v2.2.0", { exact: true }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Ethical review", exact: true }),
@@ -296,23 +298,50 @@ test("failed run support can be resolved and logs exported before retry and canc
   ).toBeVisible();
 });
 
-test('unacceptable outputs require a reason and remain blocked from download; decisions export in activity history', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Runs & results', exact: true }).click();
-  await page.getByRole('tab', { name: 'Results 1', exact: true }).click();
-  await page.getByRole('button', { name: 'De-identified clinical notes', exact: true }).click();
-  await page.getByRole('button', { name: 'Switch role', exact: true }).click();
-  await page.getByRole('radio', { name: 'Not acceptable', exact: true }).check();
-  await page.getByRole('button', { name: 'Submit validation' }).click();
-  await expect(page.getByText('Explain why this output is not acceptable.')).toBeVisible();
-  await page.getByLabel('Validation comments').fill('Residual identifiers require another processing pass.');
-  await page.getByRole('button', { name: 'Submit validation' }).click();
-  await expect(page.getByRole('button', { name: 'Download sample CSV' })).toBeDisabled();
-  await expect(page.getByText('Residual identifiers require another processing pass.', { exact: true })).toBeVisible();
-  await page.getByRole('dialog').getByRole('button', { name: 'Close', exact: true }).click();
-  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Activity log', exact: true }).click();
-  await expect(page.getByText('Artifact marked not acceptable', { exact: true })).toBeVisible();
-  const download = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export history' }).click();
-  expect((await download).suggestedFilename()).toBe('zero-trust-activity.json');
+test("unacceptable outputs require a reason and remain blocked from download; decisions export in activity history", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: "Runs & results", exact: true })
+    .click();
+  await page.getByRole("tab", { name: "Results 1", exact: true }).click();
+  await page
+    .getByRole("button", { name: "De-identified clinical notes", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Switch role", exact: true }).click();
+  await page
+    .getByRole("radio", { name: "Not acceptable", exact: true })
+    .check();
+  await page.getByRole("button", { name: "Submit validation" }).click();
+  await expect(
+    page.getByText("Explain why this output is not acceptable."),
+  ).toBeVisible();
+  await page
+    .getByLabel("Validation comments")
+    .fill("Residual identifiers require another processing pass.");
+  await page.getByRole("button", { name: "Submit validation" }).click();
+  await expect(
+    page.getByRole("button", { name: "Download sample CSV" }),
+  ).toBeDisabled();
+  await expect(
+    page.getByText("Residual identifiers require another processing pass.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "Close", exact: true })
+    .click();
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: "Activity log", exact: true })
+    .click();
+  await expect(
+    page.getByText("Artifact marked not acceptable", { exact: true }),
+  ).toBeVisible();
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export history" }).click();
+  expect((await download).suggestedFilename()).toBe("zero-trust-activity.json");
 });

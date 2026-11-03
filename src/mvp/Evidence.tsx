@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -13,13 +13,28 @@ import { uid, type Attachment } from "./model";
 export function AttachmentPicker({
   attachments,
   onChange,
+  onBusyChange,
 }: {
   attachments: Attachment[];
   onChange: (files: Attachment[]) => void;
+  onBusyChange: (busy: boolean) => void;
 }) {
   const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const picker = useRef<HTMLLabelElement>(null);
+  const restoreFocus = useRef(false);
+  useEffect(() => {
+    if (!busy && restoreFocus.current) {
+      if (
+        document.activeElement === document.body ||
+        picker.current?.contains(document.activeElement)
+      )
+        picker.current?.focus();
+      restoreFocus.current = false;
+    }
+  }, [busy]);
   const read = async (files: FileList | null) => {
-    if (!files) return;
+    if (!files || busy) return;
     const list = Array.from(files);
     if (
       attachments.length + list.length > 4 ||
@@ -33,6 +48,9 @@ export function AttachmentPicker({
       return;
     }
     try {
+      setBusy(true);
+      restoreFocus.current = true;
+      onBusyChange(true);
       const added = await Promise.all(
         list.map(async (f) => ({
           id: uid("file"),
@@ -45,6 +63,9 @@ export function AttachmentPicker({
       setError("");
     } catch {
       setError("The selected file could not be read.");
+    } finally {
+      setBusy(false);
+      onBusyChange(false);
     }
   };
   return (
@@ -53,6 +74,8 @@ export function AttachmentPicker({
         <h3>Evidence attachments</h3>
         <Button
           component="label"
+          ref={picker}
+          disabled={busy}
           size="small"
           startIcon={<Paperclip size={15} />}
         >
@@ -62,7 +85,10 @@ export function AttachmentPicker({
             multiple
             hidden
             accept=".txt,.md,.json,.csv,.yaml,.yml"
-            onChange={(e) => void read(e.target.files)}
+            onChange={(e) => {
+              void read(e.target.files);
+              e.target.value = "";
+            }}
           />
         </Button>
       </div>
@@ -79,6 +105,7 @@ export function AttachmentPicker({
           </span>
           <Button
             size="small"
+            disabled={busy}
             aria-label={`Remove ${a.name}`}
             onClick={() => onChange(attachments.filter((f) => f.id !== a.id))}
           >

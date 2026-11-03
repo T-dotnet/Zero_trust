@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -24,7 +24,8 @@ import {
 import { ArrowRight, Check, Download, FileText, Upload, X } from "lucide-react";
 import {
   now,
-  nextVersion,
+  nextAvailableVersion,
+  supportsDataset,
   uid,
   type Attachment,
   type PipelineFields,
@@ -37,16 +38,19 @@ import {
 import { PREVIEW_ROWS, downloadArtifact } from "./DataAndRuns";
 import { StagePath, Status } from "./ui";
 import { AttachmentPicker } from "./Evidence";
+import { parseDatasetCsv } from "./csv";
 
 export function PipelineForm({
   pipeline,
   versionSource,
+  pipelines,
   onClose,
   onCreate,
   onRevise,
 }: {
   pipeline?: Pipeline;
   versionSource?: Pipeline;
+  pipelines: Pipeline[];
   onClose: () => void;
   onCreate: (p: Pipeline, draft: boolean) => void;
   onRevise: (fields: PipelineFields) => void;
@@ -57,22 +61,38 @@ export function PipelineForm({
   );
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
+  const [evidenceBusy, setEvidenceBusy] = useState(false);
+  const proposedVersion = pipeline
+    ? pipeline.status === "Draft"
+      ? pipeline.version
+      : nextAvailableVersion(pipeline, pipelines, "patch")
+    : versionSource
+      ? nextAvailableVersion(versionSource, pipelines, "minor")
+      : "v1.0.0";
   const [form, setForm] = useState({
     name: source?.name || "",
     description: source?.description || "",
     repo: source?.repo || "",
     branch: source?.branch || "main",
     category: source?.category || "Data processing",
-    input: source?.input || "Structured clinical data (CSV)",
-    output: source?.output || "Processed dataset (CSV)",
+    input: source?.input ?? "Structured clinical data (CSV)",
+    output: source?.output ?? "Processed dataset (CSV)",
   });
   const update = (key: keyof typeof form, value: string) =>
     setForm((prev) => ({ ...prev, [key]: value }));
   const valid = () => {
+    let validRepo = false;
+    try {
+      const url = new URL(form.repo.trim());
+      validRepo =
+        ["http:", "https:"].includes(url.protocol) && Boolean(url.hostname);
+    } catch {
+      /* The error is shown next to the form. */
+    }
     if (
       !form.name.trim() ||
       !form.description.trim() ||
-      !/^https?:\/\/\S+$/i.test(form.repo) ||
+      !validRepo ||
       !form.branch.trim()
     ) {
       setError(
@@ -80,12 +100,36 @@ export function PipelineForm({
       );
       return false;
     }
+    if (
+      !source &&
+      pipelines.some(
+        (p) => p.name.trim().toLowerCase() === form.name.trim().toLowerCase(),
+      )
+    ) {
+      setError(
+        "A pipeline with this name already exists. Open its approved version to submit an update.",
+      );
+      return false;
+    }
+    setError("");
+    return true;
+  };
+  const validRequirements = () => {
+    if (!form.input.trim() || !form.output.trim()) {
+      setError("Define both the input specification and expected output.");
+      return false;
+    }
     setError("");
     return true;
   };
   const submit = (draft: boolean) => {
+    if (evidenceBusy) return;
     if (!valid()) {
       setStep(0);
+      return;
+    }
+    if (!draft && !validRequirements()) {
+      setStep(1);
       return;
     }
     if (pipeline) onRevise({ ...form, attachments });
@@ -97,9 +141,7 @@ export function PipelineForm({
           description: form.description.trim(),
           repo: form.repo.trim(),
           id: uid("pipe"),
-          version: versionSource
-            ? nextVersion(versionSource.version, "minor")
-            : "v1.0.0",
+          version: proposedVersion,
           basedOn: versionSource?.id,
           attachments,
           author: "Dr. Sarah Chen",
@@ -223,12 +265,14 @@ export function PipelineForm({
             <h3>Define the processing contract</h3>
             <TextField
               label="Input specification"
+              required
               value={form.input}
               onChange={(e) => update("input", e.target.value)}
               fullWidth
             />
             <TextField
               label="Expected output"
+              required
               value={form.output}
               onChange={(e) => update("output", e.target.value)}
               fullWidth
@@ -252,6 +296,7 @@ export function PipelineForm({
             <AttachmentPicker
               attachments={attachments}
               onChange={setAttachments}
+              onBusyChange={setEvidenceBusy}
             />
           </div>
         )}
@@ -261,16 +306,7 @@ export function PipelineForm({
             <p className="muted">{form.description}</p>
             <dl className="metadata-list">
               {[
-                [
-                  "Version",
-                  pipeline
-                    ? pipeline.status === "Draft"
-                      ? pipeline.version
-                      : nextVersion(pipeline.version, "patch")
-                    : versionSource
-                      ? nextVersion(versionSource.version, "minor")
-                      : "v1.0.0",
-                ],
+                ["Version", proposedVersion],
                 ["Repository", form.repo],
                 ["Input", form.input],
                 ["Output", form.output],
@@ -300,13 +336,22 @@ export function PipelineForm({
           {step === 0 ? "Cancel" : "Back"}
         </Button>
         <div className="dialog-action-spacer" />
-        {!pipeline && <Button onClick={() => submit(true)}>Save draft</Button>}
+        {!pipeline && (
+          <Button disabled={evidenceBusy} onClick={() => submit(true)}>
+            Save draft
+          </Button>
+        )}
         {step < 2 ? (
           <Button
             variant="contained"
+            disabled={evidenceBusy}
             endIcon={<ArrowRight size={16} />}
             onClick={() => {
-              if (step > 0 || valid()) setStep(step + 1);
+              if (
+                (step === 0 && valid()) ||
+                (step === 1 && validRequirements())
+              )
+                setStep(step + 1);
             }}
           >
             Continue
@@ -336,7 +381,11 @@ export function ImportDialog({
     size: string;
   } | null>(null);
   const [error, setError] = useState("");
+  const [reading, setReading] = useState(false);
+  const readSequence = useRef(0);
   const sample = () => {
+    readSequence.current += 1;
+    setReading(false);
     setName("Clinical research · Demo cohort");
     setDescription(
       "Synthetic records for demonstrating the processing workflow.",
@@ -350,28 +399,37 @@ export function ImportDialog({
   };
   const readFile = async (f?: File) => {
     if (!f) return;
+    const sequence = ++readSequence.current;
+    setFile(null);
+    setReading(true);
+    setError("");
     if (!f.name.toLowerCase().endsWith(".csv") || f.size > 5 * 1024 * 1024) {
       setError(
         "Choose a CSV file smaller than 5 MB, or use the synthetic example.",
       );
+      setReading(false);
       return;
     }
     try {
       const text = await f.text();
-      const lines = text.split(/\r?\n/).filter((s) => s.trim());
-      if (lines.length < 2) {
-        setError("The CSV needs a header and at least one data row.");
-        return;
-      }
+      if (sequence !== readSequence.current) return;
+      const { rows } = parseDatasetCsv(text);
       setFile({
         name: f.name,
-        rows: lines.length - 1,
+        rows,
         size: `${Math.max(1, Math.round(f.size / 1024))} KB`,
       });
-      if (!name) setName(f.name.replace(/\.csv$/i, ""));
+      setName((current) => current || f.name.replace(/\.csv$/i, ""));
       setError("");
-    } catch {
-      setError("This file could not be read. Try the synthetic example.");
+    } catch (error) {
+      if (sequence === readSequence.current)
+        setError(
+          error instanceof Error
+            ? error.message
+            : "This file could not be read. Try the synthetic example.",
+        );
+    } finally {
+      if (sequence === readSequence.current) setReading(false);
     }
   };
   return (
@@ -403,7 +461,10 @@ export function ImportDialog({
               type="file"
               accept=".csv,text/csv"
               hidden
-              onChange={(e) => void readFile(e.target.files?.[0])}
+              onChange={(e) => {
+                void readFile(e.target.files?.[0]);
+                e.target.value = "";
+              }}
             />
           </Button>
         </div>
@@ -444,9 +505,9 @@ export function ImportDialog({
         <Button onClick={onClose}>Cancel</Button>
         <Button
           variant="contained"
-          disabled={!file || !name.trim()}
+          disabled={!file || !name.trim() || reading || Boolean(error)}
           onClick={() => {
-            if (file)
+            if (file && !reading && !error)
               onImport({
                 id: uid("data"),
                 name: name.trim(),
@@ -487,9 +548,7 @@ export function RunDialog({
   );
   const dataset = state.datasets.find((d) => d.id === datasetId);
   const compatible = Boolean(
-    pipeline &&
-      dataset &&
-      pipeline.input.toUpperCase().includes(dataset.format),
+    pipeline && dataset && supportsDataset(pipeline, dataset),
   );
   return (
     <Dialog open onClose={onClose} fullWidth maxWidth="sm">

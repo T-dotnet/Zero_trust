@@ -22,6 +22,8 @@ export interface Event {
   date: string;
   note?: string;
   entityId?: string;
+  entityName?: string;
+  version?: string;
 }
 export interface Attachment {
   id: string;
@@ -78,6 +80,7 @@ export interface Run {
   date: string;
   error?: string;
   artifactId?: string;
+  failedStep?: number;
   support?: {
     id: string;
     message: string;
@@ -127,6 +130,54 @@ export function nextVersion(version: string, kind: "minor" | "patch") {
   return kind === "minor"
     ? `v${major}.${minor + 1}.0`
     : `v${major}.${minor}.${patch + 1}`;
+}
+export function nextAvailableVersion(
+  source: Pipeline,
+  pipelines: Pipeline[],
+  kind: "minor" | "patch",
+) {
+  const root = (pipeline: Pipeline) => {
+    let current = pipeline;
+    const seen = new Set<string>();
+    while (current.basedOn && !seen.has(current.id)) {
+      seen.add(current.id);
+      const parent = pipelines.find((p) => p.id === current.basedOn);
+      if (!parent) break;
+      current = parent;
+    }
+    return current.id;
+  };
+  const family = pipelines.filter((p) => root(p) === root(source));
+  const latest =
+    kind === "minor"
+      ? family.reduce((best, p) => {
+          const a = best.version.replace(/^v/, "").split(".").map(Number);
+          const b = p.version.replace(/^v/, "").split(".").map(Number);
+          return b[0] > a[0] ||
+            (b[0] === a[0] && (b[1] > a[1] || (b[1] === a[1] && b[2] > a[2])))
+            ? p
+            : best;
+        }, source)
+      : source;
+  let candidate = nextVersion(latest.version, kind);
+  while (family.some((p) => p.version === candidate))
+    candidate = nextVersion(candidate, kind);
+  return candidate;
+}
+export function supportsDataset(pipeline: Pipeline, dataset: Dataset) {
+  const formats: string[] =
+    pipeline.input.toUpperCase().match(/[A-Z0-9]+/g) || [];
+  return formats.includes(dataset.format.toUpperCase());
+}
+export function executionStepStatus(run: Run, index: number) {
+  if (run.status === "Completed") return "Complete";
+  const current =
+    run.status === "Failed"
+      ? (run.failedStep ?? Math.min(3, Math.floor(run.progress / 25)))
+      : Math.min(3, Math.floor(run.progress / 25));
+  if (index < current) return "Complete";
+  if (index > current) return "Pending";
+  return run.status;
 }
 export const makeEvent = (
   title: string,
@@ -250,7 +301,11 @@ export function seedWorkspace(): Workspace {
       output: i === 2 ? "Transcripts (TXT)" : "Processed dataset (CSV)",
       author: "Dr. Sarah Chen",
       updated: date,
-      history,
+      history: history.map((event) => ({
+        ...event,
+        entityName: d[0],
+        version: d[2],
+      })),
     };
   });
   return {
@@ -306,7 +361,8 @@ export function seedWorkspace(): Workspace {
         datasetId: "data-2",
         datasetName: "Patient outcomes · Site A",
         status: "Failed",
-        progress: 42,
+        progress: 12,
+        failedStep: 0,
         date: "2026-11-02T15:30:00Z",
         error:
           "Input schema mismatch: the required clinical_note column is missing. Review the dataset mapping, then retry the demonstration.",
@@ -359,10 +415,32 @@ export type Action =
   | { type: "RESET" };
 
 export function workspaceReducer(state: Workspace, action: Action): Workspace {
-  const withEvent = (next: Workspace, event: Event): Workspace => ({
-    ...next,
-    events: [event, ...state.events],
-  });
+  const withEvent = (next: Workspace, event: Event): Workspace => {
+    const pipeline = next.pipelines.find((p) => p.id === event.entityId);
+    const run = next.runs.find((r) => r.id === event.entityId);
+    const artifact = next.artifacts.find((a) => a.id === event.entityId);
+    const dataset = next.datasets.find((d) => d.id === event.entityId);
+    const contextual = {
+      ...event,
+      entityName:
+        pipeline?.name || run?.pipelineName || artifact?.name || dataset?.name,
+      version: pipeline?.version || run?.version || artifact?.version,
+    };
+    return {
+      ...next,
+      events: [contextual, ...state.events],
+      pipelines: next.pipelines.map((p) =>
+        p.history.some((e) => e.id === event.id)
+          ? {
+              ...p,
+              history: p.history.map((e) =>
+                e.id === event.id ? contextual : e,
+              ),
+            }
+          : p,
+      ),
+    };
+  };
   if (action.type === "RESET") return seedWorkspace();
   if (action.type === "ADD_DATASET")
     return withEvent(
@@ -375,6 +453,24 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
       ),
     );
   if (action.type === "SUBMIT") {
+    if (
+      state.pipelines.some(
+        (p) =>
+          p.id === action.pipeline.id ||
+          (p.name.trim().toLowerCase() ===
+            action.pipeline.name.trim().toLowerCase() &&
+            (!action.pipeline.basedOn ||
+              p.version === action.pipeline.version)),
+      )
+    )
+      return state;
+    if (
+      action.pipeline.basedOn &&
+      !state.pipelines.some(
+        (p) => p.id === action.pipeline.basedOn && p.status === "Approved",
+      )
+    )
+      return state;
     const event = makeEvent(
       action.draft ? "Draft saved" : "Submission received",
       "Dr. Sarah Chen",
@@ -383,6 +479,7 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
     const pipeline = {
       ...action.pipeline,
       status: (action.draft ? "Draft" : "In review") as PipelineStatus,
+      stage: 0,
       history: [event],
       updated: now(),
     };
@@ -438,7 +535,9 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
     if (!p || !["Draft", "Rejected", "Changes requested"].includes(p.status))
       return state;
     const version =
-      p.status === "Draft" ? p.version : nextVersion(p.version, "patch");
+      p.status === "Draft"
+        ? p.version
+        : nextAvailableVersion(p, state.pipelines, "patch");
     const event = makeEvent(
       `Revision ${version} submitted`,
       "Dr. Sarah Chen",
@@ -498,10 +597,15 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
     );
   }
   if (action.type === "START_RUN") {
+    const pipeline = state.pipelines.find(
+      (p) => p.id === action.run.pipelineId && p.status === "Approved",
+    );
+    const dataset = state.datasets.find((d) => d.id === action.run.datasetId);
     if (
-      !state.pipelines.some(
-        (p) => p.id === action.run.pipelineId && p.status === "Approved",
-      )
+      !pipeline ||
+      !dataset ||
+      !supportsDataset(pipeline, dataset) ||
+      state.runs.some((r) => r.id === action.run.id)
     )
       return state;
     return withEvent(
@@ -526,7 +630,14 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
         ...state,
         runs: state.runs.map((r) =>
           r.id === action.id
-            ? { ...r, status: "Running", progress: 0, error: undefined }
+            ? {
+                ...r,
+                status: "Running",
+                progress: 0,
+                error: undefined,
+                failedStep: undefined,
+                date: now(),
+              }
             : r,
         ),
       },
@@ -534,7 +645,9 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
         "Run retried",
         "Dr. Sarah Chen",
         action.id,
-        "Demo input mapping corrected.",
+        state.runs.find((r) => r.id === action.id)?.status === "Failed"
+          ? "Demo input mapping corrected."
+          : "Cancelled demo restarted.",
       ),
     );
   }
@@ -638,7 +751,22 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
       );
       return { ...r, progress, status: "Completed" as const, artifactId };
     });
-    return { ...state, runs, artifacts, events: [...events, ...state.events] };
+    return {
+      ...state,
+      runs,
+      artifacts,
+      events: [
+        ...events.map((event) => {
+          const run = runs.find((r) => r.id === event.entityId);
+          return {
+            ...event,
+            entityName: run?.pipelineName,
+            version: run?.version,
+          };
+        }),
+        ...state.events,
+      ],
+    };
   }
   if (action.type === "REVIEW_ARTIFACT") {
     if (

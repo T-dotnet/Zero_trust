@@ -9,6 +9,7 @@ import {
   DialogTitle,
   Snackbar,
   ThemeProvider,
+  type AlertColor,
 } from "@mui/material";
 import { Shell } from "./Shell";
 import { PipelineCatalog, Approvals, Overview } from "./PipelineViews";
@@ -52,7 +53,12 @@ export default function MvpApp() {
     pipelineId?: string;
     datasetId?: string;
   }>({});
-  const [toast, setToast] = useState("");
+  const [toast, setToastState] = useState<{
+    message: string;
+    severity: AlertColor;
+  }>({ message: "", severity: "success" });
+  const setToast = (message: string, severity: AlertColor = "success") =>
+    setToastState({ message, severity });
   const selectedPipeline = state.pipelines.find(
     (p) => p.id === selectedPipelineId,
   );
@@ -67,7 +73,7 @@ export default function MvpApp() {
   };
   const openRun = (p?: Pipeline, d?: Dataset) => {
     if (role !== "Researcher") {
-      setToast("Switch to Researcher to configure a run.");
+      setToast("Switch to Researcher to configure a run.", "info");
       return;
     }
     setRunContext({ pipelineId: p?.id, datasetId: d?.id });
@@ -75,7 +81,7 @@ export default function MvpApp() {
   };
   const createPipeline = () => {
     if (role !== "Researcher") {
-      setToast("Switch to Researcher to create a pipeline.");
+      setToast("Switch to Researcher to create a pipeline.", "info");
       return;
     }
     setReviseId(null);
@@ -166,7 +172,11 @@ export default function MvpApp() {
             onArtifact={(a) => setArtifactId(a.id)}
             onRetry={(r) => {
               dispatch({ type: "RETRY", id: r.id });
-              setToast("Demo mapping corrected. Run restarted.");
+              setToast(
+                r.status === "Failed"
+                  ? "Demo mapping corrected. Run restarted."
+                  : "Demo run restarted.",
+              );
             }}
             researcher={role === "Researcher"}
             role={role}
@@ -215,6 +225,7 @@ export default function MvpApp() {
       </Shell>
       {dialog === "pipeline" && (
         <PipelineForm
+          pipelines={state.pipelines}
           pipeline={state.pipelines.find((p) => p.id === reviseId)}
           versionSource={state.pipelines.find((p) => p.id === versionSourceId)}
           onClose={() => setDialog(null)}
@@ -343,18 +354,18 @@ export default function MvpApp() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={Boolean(toast)}
+        open={Boolean(toast.message)}
         autoHideDuration={4200}
         onClose={() => setToast("")}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert
-          severity="success"
+          severity={toast.severity}
           variant="filled"
           onClose={() => setToast("")}
           sx={{ maxWidth: 420 }}
         >
-          {toast}
+          {toast.message}
         </Alert>
       </Snackbar>
     </ThemeProvider>

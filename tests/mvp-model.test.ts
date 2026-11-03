@@ -6,6 +6,9 @@ import {
   workspaceReducer,
   type Role,
 } from "../src/mvp/model";
+import { nextAvailableVersion, executionStepStatus } from "../src/mvp/model";
+import { parseDatasetCsv, encodeCsv } from "../src/mvp/csv";
+import { isWorkspace } from "../src/mvp/storage";
 
 test("all four stage-specific approvals are needed before author publication", () => {
   let state = seedWorkspace();
@@ -172,4 +175,131 @@ test("execution produces a pending artifact; only privacy reviewer validates it"
     state.artifacts.find((a) => a.id === artifact.id)?.status,
     "Validated",
   );
+});
+
+test("CSV imports handle quoting, embedded newlines, and schema errors", () => {
+  assert.equal(
+    parseDatasetCsv(
+      '\uFEFFid,note\r\n1,"first\nsecond"\r\n2,"a, b and ""quotes"""\r\n',
+    ).rows,
+    2,
+  );
+  for (const invalid of [
+    "id,note\n",
+    "id,note\n1,extra,field",
+    "id,id\n1,2",
+    'id,note\n1,"unclosed',
+  ])
+    assert.throws(() => parseDatasetCsv(invalid));
+  const csv = encodeCsv([
+    ["id", "note"],
+    ["1", 'comma, quote " and\nnewline'],
+    ["2", "normal"],
+  ]);
+  assert.ok(csv.startsWith("id,note\r\n"));
+  assert.equal(parseDatasetCsv(csv).rows, 2);
+});
+
+test("reserved versions include drafts and every version in a pipeline family", () => {
+  const state = seedWorkspace();
+  const source = state.pipelines[0];
+  const draft = {
+    ...source,
+    id: "draft-version",
+    basedOn: source.id,
+    version: "v2.2.0",
+    status: "Draft" as const,
+    stage: 0,
+  };
+  const patch = {
+    ...source,
+    id: "patch-version",
+    basedOn: source.id,
+    version: "v2.2.1",
+    status: "In review" as const,
+    stage: 0,
+  };
+  const pipelines = [...state.pipelines, draft, patch];
+  assert.equal(nextAvailableVersion(source, pipelines, "minor"), "v2.3.0");
+  assert.equal(nextAvailableVersion(draft, pipelines, "patch"), "v2.2.2");
+});
+
+test("saved workspace validation rejects damaged records while accepting incomplete draft requirements", () => {
+  const state = seedWorkspace();
+  assert.equal(isWorkspace(state), true);
+  assert.equal(isWorkspace({ ...state, datasets: [{}] }), false);
+  assert.equal(
+    isWorkspace({
+      ...state,
+      runs: [{ ...state.runs[0], pipelineId: "missing" }],
+    }),
+    false,
+  );
+  assert.equal(
+    isWorkspace({
+      ...state,
+      pipelines: [{ ...state.pipelines[0], status: "In review", stage: 4 }],
+    }),
+    false,
+  );
+  assert.equal(
+    isWorkspace({
+      ...state,
+      pipelines: [
+        {
+          ...state.pipelines[0],
+          status: "Draft",
+          stage: 0,
+          input: "",
+          output: "",
+        },
+      ],
+    }),
+    true,
+  );
+});
+
+test("review history identifies pipeline and version before and after revision", () => {
+  let state = seedWorkspace();
+  const source = state.pipelines[1];
+  state = workspaceReducer(state, {
+    type: "REVIEW",
+    id: source.id,
+    role: "Technical reviewer",
+    decision: "changes",
+    note: "Add evidence.",
+  });
+  const feedback = state.events[0];
+  state = workspaceReducer(state, {
+    type: "REVISE",
+    id: source.id,
+    fields: { ...source, branch: "revision", input: "Revised CSV schema" },
+  });
+  assert.equal(feedback.entityName, source.name);
+  assert.equal(feedback.version, "v1.0.0");
+  assert.equal(state.events[0].version, "v1.0.1");
+  assert.equal(state.pipelines[1].history[0].version, "v1.0.1");
+  assert.equal(state.pipelines[1].history[1].version, "v1.0.0");
+});
+
+test("run steps identify the failed stage and incompatible data cannot be queued", () => {
+  const state = seedWorkspace();
+  const failed = state.runs[1];
+  assert.equal(executionStepStatus(failed, 0), "Failed");
+  assert.equal(executionStepStatus(failed, 1), "Pending");
+  assert.equal(
+    executionStepStatus({ ...failed, status: "Running", progress: 30 }, 1),
+    "Running",
+  );
+  const result = workspaceReducer(state, {
+    type: "START_RUN",
+    run: {
+      ...failed,
+      id: "bad-format",
+      pipelineId: "pipe-3",
+      datasetId: "data-1",
+      status: "Running",
+    },
+  });
+  assert.equal(result, state);
 });

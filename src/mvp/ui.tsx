@@ -141,9 +141,11 @@ export function StagePath({
                   {complete
                     ? "Completed"
                     : current
-                      ? i === 4
-                        ? "Author action"
-                        : "Current stage"
+                      ? pipeline.status === "Draft"
+                        ? "Not submitted"
+                        : pipeline.status !== "In review"
+                          ? "Author action"
+                          : "Current review"
                       : "Upcoming"}
                 </small>
               )}
@@ -170,6 +172,12 @@ export function HistoryList({
           </span>
           <div>
             <strong>{event.title}</strong>
+            {event.entityName && (
+              <small className="history-context">
+                {event.entityName}
+                {event.version ? ` · ${event.version}` : ""}
+              </small>
+            )}
             <p>
               {event.actor}
               {event.note ? ` · ${event.note}` : ""}

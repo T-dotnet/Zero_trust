@@ -2,7 +2,8 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
-  testMatch: "mvp.spec.ts",
+  testMatch: "mvp*.spec.ts",
+  outputDir: "/tmp/zero-trust-mvp-test-results",
   fullyParallel: false,
   timeout: 45_000,
   reporter: "list",

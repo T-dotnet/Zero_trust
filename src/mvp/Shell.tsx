@@ -71,7 +71,7 @@ export function Shell({
         {NAV.map(([label, Icon]) => (
           <button
             key={label}
-              aria-label={label}
+            aria-label={label}
             onClick={() => go(label)}
             className={`nav-item ${page === label ? "active" : ""}`}
             aria-current={page === label ? "page" : undefined}

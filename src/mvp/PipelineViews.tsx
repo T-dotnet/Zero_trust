@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { ArrowRight, FileText, Plus } from "lucide-react";
-import { formatDate, type Pipeline, type Workspace } from "./model";
+import { formatDate, stageLabel, type Pipeline, type Workspace } from "./model";
 import {
   EmptyState,
   HistoryList,
@@ -296,6 +296,13 @@ export function Approvals({ state, onOpen }: Pick<Props, "state" | "onOpen">) {
 
 export function Overview({ state, onNew, onApprovals, onOpen, onRun }: Props) {
   const pending = state.pipelines.filter((p) => p.status === "In review");
+  const attention = state.pipelines
+    .filter((p) => p.status !== "Approved")
+    .sort(
+      (a, b) =>
+        Number(a.status === "In review") - Number(b.status === "In review") ||
+        b.updated.localeCompare(a.updated),
+    );
   return (
     <>
       <PageHeader
@@ -341,7 +348,7 @@ export function Overview({ state, onNew, onApprovals, onOpen, onRun }: Props) {
               All approvals
             </Button>
           </div>
-          {pending.slice(0, 4).map((p) => (
+          {attention.slice(0, 4).map((p) => (
             <button
               className="attention-row"
               key={p.id}
@@ -351,18 +358,24 @@ export function Overview({ state, onNew, onApprovals, onOpen, onRun }: Props) {
               <span>
                 <strong>{p.name}</strong>
                 <small>
-                  {p.version} /{" "}
-                  {["Ethical", "Technical", "Privacy", "Security"][p.stage]}{" "}
-                  review
+                  {p.version} / {stageLabel(p)}
                 </small>
               </span>
               <ArrowRight size={18} />
             </button>
           ))}
+          {!attention.length && (
+            <p className="muted">No submissions need attention.</p>
+          )}
         </section>
         <section className="plain-panel">
           <h2>Approved & ready</h2>
           <p className="muted">Start with a reviewed processing method.</p>
+          {!state.pipelines.some((p) => p.status === "Approved") && (
+            <p className="muted">
+              Pipelines appear here after approval and publication.
+            </p>
+          )}
           {state.pipelines
             .filter((p) => p.status === "Approved")
             .map((p) => (
