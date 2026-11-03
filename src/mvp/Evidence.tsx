@@ -1,0 +1,143 @@
+import { useState } from "react";
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import { FileText, Paperclip, X } from "lucide-react";
+import { uid, type Attachment } from "./model";
+
+export function AttachmentPicker({
+  attachments,
+  onChange,
+}: {
+  attachments: Attachment[];
+  onChange: (files: Attachment[]) => void;
+}) {
+  const [error, setError] = useState("");
+  const read = async (files: FileList | null) => {
+    if (!files) return;
+    const list = Array.from(files);
+    if (
+      attachments.length + list.length > 4 ||
+      list.some(
+        (f) => f.size > 50_000 || !/\.(txt|md|json|csv|ya?ml)$/i.test(f.name),
+      )
+    ) {
+      setError(
+        "Attach up to four text, Markdown, JSON, CSV, or YAML files, each under 50 KB.",
+      );
+      return;
+    }
+    try {
+      const added = await Promise.all(
+        list.map(async (f) => ({
+          id: uid("file"),
+          name: f.name,
+          size: f.size,
+          content: await f.text(),
+        })),
+      );
+      onChange([...attachments, ...added]);
+      setError("");
+    } catch {
+      setError("The selected file could not be read.");
+    }
+  };
+  return (
+    <div className="evidence-picker">
+      <div className="section-title">
+        <h3>Evidence attachments</h3>
+        <Button
+          component="label"
+          size="small"
+          startIcon={<Paperclip size={15} />}
+        >
+          Attach files
+          <input
+            type="file"
+            multiple
+            hidden
+            accept=".txt,.md,.json,.csv,.yaml,.yml"
+            onChange={(e) => void read(e.target.files)}
+          />
+        </Button>
+      </div>
+      <p className="micro-copy">
+        Optional supporting text files. They remain in this browser and are
+        available to demo reviewers.
+      </p>
+      {attachments.map((a) => (
+        <div className="attachment-row" key={a.id}>
+          <FileText size={17} />
+          <span>
+            {a.name}
+            <small>{Math.max(1, Math.round(a.size / 1024))} KB</small>
+          </span>
+          <Button
+            size="small"
+            aria-label={`Remove ${a.name}`}
+            onClick={() => onChange(attachments.filter((f) => f.id !== a.id))}
+          >
+            <X size={14} />
+          </Button>
+        </div>
+      ))}
+      {error && <Alert severity="error">{error}</Alert>}
+    </div>
+  );
+}
+
+export function EvidenceAttachments({
+  attachments,
+}: {
+  attachments: Attachment[];
+}) {
+  const [selected, setSelected] = useState<Attachment | null>(null);
+  return (
+    <>
+      <h3>Attached evidence</h3>
+      {attachments.length ? (
+        attachments.map((a) => (
+          <button
+            className="attachment-row attachment-button"
+            key={a.id}
+            onClick={() => setSelected(a)}
+          >
+            <FileText size={18} />
+            <span>
+              {a.name}
+              <small>
+                {Math.max(1, Math.round(a.size / 1024))} KB / Open preview
+              </small>
+            </span>
+          </button>
+        ))
+      ) : (
+        <p className="muted">
+          No additional files attached. The standard sample evidence below is
+          illustrative.
+        </p>
+      )}
+      <Dialog
+        open={Boolean(selected)}
+        onClose={() => setSelected(null)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>{selected?.name}</DialogTitle>
+        <DialogContent>
+          <pre className="evidence-preview">
+            {selected?.content || "No text preview available."}
+          </pre>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelected(null)}>Close preview</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}

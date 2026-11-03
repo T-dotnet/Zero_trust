@@ -1,0 +1,16 @@
+flowchart TD
+  accTitle: Product Workflow
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in README.md.
+  R["Research user: import dataset"] --> C["Choose an approved pipeline"]
+  D["Developer: connect custom pipeline repository"] --> A["Readiness feedback and build confirmation"]
+  A --> V["Internal team: review submission"]
+  V -->|Feedback or rejection| D
+  V -->|Security review passed| P["Author: publish pipeline"]
+  P --> C
+  C --> J["Queue and inspect job"]
+  J -->|Failure| S["Diagnose, revise, retry, or request support"]
+  S --> J
+  J -. "Intended processing outcome; no real executor verified" .-> O["Inspect artifact"]
+  O -->|Pending or output issue| Q["Validate or review output"]
+  Q --> O
+  O -->|Acceptable status| E["Configure export; download is simulated"]

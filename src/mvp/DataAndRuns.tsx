@@ -1,0 +1,566 @@
+import { useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  LinearProgress,
+  Tab,
+  Tabs,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import {
+  ArrowRight,
+  Database,
+  Download,
+  FileText,
+  Plus,
+  RotateCcw,
+} from "lucide-react";
+import {
+  formatDate,
+  formatTime,
+  type Artifact,
+  type Dataset,
+  type Run,
+  type Role,
+  type Workspace,
+} from "./model";
+import { EmptyState, PageHeader, SearchField, Status } from "./ui";
+import { RunSupport } from "./RunSupport";
+import { downloadRunLog } from "./files";
+
+export function Datasets({
+  state,
+  onImport,
+  onRun,
+  researcher,
+}: {
+  state: Workspace;
+  onImport: () => void;
+  onRun: (d: Dataset) => void;
+  researcher: boolean;
+}) {
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<Dataset | null>(null);
+  const rows = state.datasets.filter((d) =>
+    `${d.name} ${d.description}`.toLowerCase().includes(search.toLowerCase()),
+  );
+  return (
+    <>
+      <PageHeader
+        title="Datasets"
+        description="The source material for your research workflows."
+      >
+        <Button
+          variant="contained"
+          onClick={onImport}
+          startIcon={<Plus size={17} />}
+          disabled={!researcher}
+        >
+          Import dataset
+        </Button>
+      </PageHeader>
+      <div className="section-note">
+        Demo workspace / All seeded records are synthetic. Imported files stay
+        in your browser.
+      </div>
+      <section className="table-panel">
+        <div className="filter-bar">
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder="Search datasets..."
+          />
+        </div>
+        <TableContainer>
+          <Table aria-label="Datasets">
+            <TableHead>
+              <TableRow>
+                {[
+                  "Dataset",
+                  "Format",
+                  "Records",
+                  "Size",
+                  "Access",
+                  "Imported",
+                  "Action",
+                ].map((h) => (
+                  <TableCell key={h}>{h}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((d) => (
+                <TableRow hover key={d.id}>
+                  <TableCell className="name-cell">
+                    <button
+                      className="entity-name"
+                      onClick={() => setSelected(d)}
+                    >
+                      {d.name}
+                    </button>
+                    <p>{d.description}</p>
+                  </TableCell>
+                  <TableCell className="mono">{d.format}</TableCell>
+                  <TableCell>{d.rows.toLocaleString()}</TableCell>
+                  <TableCell className="nowrap">{d.size}</TableCell>
+                  <TableCell>
+                    <Status>Restricted</Status>
+                  </TableCell>
+                  <TableCell className="nowrap">{formatDate(d.date)}</TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => onRun(d)}
+                      disabled={!researcher}
+                    >
+                      Run pipeline
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {!rows.length && (
+          <EmptyState
+            title="No datasets found"
+            description="Import a dataset or try a different search."
+          />
+        )}
+        <div className="table-footer">
+          {rows.length} datasets / Restricted research access
+        </div>
+      </section>
+      <Dialog
+        open={Boolean(selected)}
+        onClose={() => setSelected(null)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>{selected?.name}</DialogTitle>
+        <DialogContent>
+          <p>{selected?.description}</p>
+          <dl className="metadata-list">
+            {selected &&
+              [
+                ["Format", selected.format],
+                ["Records", selected.rows.toLocaleString()],
+                ["Size", selected.size],
+                ["Imported", formatTime(selected.date)],
+                ["Access", "Restricted / research use"],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <dt>{k}</dt>
+                  <dd>{v}</dd>
+                </div>
+              ))}
+          </dl>
+          <p className="muted">
+            The prototype stores file metadata locally. It does not upload
+            research data or enforce access permissions.
+          </p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelected(null)}>Close</Button>
+          <Button
+            variant="contained"
+            disabled={!researcher}
+            onClick={() => {
+              if (selected) onRun(selected);
+              setSelected(null);
+            }}
+          >
+            Run pipeline
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
+
+interface RunsProps {
+  state: Workspace;
+  onNewRun: () => void;
+  onArtifact: (a: Artifact) => void;
+  onRetry: (r: Run) => void;
+  researcher: boolean;
+  initialTab?: string;
+  role: Role;
+  setRole: (role: Role) => void;
+  onCancel: (run: Run) => void;
+  onReport: (id: string, message: string) => void;
+  onResolve: (id: string, resolution: string) => void;
+}
+export function RunsAndResults({
+  state,
+  onNewRun,
+  onArtifact,
+  onRetry,
+  researcher,
+  initialTab = "runs",
+  role,
+  setRole,
+  onCancel,
+  onReport,
+  onResolve,
+}: RunsProps) {
+  const [tab, setTab] = useState(initialTab);
+  const [search, setSearch] = useState("");
+  const [selectedRun, setSelectedRun] = useState<string | null>(null);
+  const run = state.runs.find((r) => r.id === selectedRun);
+  const runs = state.runs.filter((r) =>
+    `${r.id} ${r.pipelineName} ${r.datasetName}`
+      .toLowerCase()
+      .includes(search.toLowerCase()),
+  );
+  const artifacts = state.artifacts.filter((a) =>
+    `${a.name} ${a.datasetName}`.toLowerCase().includes(search.toLowerCase()),
+  );
+  return (
+    <>
+      <PageHeader
+        title="Runs & results"
+        description="Follow execution. Inspect outputs. Know what is ready to use."
+      >
+        <Button
+          variant="contained"
+          onClick={onNewRun}
+          startIcon={<Plus size={17} />}
+          disabled={!researcher}
+        >
+          New run
+        </Button>
+      </PageHeader>
+      <section className="table-panel">
+        <Tabs
+          value={tab}
+          onChange={(_, value) => setTab(value)}
+          aria-label="Runs and results"
+        >
+          <Tab value="runs" label={`Runs ${state.runs.length}`} />
+          <Tab value="results" label={`Results ${state.artifacts.length}`} />
+        </Tabs>
+        <div className="filter-bar">
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder={
+              tab === "runs" ? "Search runs..." : "Search results..."
+            }
+          />
+        </div>
+        <TableContainer>
+          {tab === "runs" ? (
+            <Table aria-label="Runs">
+              <TableHead>
+                <TableRow>
+                  {[
+                    "Run / pipeline",
+                    "Dataset",
+                    "Progress",
+                    "Status",
+                    "Started",
+                    "Action",
+                  ].map((h) => (
+                    <TableCell key={h}>{h}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {runs.map((r) => (
+                  <TableRow hover key={r.id}>
+                    <TableCell className="name-cell">
+                      <button
+                        className="entity-name"
+                        onClick={() => setSelectedRun(r.id)}
+                      >
+                        {r.pipelineName}
+                      </button>
+                      <p className="mono">
+                        {r.id} / {r.version}
+                      </p>
+                    </TableCell>
+                    <TableCell>{r.datasetName}</TableCell>
+                    <TableCell>
+                      <div className="run-progress">
+                        <LinearProgress
+                          variant="determinate"
+                          value={r.progress}
+                          color={r.status === "Failed" ? "error" : "primary"}
+                        />
+                        <small>{r.progress}%</small>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Status
+                        kind={
+                          r.status === "Completed"
+                            ? "success"
+                            : r.status === "Failed"
+                              ? "error"
+                              : "neutral"
+                        }
+                      >
+                        {r.status}
+                      </Status>
+                    </TableCell>
+                    <TableCell className="nowrap">
+                      {formatDate(r.date)}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => setSelectedRun(r.id)}
+                      >
+                        Details
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <Table aria-label="Results">
+              <TableHead>
+                <TableRow>
+                  {[
+                    "Artifact",
+                    "Source dataset",
+                    "Records",
+                    "Validation",
+                    "Created",
+                    "Action",
+                  ].map((h) => (
+                    <TableCell key={h}>{h}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {artifacts.map((a) => (
+                  <TableRow hover key={a.id}>
+                    <TableCell className="name-cell">
+                      <button
+                        className="entity-name"
+                        onClick={() => onArtifact(a)}
+                      >
+                        {a.name}
+                      </button>
+                      <p className="mono">
+                        {a.runId} / {a.version}
+                      </p>
+                    </TableCell>
+                    <TableCell>{a.datasetName}</TableCell>
+                    <TableCell>{a.rows.toLocaleString()}</TableCell>
+                    <TableCell>
+                      <Status
+                        kind={
+                          a.status === "Validated"
+                            ? "success"
+                            : a.status === "Not acceptable"
+                              ? "error"
+                              : "warning"
+                        }
+                      >
+                        {a.status}
+                      </Status>
+                    </TableCell>
+                    <TableCell className="nowrap">
+                      {formatDate(a.date)}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => onArtifact(a)}
+                      >
+                        {a.status === "Pending review" ? "Review" : "Inspect"}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+        {!(tab === "runs" ? runs.length : artifacts.length) && (
+          <EmptyState
+            title={tab === "runs" ? "No runs found" : "No results yet"}
+            description="Start a run with an approved pipeline to generate a demonstration output."
+          />
+        )}
+        <div className="table-footer">
+          <span>
+            {tab === "runs" ? runs.length : artifacts.length}{" "}
+            {tab === "runs" ? "runs" : "results"}
+          </span>
+          <span>Execution is simulated in demo mode</span>
+        </div>
+      </section>
+      <Dialog
+        open={Boolean(run)}
+        onClose={() => setSelectedRun(null)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Run details</DialogTitle>
+        <DialogContent>
+          {run && (
+            <>
+              <div className="detail-identity">
+                <span className="mono">{run.id}</span>
+                <Status
+                  kind={
+                    run.status === "Failed"
+                      ? "error"
+                      : run.status === "Completed"
+                        ? "success"
+                        : "neutral"
+                  }
+                >
+                  {run.status}
+                </Status>
+              </div>
+              <h3>{run.pipelineName}</h3>
+              <p className="muted">
+                {run.datasetName} / {run.version}
+              </p>
+              <div className="execution-timeline">
+                {[
+                  "Validate input",
+                  "Prepare environment",
+                  "Process records",
+                  "Write output",
+                ].map((label, i) => (
+                  <div key={label}>
+                    <span
+                      className={run.progress >= (i + 1) * 25 ? "done" : ""}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <strong>{label}</strong>
+                    <small>
+                      {run.progress >= (i + 1) * 25
+                        ? "Complete"
+                        : run.status === "Failed" && i === 1
+                          ? "Failed"
+                          : "Pending"}
+                    </small>
+                  </div>
+                ))}
+              </div>
+              {run.error && (
+                <div className="error-message">
+                  <strong>Data error</strong>
+                  <p>{run.error}</p>
+                </div>
+              )}
+              {(run.status === "Failed" || run.support) && (
+                <RunSupport
+                  run={run}
+                  role={role}
+                  setRole={setRole}
+                  onReport={(message) => onReport(run.id, message)}
+                  onResolve={(resolution) => onResolve(run.id, resolution)}
+                />
+              )}
+              <p className="muted">
+                Demo execution uses synthetic output. No research code runs on a
+                server.
+              </p>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelectedRun(null)}>Close</Button>
+          {run && (
+            <Button
+              startIcon={<Download size={15} />}
+              onClick={() => downloadRunLog(run)}
+            >
+              Export log
+            </Button>
+          )}
+          {run?.status === "Running" && (
+            <Button
+              color="error"
+              disabled={!researcher}
+              onClick={() => onCancel(run)}
+            >
+              Cancel run
+            </Button>
+          )}
+          {(run?.status === "Failed" || run?.status === "Cancelled") && (
+            <Button
+              variant="contained"
+              disabled={!researcher}
+              startIcon={<RotateCcw size={16} />}
+              onClick={() => {
+                onRetry(run);
+              }}
+            >
+              {run.status === "Failed"
+                ? "Correct mapping & retry"
+                : "Restart demo run"}
+            </Button>
+          )}
+          {run?.artifactId && (
+            <Button
+              variant="contained"
+              endIcon={<ArrowRight size={16} />}
+              onClick={() => {
+                const a = state.artifacts.find((a) => a.id === run.artifactId);
+                if (a) onArtifact(a);
+                setSelectedRun(null);
+              }}
+            >
+              Inspect output
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
+
+export const PREVIEW_ROWS = [
+  ["REC-001", "[PERSON] attended a follow-up visit. Symptoms improved.", "Low"],
+  ["REC-002", "Medication review completed. [DATE] removed.", "Medium"],
+  ["REC-003", "No adverse events reported during this encounter.", "Low"],
+  [
+    "REC-004",
+    "[LOCATION] generalized. Further assessment recommended.",
+    "Medium",
+  ],
+];
+export function downloadArtifact(artifact: Artifact) {
+  const content = [
+    "record_id,processed_text,risk",
+    ...PREVIEW_ROWS.map((row) =>
+      row.map((value) => `"${value.replaceAll('"', '""')}"`).join(","),
+    ),
+  ].join("\n");
+  const blob = new Blob(
+    [
+      `# Synthetic preview export; 4 sample rows\n# Run: ${artifact.runId}; pipeline version: ${artifact.version}\n${content}`,
+    ],
+    { type: "text/csv;charset=utf-8" },
+  );
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${artifact.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-sample.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}

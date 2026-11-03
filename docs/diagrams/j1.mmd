@@ -1,0 +1,12 @@
+flowchart TD
+  accTitle: J1
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  A["E1 ON; Internal View OFF"] --> B["Import Data-set: enter metadata"]
+  B --> C{"Select pipeline now?"}
+  C -->|No| D["Import Dataset Only"]
+  D --> E["Later: choose pipeline and queue job"]
+  C -->|Yes| F["Import and Queue Job"]
+  E --> G["Jobs: inspect queued work"]
+  F --> G
+  G -->|Failure| H["J6: diagnose and support"]
+  G -. "Intended output; executor not verified" .-> I["J5: inspect available artifact"]

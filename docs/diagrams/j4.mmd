@@ -1,0 +1,12 @@
+flowchart TD
+  accTitle: J4
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  N["New: Ethical Review"] --> T["Technical Review"]
+  U["Update or Bug Fix"] --> T
+  T --> P["Privacy Review"]
+  P --> S["Security Review"]
+  S -->|Accept; Internal View ON| W["Still Security Review; ready for publication"]
+  W -->|Author; Internal View OFF; Publish Pipeline| A["Approved"]
+  R["At any review stage: Submit Review; Internal View ON"] -->|Feedback| F["Same stage; next actor Researcher"]
+  R -->|Reject with comment| X["Rejected"]
+  X -->|Author; Internal View OFF; Revise Pipeline| D["Draft: J3"]

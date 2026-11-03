@@ -1,0 +1,10 @@
+flowchart TD
+  accTitle: J7
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  A["E1 ON; Internal View ON; reviewer navigation false"] --> B["Pipelines: Container Registry"]
+  B --> C["Inspect image groups, heatmap, orphan flags"]
+  C --> D["Open tag details and scan display"]
+  D --> E["Inspect associated pipelines"]
+  C --> F["Compare tags"]
+  E --> G["Assess need for pipeline update or review"]
+  F --> G

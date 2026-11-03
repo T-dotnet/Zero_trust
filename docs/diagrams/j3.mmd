@@ -1,0 +1,12 @@
+flowchart TD
+  accTitle: J3
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  A["E1 ON; Internal View OFF; eligible Draft"] --> B{"Build condition satisfied and not Building?"}
+  B -->|No| X["Dry-run hidden or disabled"]
+  B -->|Yes| C["Run Dry Run: sample or no data"]
+  C --> D["Simulated result and log history"]
+  D -->|Revise and repeat| A
+  D --> E["Submit for Review; inspect actual status"]
+  E --> F{"Submission type"}
+  F -->|New| G["Ethical Review: J4"]
+  F -->|Update or Bug Fix| H["Technical Review: J4"]

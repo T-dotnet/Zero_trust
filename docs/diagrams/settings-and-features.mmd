@@ -1,0 +1,8 @@
+flowchart TD
+  accTitle: Settings And Features
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in settings-and-feature-toggles.md.
+  S["Settings switch"] --> B["Shared boolean state"]
+  F["Features: Active switch with a supported mapping"] --> B
+  B --> U["UI conditions plus item status and view mode"]
+  B --> R["Features: computed Active display"]
+  X["Feature with no mapping or incomplete handler"] --> N["Active is not a reliable on/off control"]

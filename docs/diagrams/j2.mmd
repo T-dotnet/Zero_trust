@@ -1,0 +1,15 @@
+flowchart TD
+  accTitle: J2
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  A["E1 ON; Quality Gates ON; Internal View OFF"] --> B["Create Pipeline: connect Git"]
+  B --> C["Mock analysis: issues and blocking inputs"]
+  C --> D{"Wizard quality conditions satisfied?"}
+  D -->|No: seeded case| X["STOP: no working in-wizard resolution path"]
+  D -->|Yes: conditional continuation| E["Input/output, documentation, summary"]
+  E --> F["Save or submit; inspect actual resulting status"]
+  S["Separate entry: existing unbuilt pipeline"] --> R["Details: Readiness Analysis and resolution"]
+  R --> G{"Score at least 70 OR READY?"}
+  G -->|No| R
+  G -->|Yes| H["Build Image: Confirm and Start Build"]
+  H --> I["Draft; built flag true; local container Building"]
+  I -. "Requires actual completion; worker not implemented" .-> J["Eligible draft for J3"]

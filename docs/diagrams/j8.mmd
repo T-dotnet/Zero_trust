@@ -1,0 +1,11 @@
+flowchart TD
+  accTitle: J8
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  A["E1 ON; author Internal View OFF"] --> B{"Reason for version"}
+  B -->|Feature update| C["Approved pipeline: Submit update; minor version"]
+  B -->|Code failure; action offered| D["Job: Submit Bug Fix; patch version and job context"]
+  C --> E["Version wizard: branch, description, requirements"]
+  D --> E
+  E -->|Save as Draft| F["Draft: J3"]
+  E -->|Submit| G["Technical Review"]
+  G --> H["Internal View ON: review via J4"]

@@ -1,0 +1,13 @@
+flowchart TD
+  accTitle: J5
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  A["E1 ON: open artifact and inspect evidence"] --> B{"Artifact status"}
+  B -->|Pending| C["Validate Artifact; no internal-mode gate"]
+  C --> V["Validated"]
+  B -->|Output Issue; Internal View OFF| H["Human Support: J6"]
+  B -->|Output Issue; Internal View ON| R["Submit Review"]
+  R -->|Acceptable| V
+  R -->|Unacceptable| N["Not Acceptable: details download disabled"]
+  B -->|Already Validated| V
+  V --> D["Download options; include full logs ON"]
+  D --> E["Confirm: notification only"]

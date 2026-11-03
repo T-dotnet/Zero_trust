@@ -1,0 +1,15 @@
+flowchart TD
+  accTitle: J6
+  accDescr: Source-derived workflow. See the adjacent numbered steps and implementation limits in user-flows.md.
+  A["E1 ON; Pivot by Status ON; Internal View OFF"] --> B["Open failed job and inspect context"]
+  B --> C{"Existing support request?"}
+  C -->|Yes| D["Inspect existing request"]
+  C -->|No; Human Support available| E["Create local Submitted request"]
+  E --> F["Internal View ON: mark In Progress"]
+  D --> F
+  F --> G["Investigate; resolve with comment"]
+  G --> H["Internal View OFF: return to job"]
+  H --> I{"Eligible retry status and ticket state?"}
+  I -->|Yes| J["Run Pipeline Again or Retry Job: Queued"]
+  I -->|Code change needed| K["J8: submit bug fix"]
+  I -->|No available retry| L["Continue investigation; no guaranteed recovery"]
