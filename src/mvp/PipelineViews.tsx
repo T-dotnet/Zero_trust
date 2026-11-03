@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Button,
+  Menu,
   MenuItem,
   Select,
   Tab,
@@ -11,8 +12,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useMediaQuery,
 } from "@mui/material";
-import { ArrowRight, FileText, Plus } from "lucide-react";
+import { ArrowRight, FileText, Plus, SlidersHorizontal, X } from "lucide-react";
 import {
   formatDate,
   stageLabel,
@@ -51,6 +53,11 @@ export function PipelineCatalog({
   const [tab, setTab] = useState("all");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const [categoryAnchor, setCategoryAnchor] = useState<HTMLElement | null>(
+    null,
+  );
+  const compact = useMediaQuery("(max-width: 599px)");
+  const categoryMenuOpen = compact && Boolean(categoryAnchor?.isConnected);
   const tasks = state.pipelines.filter((p) => pipelineNeedsAction(p, role));
   const approved = state.pipelines.filter(
     (p) => p.status === "Approved",
@@ -58,6 +65,19 @@ export function PipelineCatalog({
   const pending = state.pipelines.filter(
     (p) => p.status === "In review",
   ).length;
+  const categories = Array.from(
+    new Set(state.pipelines.map((p) => p.category)),
+  );
+  const statuses = [
+    { value: "all", label: `All pipelines ${state.pipelines.length}` },
+    {
+      value: "tasks",
+      label: `Needs your action ${tasks.length}`,
+      short: `Needs action ${tasks.length}`,
+    },
+    { value: "approved", label: `Approved ${approved}` },
+    { value: "review", label: `In review ${pending}` },
+  ];
   const rows = state.pipelines.filter(
     (p) =>
       (tab === "all" ||
@@ -75,15 +95,15 @@ export function PipelineCatalog({
         title="Pipelines"
         description="From research code to approved, reproducible workflows."
       >
-        <Button variant="outlined" onClick={onApprovals}>
-          View approvals
-        </Button>
         <Button
           variant="contained"
           startIcon={<Plus size={17} />}
           onClick={role === "Researcher" ? onNew : onApprovals}
         >
           {role === "Researcher" ? "New pipeline" : "View my tasks"}
+        </Button>
+        <Button variant="outlined" onClick={onApprovals}>
+          View approvals
         </Button>
       </PageHeader>
       <div className="metrics-row">
@@ -99,40 +119,106 @@ export function PipelineCatalog({
         ))}
       </div>
       <section className="table-panel">
-        <Tabs
-          value={tab}
-          onChange={(_, value) => setTab(value)}
-          aria-label="Pipeline status"
-          variant="scrollable"
-          scrollButtons="auto"
+        {!compact && (
+          <Tabs
+            value={tab}
+            onChange={(_, value) => setTab(value)}
+            aria-label="Pipeline status"
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            {statuses.map((status) => (
+              <Tab
+                key={status.value}
+                value={status.value}
+                label={status.label}
+              />
+            ))}
+          </Tabs>
+        )}
+        <div
+          className={`filter-bar ${compact ? "catalog-mobile-controls" : ""}`}
         >
-          <Tab value="all" label={`All pipelines ${state.pipelines.length}`} />
-          <Tab value="tasks" label={`Needs your action ${tasks.length}`} />
-          <Tab value="approved" label={`Approved ${approved}`} />
-          <Tab value="review" label={`In review ${pending}`} />
-        </Tabs>
-        <div className="filter-bar">
           <SearchField
             value={search}
             onChange={setSearch}
             placeholder="Search pipelines..."
           />
-          <Select
-            aria-label="Pipeline category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            size="small"
-          >
-            <MenuItem value="all">All categories</MenuItem>
-            {Array.from(new Set(state.pipelines.map((p) => p.category))).map(
-              (c) => (
+          {compact ? (
+            <>
+              <Select
+                aria-label="Pipeline status"
+                value={tab}
+                onChange={(event) => setTab(event.target.value)}
+                renderValue={(value) => {
+                  const status = statuses.find((item) => item.value === value);
+                  return status?.short || status?.label;
+                }}
+              >
+                {statuses.map((status) => (
+                  <MenuItem key={status.value} value={status.value}>
+                    {status.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Button
+                variant="outlined"
+                startIcon={<SlidersHorizontal size={17} />}
+                onClick={(event) => setCategoryAnchor(event.currentTarget)}
+                aria-label="Filter pipelines by category"
+                aria-haspopup="menu"
+                aria-expanded={categoryMenuOpen}
+              >
+                Filters{category !== "all" ? " (1)" : ""}
+              </Button>
+              {category !== "all" && (
+                <Button
+                  className="active-category-filter"
+                  aria-label={`Clear category filter: ${category}`}
+                  endIcon={<X size={16} />}
+                  onClick={() => setCategory("all")}
+                >
+                  Category: {category}
+                </Button>
+              )}
+            </>
+          ) : (
+            <Select
+              aria-label="Pipeline category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              size="small"
+            >
+              <MenuItem value="all">All categories</MenuItem>
+              {categories.map((c) => (
                 <MenuItem key={c} value={c}>
                   {c}
                 </MenuItem>
-              ),
-            )}
-          </Select>
+              ))}
+            </Select>
+          )}
         </div>
+        <Menu
+          anchorEl={categoryAnchor}
+          open={categoryMenuOpen}
+          onClose={() => setCategoryAnchor(null)}
+          slotProps={{ list: { "aria-label": "Pipeline categories" } }}
+        >
+          {["all", ...categories].map((value) => (
+            <MenuItem
+              key={value}
+              role="menuitemradio"
+              aria-checked={category === value}
+              selected={category === value}
+              onClick={() => {
+                setCategory(value);
+                setCategoryAnchor(null);
+              }}
+            >
+              {value === "all" ? "All categories" : value}
+            </MenuItem>
+          ))}
+        </Menu>
         <TableContainer>
           <Table
             aria-label="Pipelines"
@@ -399,7 +485,7 @@ export function Overview({
           {role === "Researcher" ? "New pipeline" : "View my tasks"}
         </Button>
       </PageHeader>
-      <div className="metrics-row">
+      <div className="metrics-row overview-metrics">
         {[
           [state.datasets.length, "Datasets"],
           [attention.length, "Your pipeline tasks"],

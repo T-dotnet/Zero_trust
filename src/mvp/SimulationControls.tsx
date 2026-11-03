@@ -1,7 +1,6 @@
 import { useState, type Dispatch } from "react";
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -9,6 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { STAGES, type Action, type Workspace } from "./model";
+import { WorkspaceDialog } from "./WorkspaceDialog";
 
 export function SimulationControls({
   state,
@@ -55,7 +55,7 @@ export function SimulationControls({
     );
   };
   return (
-    <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
+    <WorkspaceDialog open onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Simulation controls</DialogTitle>
       <DialogContent>
         <p className="muted">
@@ -202,6 +202,6 @@ export function SimulationControls({
           Return to prototype
         </Button>
       </DialogActions>
-    </Dialog>
+    </WorkspaceDialog>
   );
 }

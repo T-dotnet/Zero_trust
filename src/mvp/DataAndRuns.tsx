@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -34,6 +33,7 @@ import {
   type Workspace,
 } from "./model";
 import { EmptyState, PageHeader, SearchField, Status } from "./ui";
+import { WorkspaceDialog } from "./WorkspaceDialog";
 import { RunSupport } from "./RunSupport";
 import { downloadRunLog, downloadText } from "./files";
 import { encodeCsv } from "./csv";
@@ -171,7 +171,7 @@ export function Datasets({
           {rows.length} datasets / Restricted research access
         </div>
       </section>
-      <Dialog
+      <WorkspaceDialog
         open={Boolean(selected)}
         onClose={() => setSelected(null)}
         fullWidth
@@ -219,7 +219,7 @@ export function Datasets({
             Run pipeline
           </Button>
         </DialogActions>
-      </Dialog>
+      </WorkspaceDialog>
     </>
   );
 }
@@ -525,7 +525,7 @@ export function RunsAndResults({
           <span>Execution is simulated in demo mode</span>
         </div>
       </section>
-      <Dialog
+      <WorkspaceDialog
         open={Boolean(run)}
         onClose={() => setSelectedRun(null)}
         fullWidth
@@ -661,7 +661,7 @@ export function RunsAndResults({
             </Button>
           )}
         </DialogActions>
-      </Dialog>
+      </WorkspaceDialog>
     </>
   );
 }

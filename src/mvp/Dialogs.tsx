@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import {
   Alert,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -41,6 +40,9 @@ import { artifactPreview } from "./artifactPreview";
 import { StagePath, Status } from "./ui";
 import { AttachmentPicker } from "./Evidence";
 import { parseDatasetCsv } from "./csv";
+import { WorkspaceDialog } from "./WorkspaceDialog";
+
+const PIPELINE_STEPS = ["Source & purpose", "Requirements", "Review & submit"];
 
 export function PipelineForm({
   pipeline,
@@ -65,6 +67,11 @@ export function PipelineForm({
     working?.attachments || [],
   );
   const [step, setStep] = useState(0);
+  const content = useRef<HTMLDivElement>(null);
+  const changeStep = (next: number) => {
+    setStep(next);
+    content.current?.scrollTo(0, 0);
+  };
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [sourceOpen, setSourceOpen] = useState(false);
@@ -101,7 +108,7 @@ export function PipelineForm({
   ) => {
     setFieldErrors(errors);
     setError(message);
-    setStep(target);
+    changeStep(target);
     if (errors.branch) setSourceOpen(true);
     const key = Object.keys(errors)[0];
     setTimeout(() => fields.current[key]?.focus(), 0);
@@ -210,7 +217,7 @@ export function PipelineForm({
     />
   );
   return (
-    <Dialog open onClose={onClose} fullWidth maxWidth="md">
+    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>
         {pipeline
           ? pipeline.status === "Draft"
@@ -227,7 +234,7 @@ export function PipelineForm({
           <X size={20} />
         </button>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent ref={content}>
         <p className="muted">
           {pipeline && pipeline.status !== "Draft"
             ? "Save your working revision at any time. Resubmission restarts all four approval stages."
@@ -239,14 +246,18 @@ export function PipelineForm({
             <p>{feedback.note}</p>
           </div>
         )}
+        <div className="compact-form-progress" role="status" aria-live="polite">
+          <span>
+            Step {step + 1} of {PIPELINE_STEPS.length}
+          </span>
+          <strong>{PIPELINE_STEPS[step]}</strong>
+        </div>
         <Stepper activeStep={step} className="form-stepper">
-          {["Source & purpose", "Requirements", "Review & submit"].map(
-            (label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ),
-          )}
+          {PIPELINE_STEPS.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
         </Stepper>
         {step === 0 && (
           <div className="form-stack">
@@ -445,7 +456,7 @@ export function PipelineForm({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={step === 0 ? onClose : () => setStep(step - 1)}>
+        <Button onClick={step === 0 ? onClose : () => changeStep(step - 1)}>
           {step === 0 ? "Cancel" : "Back"}
         </Button>
         <div className="dialog-action-spacer" />
@@ -464,7 +475,7 @@ export function PipelineForm({
                 (step === 0 && valid()) ||
                 (step === 1 && validRequirements())
               )
-                setStep(step + 1);
+                changeStep(step + 1);
             }}
           >
             Continue
@@ -479,7 +490,7 @@ export function PipelineForm({
           </Button>
         )}
       </DialogActions>
-    </Dialog>
+    </WorkspaceDialog>
   );
 }
 
@@ -561,7 +572,7 @@ export function ImportDialog({
     }
   };
   return (
-    <Dialog open onClose={onClose} fullWidth maxWidth="sm">
+    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Import dataset</DialogTitle>
       <DialogContent>
         <p className="muted">
@@ -716,7 +727,7 @@ export function ImportDialog({
           Import dataset
         </Button>
       </DialogActions>
-    </Dialog>
+    </WorkspaceDialog>
   );
 }
 
@@ -743,7 +754,7 @@ export function RunDialog({
     pipeline && dataset && supportsDataset(pipeline, dataset),
   );
   return (
-    <Dialog open onClose={onClose} fullWidth maxWidth="sm">
+    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Configure run</DialogTitle>
       <DialogContent>
         <p className="muted">Choose an approved method and source dataset.</p>
@@ -834,7 +845,7 @@ export function RunDialog({
           Start demo run
         </Button>
       </DialogActions>
-    </Dialog>
+    </WorkspaceDialog>
   );
 }
 
@@ -860,7 +871,7 @@ export function ArtifactDialog({
   const [error, setError] = useState("");
   const preview = artifactPreview(a);
   return (
-    <Dialog open onClose={onClose} fullWidth maxWidth="md">
+    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>Artifact review</DialogTitle>
       <DialogContent>
         <div className="detail-identity">
@@ -1063,7 +1074,7 @@ export function ArtifactDialog({
           Download sample CSV
         </Button>
       </DialogActions>
-    </Dialog>
+    </WorkspaceDialog>
   );
 }
 
@@ -1079,7 +1090,7 @@ export function HelpDialog({
   onApprovals: () => void;
 }) {
   return (
-    <Dialog open onClose={onClose} fullWidth maxWidth="sm">
+    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Explore the MVP</DialogTitle>
       <DialogContent>
         <p className="muted">
@@ -1126,6 +1137,6 @@ export function HelpDialog({
           Create a pipeline
         </Button>
       </DialogActions>
-    </Dialog>
+    </WorkspaceDialog>
   );
 }

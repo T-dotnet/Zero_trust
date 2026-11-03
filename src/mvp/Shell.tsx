@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import {
   Avatar,
   Button,
@@ -22,6 +22,7 @@ import {
   Shield,
   ShieldCheck,
   Workflow,
+  X,
 } from "lucide-react";
 import { STAGES, type Page, type Role, actorFor } from "./model";
 import { colors } from "./designTokens";
@@ -59,6 +60,24 @@ export function Shell({
 }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const header = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const update = () => {
+      if (header.current)
+        root.style.setProperty(
+          "--zt-header-height",
+          `${header.current.getBoundingClientRect().height}px`,
+        );
+    };
+    const observer = new ResizeObserver(update);
+    if (header.current) observer.observe(header.current);
+    update();
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty("--zt-header-height");
+    };
+  }, []);
   const go = (page: Page) => {
     setPage(page);
     setMobileOpen(false);
@@ -108,12 +127,23 @@ export function Shell({
       <Drawer
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
-        sx={{ "& .MuiDrawer-paper": { width: 224 } }}
+        sx={{
+          "& .MuiDrawer-paper": { width: 280, maxWidth: "calc(100% - 48px)" },
+        }}
       >
-        <div className="mobile-sidebar">{sidebar}</div>
+        <div className="mobile-sidebar">
+          <IconButton
+            className="drawer-close"
+            aria-label="Close navigation"
+            onClick={() => setMobileOpen(false)}
+          >
+            <X size={21} />
+          </IconButton>
+          {sidebar}
+        </div>
       </Drawer>
       <div className="workspace-body">
-        <header className="utility-bar">
+        <header className="utility-bar" ref={header}>
           <div className="utility-left">
             <IconButton
               aria-label="Open navigation"
@@ -142,6 +172,7 @@ export function Shell({
               size="small"
               IconComponent={ChevronDown}
               className="role-select"
+              MenuProps={{ transitionDuration: 0 }}
             >
               {(
                 ["Researcher", ...STAGES.map((s) => `${s} reviewer`)] as Role[]

@@ -2,13 +2,13 @@ import { useLayoutEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
 } from "@mui/material";
 import { FileText, Paperclip, X } from "lucide-react";
 import { uid, type Attachment } from "./model";
+import { WorkspaceDialog } from "./WorkspaceDialog";
 
 export function AttachmentPicker({
   attachments,
@@ -153,7 +153,7 @@ export function EvidenceAttachments({
           illustrative.
         </p>
       )}
-      <Dialog
+      <WorkspaceDialog
         open={Boolean(selected)}
         onClose={() => setSelected(null)}
         fullWidth
@@ -168,7 +168,7 @@ export function EvidenceAttachments({
         <DialogActions>
           <Button onClick={() => setSelected(null)}>Close preview</Button>
         </DialogActions>
-      </Dialog>
+      </WorkspaceDialog>
     </>
   );
 }

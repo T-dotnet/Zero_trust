@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import {
   Alert,
   Button,
@@ -76,6 +76,14 @@ export default function MvpApp() {
   const selectedPipeline = state.pipelines.find(
     (p) => p.id === selectedPipelineId,
   );
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [
+    page,
+    selectedPipelineId,
+    selectedPipeline?.stage,
+    selectedPipeline?.status,
+  ]);
   const artifact = state.artifacts.find((a) => a.id === artifactId);
   const navigate = (next: Page) => {
     setPage(next);

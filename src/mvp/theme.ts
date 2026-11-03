@@ -99,6 +99,7 @@ export const theme = createTheme({
       },
     },
     MuiDialogActions: {
+      defaultProps: { disableSpacing: true },
       styleOverrides: {
         root: {
           padding: "18px 24px",
