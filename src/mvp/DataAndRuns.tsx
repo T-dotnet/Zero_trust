@@ -550,7 +550,9 @@ export function RunsAndResults({
                       ? "error"
                       : run.status === "Completed"
                         ? "success"
-                        : "neutral"
+                        : run.status === "Running"
+                          ? "warning"
+                          : "neutral"
                   }
                 >
                   {run.status}
