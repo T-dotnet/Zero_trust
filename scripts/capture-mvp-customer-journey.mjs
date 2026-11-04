@@ -1,4 +1,5 @@
 import { chromium, expect } from '@playwright/test';
+import { colors } from '../src/mvp/palette.mjs';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -8,7 +9,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const target=process.env.MVP_CAPTURE_URL||'http://localhost:3000';
 const output=path.join(root,'public/mvp-customer-journey');
 mkdirSync(path.join(output,'screenshots'),{recursive:true});
-const manifest={capturedAt:new Date().toISOString(),sourceCommit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),appSourceCommit:execFileSync('git',['log','-1','--format=%H','--','src/mvp'],{cwd:root,encoding:'utf8'}).trim(),target,method:'Local Playwright Chromium. Browser runtime tools are not exposed in this session; the established local Playwright fallback is used.',scenario:'Fresh local workspace; synthetic example dataset and new Customer journey outcome classifier v1.0.0. All four reviews are performed through normal UI controls; simulation shortcuts are not used.',screenshots:[],checks:{pageErrors:[],consoleErrors:[]}};
+const manifest={capturedAt:new Date().toISOString(),sourceCommit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),appSourceCommit:execFileSync('git',['log','-1','--format=%H','--','src/mvp'],{cwd:root,encoding:'utf8'}).trim(),target,method:'Local Playwright Chromium. Browser runtime tools are not exposed in this session; the established local Playwright fallback is used.',scenario:'Fresh local workspace; synthetic example dataset and new Customer journey outcome classifier v1.0.0. All four reviews are performed through normal UI controls; simulation shortcuts are not used.',screenshots:[],visualPalette:{primary:colors.primary,slate:colors.slate,amber:colors.warningAccent,coral:colors.errorAccent,primaryText:colors.ink,interactiveText:colors.primaryDark},checks:{pageErrors:[],consoleErrors:[]}};
 const scratch=mkdtempSync(path.join(tmpdir(),'mvp-customer-journey-'));
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
 try {

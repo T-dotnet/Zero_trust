@@ -2,7 +2,7 @@
 
 An interactive research workspace for datasets, governed pipelines, mandatory multistage approval, simulated execution, and reviewed outputs. Built with React, TypeScript, MUI, and Lucide.
 
-The current UI uses Stripe as a visual reference: self-hosted Inter, navy text, violet actions, light surfaces and restrained borders. This styling is always on. Phone/tablet layouts retain larger text and touch controls.
+The current UI uses the supplied mint, slate, amber and coral palette: mint primary actions with dark labels, deeper green links and focus states, self-hosted Inter, light surfaces and restrained borders. This styling is always on. Phone/tablet layouts retain larger text and touch controls.
 
 ## Run locally
 

@@ -1,3 +1,4 @@
+import { colors, applyDocumentPalette } from './mvp-document-theme.mjs';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -34,10 +35,10 @@ const base = `https://github.com/T-dotnet/Zero_trust/blob/${model.sourceCommit}/
 const graphDir=path.join(root,'public/mvp-flow-docs/flows'); mkdirSync(graphDir,{recursive:true});
 const graphs={};
 for (const f of model.journeys) {
- const lines=['digraph flow {','graph [rankdir=LR, bgcolor="transparent", pad="0.25", nodesep="0.6", ranksep="1.05", splines=polyline, outputorder=edgesfirst];','node [shape=plain, fontname="Arial"];','edge [color="#8590a2", fontcolor="#42526b", fontname="Arial", fontsize=12, arrowsize=0.75, penwidth=1.3];'];
+ const lines=['digraph flow {','graph [rankdir=LR, bgcolor="transparent", pad="0.25", nodesep="0.6", ranksep="1.05", splines=polyline, outputorder=edgesfirst];','node [shape=plain, fontname="Arial"];',`edge [color="${colors.slate}", fontcolor="${colors.body}", fontname="Arial", fontsize=12, arrowsize=0.75, penwidth=1.3];`];
  for (const id of f.screens) {
   const s=screens.get(id); const title=s.title.replace(' · ','<BR ALIGN="LEFT"/>');
-  const label=`<TABLE BORDER="1" COLOR="#cbd2df" CELLBORDER="0" CELLSPACING="0" CELLPADDING="12" BGCOLOR="white"><TR><TD ALIGN="LEFT" WIDTH="260" BGCOLOR="#f1f0ff"><FONT POINT-SIZE="12" COLOR="#5147cb">${id} · ${html(s.kind)}</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="16" COLOR="#152b42"><B>${title.split('<BR ALIGN="LEFT"/>').map(html).join('<BR ALIGN="LEFT"/>')}</B></FONT></TD></TR>${s.layout.slice(0,3).map(x=>`<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="12" COLOR="#52617a">${html(x.length>52?x.slice(0,49)+'…':x)}</FONT></TD></TR>`).join('')}<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="12" COLOR="#5147cb">Open screen + user story →</FONT></TD></TR></TABLE>`;
+  const label=`<TABLE BORDER="1" COLOR="${colors.line}" CELLBORDER="0" CELLSPACING="0" CELLPADDING="12" BGCOLOR="white"><TR><TD ALIGN="LEFT" WIDTH="260" BGCOLOR="${colors.primarySoft}"><FONT POINT-SIZE="12" COLOR="${colors.primaryDark}">${id} · ${html(s.kind)}</FONT></TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="16" COLOR="${colors.ink}"><B>${title.split('<BR ALIGN="LEFT"/>').map(html).join('<BR ALIGN="LEFT"/>')}</B></FONT></TD></TR>${s.layout.slice(0,3).map(x=>`<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="12" COLOR="${colors.muted}">${html(x.length>52?x.slice(0,49)+'…':x)}</FONT></TD></TR>`).join('')}<TR><TD ALIGN="LEFT"><FONT POINT-SIZE="12" COLOR="${colors.primaryDark}">Open screen + user story →</FONT></TD></TR></TABLE>`;
   lines.push(`${id} [id="node-${id}", href="#screen=${id}&journey=${f.id}", tooltip=${dotString(s.title)}, label=<${label}>];`);
  }
  for (const [from,to,label] of f.edges) lines.push(`${from} -> ${to} [label=${dotString(label)}, tooltip=${dotString(label)}];`);
@@ -64,6 +65,6 @@ for (const s of model.screens) {
 md.push('## Coverage checklist','','| Feature area | Screen coverage |','| --- | --- |',...model.coverage.map(x=>`| ${x.area} | ${x.screens.map(link).join(', ')} |`),'','## Maintain this document','','Edit `docs/mvp/user-flows.json` for screen, story and transition content. Edit `scripts/mvp-flow-viewer.html` for document presentation. With Graphviz installed (`dot` on PATH), run:','','```sh','npm run docs:mvp','```','','The generator validates stable IDs, transition endpoints, source-file references, screen reachability, journey membership and story acceptance criteria. It emits this Markdown document, a standalone interactive HTML document, a portable model JSON, and editable `.dot` plus SVG diagrams. Source commit identifies the app behavior reviewed, not a guarantee that later code has identical flows. Refresh the review after changes to `src/mvp`.','');
 writeFileSync(path.join(root,'docs/mvp/screen-flows.md'),md.join('\n'));
 const payload=JSON.stringify({...model,graphs}).replaceAll('<','\\u003c');
-const template=readFileSync(path.join(root,'scripts/mvp-flow-viewer.html'),'utf8');
+const template=applyDocumentPalette(readFileSync(path.join(root,'scripts/mvp-flow-viewer.html'),'utf8'));
 writeFileSync(path.join(root,'public/mvp-flows.html'),template.replace('/*__MODEL__*/',payload));
 console.log(`MVP docs validated: ${screens.size} reachable screens, ${model.journeys.length} journeys, ${model.screens.reduce((n,s)=>n+s.actions.length,0)} transitions. Generated Markdown, standalone HTML and SVG/DOT diagrams.`);

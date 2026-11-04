@@ -1,0 +1,28 @@
+// One palette for the React workspace, standalone documentation and diagrams.
+// Exact reference swatches are preserved; foreground shades meet text contrast.
+export const colors = Object.freeze({
+  ink: "#18212f",
+  body: "#495268",
+  muted: "#626a7e",
+  slate: "#8c91a4",
+  line: "#e0e4ec",
+  inputBorder: "#8c91a4",
+  surface: "#f6f7fa",
+  surfaceHover: "#eceef4",
+  primary: "#2be1b0",
+  primaryHover: "#20cfa1",
+  primaryDark: "#006b50",
+  primaryDeep: "#004d3a",
+  primarySoft: "#eafbf5",
+  primaryBorder: "#a1e7d2",
+  focus: "#006b50",
+  success: "#117557",
+  successSoft: "#eaf8f2",
+  warningAccent: "#feab3d",
+  warning: "#875000",
+  warningSoft: "#fff4e3",
+  errorAccent: "#f8506d",
+  errorHover: "#ff6881",
+  error: "#b01e3e",
+  errorSoft: "#fff0f3",
+});

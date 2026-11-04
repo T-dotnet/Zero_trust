@@ -4,11 +4,15 @@ import { colors, cssTokens, fontFamily } from "./designTokens";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: colors.primary,
-      dark: colors.primaryDark,
-      light: colors.primarySoft,
+      // Small text, form states and selection controls use accessible green.
+      main: colors.primaryDark,
+      dark: colors.primaryDeep,
+      light: colors.primary,
+      contrastText: "#ffffff",
     },
     secondary: { main: colors.body },
+    action: { active: colors.body },
+    info: { main: colors.primaryDark, light: colors.primarySoft },
     background: { default: "#ffffff", paper: "#ffffff" },
     text: { primary: colors.ink, secondary: colors.muted },
     divider: colors.line,
@@ -32,20 +36,41 @@ export const theme = createTheme({
   },
   shape: { borderRadius: 7 },
   components: {
-    MuiCssBaseline: { styleOverrides: { ":root": cssTokens } },
+    MuiCssBaseline: { styleOverrides: { ":root": cssTokens, ":focus-visible": { outline: `2px solid ${colors.focus}`, outlineOffset: 3 } } },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: { "&.Mui-focusVisible": { outline: `2px solid ${colors.focus}`, outlineOffset: 3 } },
+      },
+    },
     MuiButton: {
       defaultProps: { disableElevation: true },
       styleOverrides: {
         root: { minHeight: 42, paddingInline: 18, letterSpacing: "-.1px" },
         sizeSmall: { minHeight: 34, fontSize: 13, paddingInline: 12 },
-        outlined: {
-          borderColor: colors.inputBorder,
-          color: colors.ink,
-          "&:hover": {
-            borderColor: colors.primary,
-            background: colors.primarySoft,
+        contained: ({ ownerState }) => ({
+          ...(ownerState.color === "primary" && {
+            backgroundColor: colors.primary,
+            color: colors.ink,
+            "&:hover": { backgroundColor: colors.primaryHover },
+          }),
+          ...(ownerState.color === "error" && {
+            backgroundColor: colors.errorAccent,
+            color: colors.ink,
+            "&:hover": { backgroundColor: colors.errorHover },
+          }),
+          "&.Mui-disabled": {
+            backgroundColor: colors.line,
+            color: colors.muted,
           },
-        },
+        }),
+        outlined: ({ ownerState }) => ({
+          borderColor: colors.inputBorder,
+          color: ownerState.color === "error" ? colors.error : colors.primaryDark,
+          "&:hover": {
+            borderColor: ownerState.color === "error" ? colors.error : colors.primaryDark,
+            background: ownerState.color === "error" ? colors.errorSoft : colors.primarySoft,
+          },
+        }),
       },
     },
     MuiPaper: { defaultProps: { elevation: 0 } },
@@ -77,6 +102,11 @@ export const theme = createTheme({
       },
     },
     MuiTextField: { defaultProps: { size: "small" } },
+    MuiInputBase: {
+      styleOverrides: {
+        input: { "&::placeholder": { color: colors.muted, opacity: 1 } },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: { background: "#fff", fontSize: 14 },
@@ -85,7 +115,7 @@ export const theme = createTheme({
     },
     MuiDialog: {
       styleOverrides: {
-        paper: { borderRadius: 12, boxShadow: "0 24px 80px #0a254029" },
+        paper: { borderRadius: 12, boxShadow: "0 24px 80px #18212f29" },
       },
     },
     MuiDialogTitle: {
@@ -111,12 +141,26 @@ export const theme = createTheme({
     MuiChip: {
       styleOverrides: { root: { height: 27, borderRadius: 6, fontSize: 12 } },
     },
-    MuiAlert: { styleOverrides: { root: { fontSize: 14, borderRadius: 8 } } },
+    MuiAlert: {
+      styleOverrides: {
+        root: { fontSize: 14, borderRadius: 8 },
+        standard: ({ ownerState }) => {
+          const tone = ownerState.severity === "warning"
+            ? { backgroundColor: colors.warningSoft, color: colors.warning }
+            : ownerState.severity === "error"
+              ? { backgroundColor: colors.errorSoft, color: colors.error }
+              : ownerState.severity === "success"
+                ? { backgroundColor: colors.successSoft, color: colors.success }
+                : { backgroundColor: colors.primarySoft, color: colors.ink };
+          return { ...tone, "& .MuiAlert-icon": { color: ownerState.severity === "info" ? colors.primaryDark : tone.color } };
+        },
+      },
+    },
     MuiMenu: {
       styleOverrides: {
         paper: {
           border: `1px solid ${colors.line}`,
-          boxShadow: "0 8px 30px #0a254014",
+          boxShadow: "0 8px 30px #18212f14",
         },
       },
     },

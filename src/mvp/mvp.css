@@ -979,7 +979,7 @@
   transform: translateY(0);
 }
 .mvp-app button:focus-visible {
-  outline: 2px solid var(--zt-primary);
+  outline: 2px solid var(--zt-focus);
   outline-offset: 3px;
 }
 .mvp-app ::selection {
@@ -1327,7 +1327,7 @@
   }
 }
 
-/* Stripe-inspired refinement of the existing workspace and component system. */
+/* Palette refinement of the existing workspace and component system. */
 .mvp-app {
   --line: var(--zt-line);
   --accent: var(--zt-primary);
@@ -1345,7 +1345,7 @@
   padding-top: 2px;
 }
 .brand > svg {
-  color: var(--zt-primary);
+  color: var(--zt-primary-dark);
   width: 28px;
   height: 28px;
 }
@@ -1400,7 +1400,7 @@
   gap: 12px;
 }
 .nav-item:hover {
-  background: #edf0f6;
+  background: var(--zt-surface-hover);
 }
 .nav-item.active {
   background: var(--zt-primary-soft);
@@ -1410,6 +1410,7 @@
 .nav-item b {
   font: 600 11px/1 var(--zt-font);
   background: var(--zt-primary);
+  color: var(--zt-ink);
   border-radius: 10px;
 }
 .page-heading h1 {
@@ -1531,7 +1532,7 @@
 }
 .progress-blocks > span.current {
   background: var(--zt-primary);
-  border-color: var(--zt-primary);
+  border-color: var(--zt-primary-dark);
 }
 .table-footer {
   font-family: var(--zt-font);
@@ -1574,7 +1575,7 @@
   background: var(--zt-success);
 }
 .stage-path li.current .stage-number {
-  color: white;
+  color: var(--zt-ink);
   background: var(--zt-primary);
 }
 .text-link.MuiButton-root {
@@ -1736,4 +1737,13 @@
   .breadcrumb {
     display: none;
   }
+}
+
+/* Status accents retain explicit labels and accessible foreground colors. */
+.status-label.warning .status-dot {
+  background: var(--zt-warning-accent);
+  box-shadow: 0 0 0 1px var(--zt-warning);
+}
+.status-label.error .status-dot {
+  background: var(--zt-error-accent);
 }

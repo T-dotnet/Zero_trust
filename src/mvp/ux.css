@@ -17,7 +17,7 @@
 .disclosure > summary:focus-visible,
 .simulation-link:focus-visible,
 .entity-name:focus-visible {
-  outline: 2px solid var(--zt-primary);
+  outline: 2px solid var(--zt-focus);
   outline-offset: 4px;
   border-radius: 3px;
 }
@@ -186,7 +186,7 @@
   font-size: 13px;
 }
 .revision-context {
-  border-left: 3px solid var(--zt-warning);
+  border-left: 3px solid var(--zt-warning-accent);
   padding: 12px 16px;
   margin: 16px 0;
   background: var(--zt-warning-soft);
