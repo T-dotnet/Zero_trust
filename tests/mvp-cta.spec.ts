@@ -1,4 +1,24 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Locator, type Page } from "@playwright/test";
+
+async function fullWidth(action: Locator) {
+  const bounds = (await action.boundingBox())!;
+  const parent = await action.evaluate((element) => {
+    const parent = element.parentElement!;
+    const style = getComputedStyle(parent);
+    return {
+      left:
+        parent.getBoundingClientRect().left +
+        parent.clientLeft +
+        parseFloat(style.paddingLeft),
+      width:
+        parent.clientWidth -
+        parseFloat(style.paddingLeft) -
+        parseFloat(style.paddingRight),
+    };
+  });
+  expect(Math.abs(bounds.x - parent.left)).toBeLessThanOrEqual(1);
+  expect(Math.abs(bounds.width - parent.width)).toBeLessThanOrEqual(1);
+}
 
 async function nav(page: Page, name: string) {
   await page
@@ -21,20 +41,17 @@ async function primaryFirst(page: Page, name: string) {
   await expect(primary).toBeInViewport({ ratio: 1 });
   const main = (await primary.boundingBox())!;
   expect(main.height).toBeGreaterThanOrEqual(48);
+  await fullWidth(primary);
+  let previousBottom = main.y + main.height;
   for (const action of (await actions.getByRole("button").all()).slice(1)) {
     const bounds = (await action.boundingBox())!;
     expect(bounds.x).toBeGreaterThanOrEqual(0);
     expect(bounds.x + bounds.width).toBeLessThanOrEqual(
       page.viewportSize()!.width + 1,
     );
-    if (
-      page.viewportSize()!.width < 600 ||
-      page.viewportSize()!.height >= 480
-    ) {
-      expect(bounds.y).toBeGreaterThanOrEqual(main.y + main.height);
-    } else {
-      expect(bounds.y).toBeGreaterThanOrEqual(main.y);
-    }
+    await fullWidth(action);
+    expect(bounds.y).toBeGreaterThanOrEqual(previousBottom);
+    previousBottom = bounds.y + bounds.height;
   }
   return { actions, primary };
 }
@@ -50,12 +67,21 @@ test("form actions put the primary first in layout and keyboard order at every s
   ]) {
     await page.setViewportSize({ width, height });
     await page.goto("/");
+    await fullWidth(
+      page.getByRole("button", { name: "New pipeline", exact: true }),
+    );
+    await fullWidth(
+      page.getByRole("button", { name: "View approvals", exact: true }),
+    );
     await page
       .getByRole("button", { name: "New pipeline", exact: true })
       .click();
     await page
       .getByRole("button", { name: "Use example", exact: true })
       .click();
+    await fullWidth(
+      page.getByRole("button", { name: "Use example", exact: true }),
+    );
     for (const step of [0, 1, 2]) {
       const name = step === 2 ? "Submit for review" : "Continue";
       const { actions, primary } = await primaryFirst(page, name);
@@ -72,6 +98,9 @@ test("form actions put the primary first in layout and keyboard order at every s
         }),
       ).toBeFocused();
       if (step === 1) {
+        await fullWidth(
+          page.getByRole("button", { name: "Attach files", exact: true }),
+        );
         const filename =
           "research-evidence-for-the-longitudinal-outcome-classifier-with-a-long-file-name.md";
         await page.locator('input[type="file"]').setInputFiles({
@@ -106,6 +135,12 @@ test("output review gives each role a clear primary and keeps recovery actions f
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await nav(page, "Runs & results");
+  for (const action of await page
+    .getByRole("row")
+    .filter({ hasText: "RUN-1042" })
+    .locator(".mobile-card-actions .MuiButton-root")
+    .all())
+    await fullWidth(action);
   await page
     .getByRole("row")
     .filter({ hasText: "RUN-1042" })
@@ -138,6 +173,8 @@ test("output review gives each role a clear primary and keeps recovery actions f
     .getByRole("textbox", { name: "Describe the issue", exact: true })
     .fill("Synthetic demo input could not be mapped.");
   const support = page.locator(".support-actions");
+  for (const action of await support.getByRole("button").all())
+    await fullWidth(action);
   await expect(support.getByRole("button").first()).toHaveAccessibleName(
     "Create support request",
   );

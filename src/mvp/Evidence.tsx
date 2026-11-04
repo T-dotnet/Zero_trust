@@ -1,5 +1,11 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { Alert, Button, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Alert,
+  Button,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
 import { FileText, Paperclip, X } from "lucide-react";
 import { uid, type Attachment } from "./model";
 import { WorkspaceDialog } from "./WorkspaceDialog";
@@ -103,14 +109,14 @@ export function AttachmentPicker({
             {a.name}
             <small>{Math.max(1, Math.round(a.size / 1024))} KB</small>
           </span>
-          <Button
+          <IconButton
             size="small"
             disabled={busy}
             aria-label={`Remove ${a.name}`}
             onClick={() => onChange(attachments.filter((f) => f.id !== a.id))}
           >
             <X size={14} />
-          </Button>
+          </IconButton>
         </div>
       ))}
       {error && <Alert severity="error">{error}</Alert>}
