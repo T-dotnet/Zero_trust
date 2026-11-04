@@ -1781,3 +1781,83 @@
   background: var(--zt-error-soft);
   border-color: var(--zt-error-border);
 }
+
+/* Review progress has separate hues and marker shapes for each state. */
+.review-progress-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin: 0 0 16px;
+  color: var(--zt-body);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.review-progress-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.review-progress-legend i,
+.progress-blocks > span {
+  display: inline-block;
+  width: 10px;
+  height: 6px;
+  border: 1px solid var(--zt-slate);
+  border-radius: 2px;
+  background: var(--zt-surface);
+}
+.review-progress-legend .complete,
+.progress-blocks > span.complete {
+  background: var(--zt-success);
+  border-color: var(--zt-success);
+}
+.review-progress-legend .current,
+.progress-blocks > span.current {
+  width: 14px;
+  height: 8px;
+  background: var(--zt-warning-accent);
+  border-color: var(--zt-warning);
+}
+.review-progress-legend .pending,
+.progress-blocks > span.pending {
+  background: var(--zt-surface);
+  border-color: var(--zt-slate);
+  border-style: dashed;
+}
+.review-progress-legend .blocked,
+.progress-blocks > span.blocked {
+  background: var(--zt-error-accent);
+  border-color: var(--zt-error);
+}
+.progress-blocks { align-items: center; }
+.stage-path li.current {
+  background: var(--zt-warning-soft);
+  border-color: var(--zt-warning-accent);
+}
+.stage-path li.current .stage-number {
+  color: var(--zt-ink);
+  background: var(--zt-warning-accent);
+  box-shadow: 0 0 0 1px var(--zt-warning);
+}
+.stage-path li.current.blocked {
+  background: var(--zt-error-soft);
+  border-color: var(--zt-error-border);
+}
+.stage-path li.current.blocked .stage-number {
+  background: var(--zt-error-accent);
+  box-shadow: 0 0 0 1px var(--zt-error);
+}
+.stage-path li.current.not-started {
+  background: var(--zt-surface);
+  border-color: var(--zt-neutral-border);
+}
+.stage-path li.current.not-started .stage-number {
+  background: var(--zt-surface-hover);
+  color: var(--zt-body);
+  box-shadow: none;
+}
+@media (max-width: 900px) {
+  .review-progress-legend { font-size: 0.875rem; gap: 8px 16px; }
+}

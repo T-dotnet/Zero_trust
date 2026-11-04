@@ -30,6 +30,7 @@ import {
   PageHeader,
   PipelineProgress,
   ReviewGuide,
+  ReviewProgressLegend,
   SearchField,
 } from "./ui";
 
@@ -118,6 +119,7 @@ export function PipelineCatalog({
           </div>
         ))}
       </div>
+      <ReviewProgressLegend />
       <section className="table-panel">
         {!compact && (
           <Tabs
@@ -348,6 +350,7 @@ export function Approvals({
         New submissions pass Ethical, Technical, Privacy, and Security review.
         Publication remains an author action.
       </div>
+      <ReviewProgressLegend />
       <section className="table-panel">
         <Tabs
           value={scope}

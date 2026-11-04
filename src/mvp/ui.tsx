@@ -70,18 +70,30 @@ export function Status({
     </span>
   );
 }
+export function ReviewProgressLegend() {
+  return (
+    <div className="review-progress-legend" role="group" aria-label="Review progress legend">
+      <span><i className="complete" aria-hidden="true" />Completed</span>
+      <span><i className="current" aria-hidden="true" />Current step</span>
+      <span><i className="pending" aria-hidden="true" />Pending</span>
+      <span><i className="blocked" aria-hidden="true" />Needs changes</span>
+    </div>
+  );
+}
 export function PipelineProgress({ pipeline }: { pipeline: Pipeline }) {
   const approved = pipeline.status === "Approved";
+  const needsChanges = pipeline.status === "Rejected" || pipeline.status === "Changes requested";
   return (
     <div className="pipeline-progress">
       <span
         className="progress-blocks"
-        aria-label={`${pipeline.stage} of 4 stages approved`}
+        role="img"
+        aria-label={`${pipeline.stage} of 4 stages approved; ${stageLabel(pipeline)}`}
       >
         {STAGES.map((stage, i) => (
           <Tooltip
             key={stage}
-            title={`${stage}: ${i < pipeline.stage ? "approved" : i === pipeline.stage && pipeline.status === "In review" ? "current review" : "pending"}`}
+            title={`${stage}: ${i < pipeline.stage ? "approved" : i === pipeline.stage && pipeline.status === "In review" ? "current review" : i === pipeline.stage && needsChanges ? "needs author changes" : "pending"}`}
           >
             <span
               className={
@@ -89,7 +101,9 @@ export function PipelineProgress({ pipeline }: { pipeline: Pipeline }) {
                   ? "complete"
                   : i === pipeline.stage && pipeline.status === "In review"
                     ? "current"
-                    : ""
+                    : i === pipeline.stage && needsChanges
+                      ? "blocked"
+                      : "pending"
               }
             />
           </Tooltip>
@@ -101,9 +115,11 @@ export function PipelineProgress({ pipeline }: { pipeline: Pipeline }) {
             ? "success"
             : pipeline.status === "Rejected"
               ? "error"
-              : pipeline.status === "Changes requested"
-                ? "warning"
-                : "neutral"
+              : needsChanges
+                ? "error"
+                : pipeline.status === "In review" || pipeline.status === "Ready to publish"
+                  ? "warning"
+                  : "neutral"
         }
       >
         {stageLabel(pipeline)}
@@ -119,6 +135,8 @@ export function StagePath({
   illustrative?: boolean;
 }) {
   return (
+    <>
+    <ReviewProgressLegend />
     <ol className={`stage-path ${illustrative ? "illustrative" : ""}`}>
       {[...STAGES.map((s) => `${s} review`), "Publication"].map((label, i) => {
         const complete =
@@ -129,7 +147,8 @@ export function StagePath({
         return (
           <li
             key={label}
-            className={`${complete ? "complete" : ""} ${current ? "current" : ""}`}
+            className={`${complete ? "complete" : ""} ${current ? "current" : ""} ${current && (pipeline?.status === "Rejected" || pipeline?.status === "Changes requested") ? "blocked" : ""} ${pipeline?.status === "Draft" ? "not-started" : ""}`}
+            aria-current={current && pipeline?.status !== "Draft" && pipeline?.status !== "Rejected" && pipeline?.status !== "Changes requested" ? "step" : undefined}
           >
             <span className="stage-number">
               {complete ? <Check size={15} /> : String(i + 1).padStart(2, "0")}
@@ -158,6 +177,7 @@ export function StagePath({
         );
       })}
     </ol>
+    </>
   );
 }
 export function HistoryList({

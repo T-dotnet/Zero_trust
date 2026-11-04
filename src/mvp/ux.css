@@ -369,3 +369,16 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.compact-review-status.review-current {
+  background: var(--zt-warning-soft);
+  border-color: var(--zt-warning-accent);
+}
+.compact-review-status.review-blocked {
+  background: var(--zt-error-soft);
+  border-color: var(--zt-error-border);
+}
+.compact-review-status.review-pending {
+  background: var(--zt-surface);
+  border-color: var(--zt-neutral-border);
+}

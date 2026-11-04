@@ -121,7 +121,7 @@ export function ReviewView({
         title={p.status === "Approved" ? "Pipeline details" : "Pipeline review"}
         description={`${p.name} · ${p.version}`}
       />
-      <div className="compact-review-status">
+      <div className={`compact-review-status ${activeReview || p.status === "Ready to publish" ? "review-current" : p.status === "Rejected" || p.status === "Changes requested" ? "review-blocked" : p.status === "Approved" ? "review-complete" : "review-pending"}`}>
         <div>
           <span className="eyebrow">
             {activeReview ? "Current stage" : "Submission status"}
@@ -150,7 +150,7 @@ export function ReviewView({
             <>
               <div className="section-title">
                 <h2>{stage} review</h2>
-                <Status>Action required</Status>
+                <Status kind="warning">Action required</Status>
               </div>
               <p className="assigned">Assigned to {REVIEWERS[stage]}</p>
               <p className="review-purpose">{REASONS[stage]}</p>
@@ -238,7 +238,7 @@ export function ReviewView({
             </>
           ) : activeReview ? (
             <>
-              <Status>Awaiting {stage.toLowerCase()} review</Status>
+              <Status kind="warning">Awaiting {stage.toLowerCase()} review</Status>
               <h2>
                 {role === "Researcher"
                   ? "Submitted for review"
@@ -317,7 +317,7 @@ export function ReviewView({
             </>
           ) : (
             <>
-              <Status kind={p.status === "Rejected" ? "error" : "warning"}>
+              <Status kind={p.status === "Draft" ? "neutral" : "error"}>
                 {p.status}
               </Status>
               <h2>
