@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Zero Trust MVP · Screen & flow atlas",
   "reviewedAt": "2026-11-04",
-  "sourceCommit": "b04e8a6601d2867794b2611494caaef640a3f972",
+  "sourceCommit": "460b5b36846e7e3ece576c62d7efd9f131e770ab",
   "scope": "Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.",
   "boundaries": [
     "Role switching demonstrates five interfaces; it is not authentication or backend authorization.",
