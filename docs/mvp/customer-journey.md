@@ -35,7 +35,7 @@ The top row reads left to right, then the bottom row reads right to left. The re
 | [J07 · Retrieve the accepted sample](#j07) | Researcher | Obtain the accepted demonstration result. | The Download sample CSV action is enabled and the browser emits a CSV download. |
 | [J08 · Trace decisions and improve the method](#j08) | Researcher / all participants | Understand the recorded decisions and choose the next iteration. | Filtered history exports as JSON; related entities reopen their current state. Iteration is available from the approved version. |
 
-## Selected scenario and always-on features
+## Selected scenario and enabled features
 
 | Setting / selection | Value |
 | --- | --- |
