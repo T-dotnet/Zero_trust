@@ -107,6 +107,9 @@ test("phone forms and output samples remain readable without horizontal scrollin
   await page
     .getByRole("button", { name: "Close pipeline form", exact: true })
     .click();
+  await page
+    .getByRole("button", { name: "Discard changes", exact: true })
+    .click();
   await nav(page, "Runs & results");
   await page
     .getByRole("row")
@@ -427,6 +430,9 @@ test("task forms use the available viewport and keep content separate from foote
     }
     await page
       .getByRole("button", { name: "Close pipeline form", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Discard changes", exact: true })
       .click();
   }
 });

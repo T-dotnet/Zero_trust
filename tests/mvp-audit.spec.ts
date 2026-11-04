@@ -118,35 +118,51 @@ test("new versions never reuse a reserved version number", async ({ page }) => {
   }
 });
 
-test("damaged saved demo data recovers without a blank or broken screen", async ({
+test("damaged saved data is preserved until explicit recovery and reset", async ({
   page,
 }) => {
-  await page.addInitScript(() =>
-    localStorage.setItem(
-      "zero-trust-mvp-v1",
-      JSON.stringify({
-        schema: 1,
-        pipelines: [{ name: "Broken saved item", stage: 0, history: [] }],
-        datasets: [{}],
-        runs: [],
-        artifacts: [],
-        events: [],
-      }),
-    ),
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", { name: "Pipelines", exact: true }),
+  ).toBeVisible();
+  const damaged = '{"schema":1,"datasets":[{"name":"Keep this original"}]}';
+  await page.evaluate(
+    (raw) => localStorage.setItem("zero-trust-mvp-v1", raw),
+    damaged,
   );
   const errors: string[] = [];
-  page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/");
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Your saved workspace needs recovery" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(() => localStorage.getItem("zero-trust-mvp-v1")),
+  ).toBe(damaged);
+  const downloading = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download recovery copy" }).click();
+  const download = await downloading;
+  expect(await readFile((await download.path())!, "utf8")).toBe(damaged);
+  await page.getByRole("button", { name: "Reset saved workspace" }).click();
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  expect(
+    await page.evaluate(() => localStorage.getItem("zero-trust-mvp-v1")),
+  ).toBe(damaged);
+  await page.getByRole("button", { name: "Reset saved workspace" }).click();
+  await page.getByRole("button", { name: "Reset demo", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Pipelines", exact: true }),
+  ).toBeVisible();
+  const backups = await page.evaluate(() =>
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith("zero-trust-mvp-v1-recovery-"))
+      .map((key) => localStorage.getItem(key)),
+  );
+  expect(backups).toContain(damaged);
+  await page.reload();
   await expect(
     page.getByRole("button", {
       name: "Clinical note de-identification",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await nav(page, "Datasets");
-  await expect(
-    page.getByRole("button", {
-      name: "Clinical notes · November cohort",
       exact: true,
     }),
   ).toBeVisible();
@@ -413,6 +429,9 @@ test("evidence limits, removal, same-file reattachment, and cancel do not leak d
     page.getByRole("button", { name: "Attach files", exact: true }),
   ).toBeFocused();
   await page.keyboard.press("Escape");
+  await page
+    .getByRole("button", { name: "Discard changes", exact: true })
+    .click();
   await expect(page.getByRole("dialog")).toBeHidden();
   await expect(
     page.getByRole("tab", { name: "All pipelines 6", exact: true }),
@@ -460,7 +479,7 @@ test("storage warnings recover after a later successful save", async ({
 }) => {
   await page.addInitScript(() => {
     const original = Storage.prototype.setItem;
-    let remainingFailures = 2;
+    let remainingFailures = 1;
     Storage.prototype.setItem = function (key, value) {
       if (remainingFailures > 0 && key === "zero-trust-mvp-v1") {
         remainingFailures -= 1;

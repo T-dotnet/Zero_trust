@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "test:mvp": "node --import tsx --test tests/mvp-model.test.ts && playwright test",
+    "test:mvp": "node --import tsx --test tests/mvp-model.test.ts tests/firestore-policy.test.mjs && playwright test",
     "docs:mvp": "node scripts/build-mvp-flow-docs.mjs && node scripts/build-mvp-customer-journey.mjs",
     "docs:mvp:journey:capture": "node scripts/capture-mvp-customer-journey.mjs",
     "docs:mvp:journey:pdf": "node scripts/export-mvp-customer-journey-pdf.mjs"
