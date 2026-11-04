@@ -6,6 +6,12 @@ import {
   type Workspace,
 } from "./model";
 import { isWorkspace } from "./storage";
+import {
+  workspaceLedger,
+  readWorkspaceRecord,
+  writeWorkspaceRecord,
+  mirrorFingerprint,
+} from "./workspaceLedger";
 
 export const STORAGE_KEY = "zero-trust-mvp-v1";
 type Snapshot = {
@@ -64,7 +70,8 @@ export function useWorkspace() {
   // in-memory state; they are never replayed with regenerated history IDs.
   const enqueue = useCallback(
     (action?: Action, useSaved = false) => {
-      const update = () => {
+      const update = async (db: IDBDatabase) => {
+        const record = await readWorkspaceRecord(db);
         let raw: string | null;
         try {
           raw = localStorage.getItem(STORAGE_KEY);
@@ -82,6 +89,15 @@ export function useWorkspace() {
           publish({ ...before, state: next, storageAvailable: false });
           return !action || next !== before.state;
         }
+        // A valid older mirror is a renderer-cache lag, not a new save. Unknown
+        // or damaged bytes still take the explicit recovery path below.
+        const mirrorHash = await mirrorFingerprint(raw);
+        if (
+          record &&
+          parseSaved(raw) &&
+          record.knownMirrors.includes(mirrorHash)
+        )
+          raw = record.raw;
         const saved = parseSaved(raw);
         const localConflict =
           unsaved.current &&
@@ -115,6 +131,8 @@ export function useWorkspace() {
           ? saved!
           : unsaved.current?.state || saved || seedWorkspace();
         const next = action ? workspaceReducer(base, action) : base;
+        const encoded = JSON.stringify(next);
+        let mirrorWritten = false;
         try {
           // Reset/recovery is explicit and keeps the replaced bytes as a backup.
           const backup =
@@ -128,8 +146,15 @@ export function useWorkspace() {
               `${STORAGE_KEY}-recovery-${crypto.randomUUID()}`,
               backup,
             );
-          const encoded = JSON.stringify(next);
           localStorage.setItem(STORAGE_KEY, encoded);
+          mirrorWritten = true;
+          const knownMirrors = new Set(record?.knownMirrors || []);
+          if (parseSaved(raw)) knownMirrors.add(await mirrorFingerprint(raw));
+          knownMirrors.add(await mirrorFingerprint(encoded));
+          await writeWorkspaceRecord(db, {
+            raw: encoded,
+            knownMirrors: [...knownMirrors],
+          });
           lastSaved.current = encoded;
           unsaved.current = null;
           publish({
@@ -144,7 +169,10 @@ export function useWorkspace() {
             return false;
           }
           if (action || unsaved.current)
-            unsaved.current = { base: raw, state: next };
+            unsaved.current = {
+              base: mirrorWritten ? encoded : raw,
+              state: next,
+            };
           publish({
             state: next,
             storageAvailable: false,
@@ -156,8 +184,15 @@ export function useWorkspace() {
       };
       const result = queue.current
         .then(async () => {
-          if (navigator.locks)
-            return await navigator.locks.request(STORAGE_KEY, update);
+          if (navigator.locks) {
+            // If the shared record is unavailable, keep edits in memory. Never
+            // fall back to unsafe localStorage-only writes across tabs.
+            const db = await workspaceLedger().catch(() => null);
+            if (db)
+              return await navigator.locks.request(STORAGE_KEY, () =>
+                update(db),
+              );
+          }
           // Session-only fallback: unsafe cross-tab persistence is never attempted.
           const before = current.current;
           const next =

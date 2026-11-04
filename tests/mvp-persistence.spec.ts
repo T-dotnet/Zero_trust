@@ -291,3 +291,55 @@ test("browsers without atomic storage support keep edits in the session without 
     await page.evaluate((key) => localStorage.getItem(key), key),
   ).toBeNull();
 });
+
+test("a stale localStorage renderer cache cannot erase another tab's saved draft", async ({
+  page,
+  context,
+}) => {
+  await page.goto("/");
+  await expect
+    .poll(() => page.evaluate((key) => localStorage.getItem(key), key))
+    .not.toBeNull();
+  const second = await context.newPage();
+  await second.goto("/");
+  await page.evaluate((key) => {
+    const original = Storage.prototype.getItem;
+    const cached = localStorage.getItem(key);
+    Storage.prototype.getItem = function (item) {
+      return this === localStorage && item === key
+        ? cached
+        : original.call(this, item);
+    };
+  }, key);
+  await draft(second, "Latest renderer draft");
+  await save(second);
+  await draft(page, "Cached renderer draft");
+  await save(page);
+  await page.reload();
+  await expect(
+    page.getByRole("button", { name: "Latest renderer draft", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Cached renderer draft", exact: true }),
+  ).toBeVisible();
+  await second.close();
+});
+
+test("unavailable IndexedDB keeps edits in the session without unsafe mirror writes", async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    Object.defineProperty(window, "indexedDB", { value: undefined }),
+  );
+  await page.goto("/");
+  await draft(page, "Protected session draft");
+  await save(page);
+  await expect(
+    page.getByText(
+      "Browser storage unavailable. Changes last for this session.",
+    ),
+  ).toBeVisible();
+  expect(
+    await page.evaluate((key) => localStorage.getItem(key), key),
+  ).toBeNull();
+});

@@ -33,7 +33,7 @@ Phone and portrait-tablet layouts use **16px body/input text, 14px secondary lab
 
 ## Saving and recovery
 
-Tabs synchronize saved actions using the browser's Web Locks API. Independent changes are combined against the latest saved workspace. If another tab changes the pipeline you are editing, saving keeps your form open and explains the conflict. Copy your edits before reopening the latest version. Browsers without Web Locks use session-only changes, with a storage warning.
+Tabs synchronize saved actions using browser locks and a shared IndexedDB record, so a stale local-storage cache cannot overwrite another tab's save. Independent changes are combined against the latest saved workspace. If another tab changes the pipeline you are editing, saving keeps your form open and explains the conflict. Copy your edits before reopening the latest version. Browsers without browser locks or IndexedDB use session-only changes, with a storage warning.
 
 Unreadable saved data is never replaced automatically. The recovery screen pauses editing, lets you download the original bytes, and offers an explicit reset that first stores a browser recovery copy. If a save fails, changes remain in memory; a later successful save retains them. A concurrent save from another tab pauses editing and offers a download of your local copy before loading the saved workspace. Keep the download if browser storage is full or unavailable.
 
