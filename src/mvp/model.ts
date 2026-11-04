@@ -128,6 +128,8 @@ export const actorFor = (role: Role) =>
 export const uid = (prefix: string) =>
   `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
 export const now = () => new Date().toISOString();
+export const pipelineRevision = (pipeline: Pipeline) =>
+  pipeline.history[0]?.id || pipeline.updated;
 export const pipelineNeedsAction = (pipeline: Pipeline, role: Role) =>
   role === "Researcher"
     ? ["Draft", "Changes requested", "Rejected", "Ready to publish"].includes(
@@ -447,13 +449,23 @@ export type Action =
       decision: "approve" | "changes" | "reject";
       note: string;
     }
-  | { type: "REVISE"; id: string; fields: PipelineFields }
-  | { type: "SAVE_DRAFT"; id: string; fields: PipelineFields }
+  | {
+      type: "REVISE";
+      id: string;
+      fields: PipelineFields;
+      expectedRevision?: string;
+    }
+  | {
+      type: "SAVE_DRAFT";
+      id: string;
+      fields: PipelineFields;
+      expectedRevision?: string;
+    }
   | { type: "PUBLISH"; id: string; role: Role }
   | { type: "START_RUN"; run: Run }
   | { type: "RETRY"; id: string }
   | { type: "CANCEL_RUN"; id: string }
-  | { type: "REPORT_ISSUE"; id: string; message: string }
+  | { type: "REPORT_ISSUE"; id: string; role: Role; message: string }
   | { type: "RESOLVE_ISSUE"; id: string; role: Role; resolution: string }
   | { type: "TICK" }
   | {
@@ -590,6 +602,8 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
     const pipeline = state.pipelines.find((p) => p.id === action.id);
     if (
       !pipeline ||
+      (action.expectedRevision !== undefined &&
+        action.expectedRevision !== pipelineRevision(pipeline)) ||
       !["Draft", "Rejected", "Changes requested"].includes(pipeline.status)
     )
       return state;
@@ -620,6 +634,11 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
   if (action.type === "REVISE") {
     const p = state.pipelines.find((p) => p.id === action.id);
     if (!p || !["Draft", "Rejected", "Changes requested"].includes(p.status))
+      return state;
+    if (
+      action.expectedRevision !== undefined &&
+      action.expectedRevision !== pipelineRevision(p)
+    )
       return state;
     if (!submissionComplete({ ...p, ...action.fields })) return state;
     const version =
@@ -774,7 +793,7 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
       },
       makeEvent(
         "Support requested",
-        "Dr. Sarah Chen",
+        actorFor(action.role),
         action.id,
         support.message,
       ),

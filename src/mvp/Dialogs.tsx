@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
+  Dialog,
   DialogContent,
   DialogTitle,
   FormControlLabel,
@@ -24,6 +25,7 @@ import {
   now,
   formatTime,
   nextAvailableVersion,
+  pipelineRevision,
   supportsDataset,
   uid,
   type Attachment,
@@ -56,8 +58,12 @@ export function PipelineForm({
   versionSource?: Pipeline;
   pipelines: Pipeline[];
   onClose: () => void;
-  onCreate: (p: Pipeline, draft: boolean) => void;
-  onRevise: (fields: PipelineFields, draft: boolean) => void;
+  onCreate: (p: Pipeline, draft: boolean) => Promise<boolean>;
+  onRevise: (
+    fields: PipelineFields,
+    draft: boolean,
+    expectedRevision: string,
+  ) => Promise<boolean>;
 }) {
   const source = pipeline || versionSource;
   const working = pipeline?.revisionDraft
@@ -76,6 +82,8 @@ export function PipelineForm({
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [sourceOpen, setSourceOpen] = useState(false);
   const [evidenceBusy, setEvidenceBusy] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const originalRevision = useRef(pipeline ? pipelineRevision(pipeline) : "");
   const fields = useRef<Record<string, HTMLInputElement | null>>({});
   const proposedVersion = pipeline
     ? pipeline.status === "Draft"
@@ -96,6 +104,23 @@ export function PipelineForm({
     input: working?.input ?? "Structured clinical data (CSV)",
     output: working?.output ?? "Processed dataset (CSV)",
   });
+  const initialValues = useRef(JSON.stringify({ form, attachments }));
+  const dirty = initialValues.current !== JSON.stringify({ form, attachments });
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
+  const requestClose = () => {
+    if (saving) return;
+    if (dirty || evidenceBusy) setConfirmDiscard(true);
+    else onClose();
+  };
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
   const update = (key: keyof typeof form, value: string) => {
     setForm((previous) => ({ ...previous, [key]: value }));
     setFieldErrors((previous) => ({ ...previous, [key]: "" }));
@@ -174,29 +199,42 @@ export function PipelineForm({
     setFieldErrors({});
     return true;
   };
-  const submit = (draft: boolean) => {
-    if (evidenceBusy || !(draft ? validName() : valid())) return;
+  const submit = async (draft: boolean) => {
+    if (saving || evidenceBusy || !(draft ? validName() : valid())) return;
     if (!draft && !validRequirements()) return;
-    if (pipeline) onRevise({ ...form, attachments }, draft);
-    else
-      onCreate(
-        {
-          ...form,
-          name: form.name.trim(),
-          description: form.description.trim(),
-          repo: form.repo.trim(),
-          id: uid("pipe"),
-          version: proposedVersion,
-          basedOn: versionSource?.id,
-          attachments,
-          author: "Dr. Sarah Chen",
-          status: "Draft",
-          stage: 0,
-          updated: now(),
-          history: [],
-        },
-        draft,
+    setSaving(true);
+    const accepted = pipeline
+      ? await onRevise(
+          { ...form, attachments },
+          draft,
+          originalRevision.current,
+        )
+      : await onCreate(
+          {
+            ...form,
+            name: form.name.trim(),
+            description: form.description.trim(),
+            repo: form.repo.trim(),
+            id: uid("pipe"),
+            version: proposedVersion,
+            basedOn: versionSource?.id,
+            attachments,
+            author: "Dr. Sarah Chen",
+            status: "Draft",
+            stage: 0,
+            updated: now(),
+            history: [],
+          },
+          draft,
+        );
+    if (!accepted) {
+      setSaving(false);
+      setError(
+        pipeline
+          ? "This pipeline changed in another tab. Your edits are still here. Copy your changes before closing this form and reopening the latest saved version."
+          : "A pipeline with this name or version was saved in another tab. Your edits are still here. Choose a unique name or reopen the latest saved version.",
       );
+    }
   };
   const field = (
     key: keyof typeof form,
@@ -217,286 +255,333 @@ export function PipelineForm({
     />
   );
   return (
-    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>
-        {pipeline
-          ? pipeline.status === "Draft"
-            ? "Edit pipeline draft"
-            : "Revise pipeline"
-          : versionSource
-            ? "New pipeline version"
-            : "New pipeline"}
-        <button
-          className="dialog-close"
-          aria-label="Close pipeline form"
-          onClick={onClose}
-        >
-          <X size={20} />
-        </button>
-      </DialogTitle>
-      <DialogContent ref={content}>
-        <p className="muted">
-          {pipeline && pipeline.status !== "Draft"
-            ? "Save your working revision at any time. Resubmission restarts all four approval stages."
-            : "Start with a name. Save a draft at any time; complete the required fields before submission."}
-        </p>
-        {feedback && (
-          <div className="revision-context" role="note">
-            <strong>Requested changes · {feedback.actor}</strong>
-            <p>{feedback.note}</p>
-          </div>
-        )}
-        <div className="compact-form-progress" role="status" aria-live="polite">
-          <span>
-            Step {step + 1} of {PIPELINE_STEPS.length}
-          </span>
-          <strong>{PIPELINE_STEPS[step]}</strong>
-        </div>
-        <Stepper activeStep={step} className="form-stepper">
-          {PIPELINE_STEPS.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        {step === 0 && (
-          <div className="form-stack">
-            <div className="form-section-heading">
-              <h3>Pipeline details</h3>
-              {!source && (
-                <Button
-                  size="small"
-                  onClick={() => {
-                    setForm({
-                      name: "Longitudinal outcome classifier",
-                      description:
-                        "Classifies longitudinal outcomes from synthetic clinical records.",
-                      repo: "https://github.com/research/outcome-classifier",
-                      branch: "main",
-                      category: "ML model",
-                      input: "Structured clinical data (CSV)",
-                      output: "Outcome classification (CSV)",
-                    });
-                    setFieldErrors({});
-                    setError("");
-                  }}
-                >
-                  Use example
-                </Button>
-              )}
+    <>
+      <WorkspaceDialog open onClose={requestClose} fullWidth maxWidth="md">
+        <DialogTitle>
+          {pipeline
+            ? pipeline.status === "Draft"
+              ? "Edit pipeline draft"
+              : "Revise pipeline"
+            : versionSource
+              ? "New pipeline version"
+              : "New pipeline"}
+          <button
+            className="dialog-close"
+            aria-label="Close pipeline form"
+            onClick={requestClose}
+          >
+            <X size={20} />
+          </button>
+        </DialogTitle>
+        <DialogContent ref={content}>
+          <p className="muted">
+            {pipeline && pipeline.status !== "Draft"
+              ? "Save your working revision at any time. Resubmission restarts all four approval stages."
+              : "Start with a name. Save a draft at any time; complete the required fields before submission."}
+          </p>
+          {feedback && (
+            <div className="revision-context" role="note">
+              <strong>Requested changes · {feedback.actor}</strong>
+              <p>{feedback.note}</p>
             </div>
-            {field("name", "Pipeline name", {
-              autoFocus: true,
-              required: true,
-              disabled: Boolean(source),
-            })}
-            {field("description", "Research purpose", {
-              multiline: true,
-              minRows: 2,
-              required: true,
-            })}
-            {field("repo", "Repository URL", {
-              placeholder: "https://github.com/research/my-pipeline",
-              required: true,
-            })}
-            <details
-              className="disclosure"
-              open={sourceOpen}
-              onToggle={(event) => setSourceOpen(event.currentTarget.open)}
-            >
-              <summary>
-                Source settings · {form.branch || "branch required"} ·{" "}
-                {form.category}
-              </summary>
-              <div className="form-two-col disclosure-content">
-                {field("branch", "Branch or tag", { required: true })}
-                <TextField
-                  select
-                  label="Category"
-                  fullWidth
-                  value={form.category}
-                  onChange={(event) => update("category", event.target.value)}
-                >
-                  {["Data processing", "ML model", "Privacy", "Audio"].map(
-                    (category) => (
-                      <MenuItem key={category} value={category}>
-                        {category}
-                      </MenuItem>
-                    ),
-                  )}
-                </TextField>
+          )}
+          <div
+            className="compact-form-progress"
+            role="status"
+            aria-live="polite"
+          >
+            <span>
+              Step {step + 1} of {PIPELINE_STEPS.length}
+            </span>
+            <strong>{PIPELINE_STEPS[step]}</strong>
+          </div>
+          <Stepper activeStep={step} className="form-stepper">
+            {PIPELINE_STEPS.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          {step === 0 && (
+            <div className="form-stack">
+              <div className="form-section-heading">
+                <h3>Pipeline details</h3>
+                {!source && (
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      setForm({
+                        name: "Longitudinal outcome classifier",
+                        description:
+                          "Classifies longitudinal outcomes from synthetic clinical records.",
+                        repo: "https://github.com/research/outcome-classifier",
+                        branch: "main",
+                        category: "ML model",
+                        input: "Structured clinical data (CSV)",
+                        output: "Outcome classification (CSV)",
+                      });
+                      setFieldErrors({});
+                      setError("");
+                    }}
+                  >
+                    Use example
+                  </Button>
+                )}
               </div>
-            </details>
-            <p className="micro-copy">
-              Repository details are recorded for this demo. No source code is
-              fetched.
-            </p>
-          </div>
-        )}
-        {step === 1 && (
-          <div className="form-stack">
-            <h3>Define the processing contract</h3>
-            {field("input", "Input specification", {
-              required: true,
-              helperText:
-                fieldErrors.input ||
-                "Include the format and required fields, for example CSV with record_id and clinical_note.",
-            })}
-            {field("output", "Expected output", {
-              required: true,
-              helperText:
-                fieldErrors.output ||
-                "Describe the output format and fields reviewers should expect.",
-            })}
-            <div>
-              <h3>Review evidence · {attachments.length} attached files</h3>
-              <p className="muted">
-                Add specifications, handling statements or synthetic examples
-                for the reviewers.
-              </p>
-            </div>
-            <AttachmentPicker
-              attachments={attachments}
-              onChange={setAttachments}
-              onBusyChange={setEvidenceBusy}
-            />
-            <details className="disclosure">
-              <summary>Evidence guidance by review stage</summary>
-              <ul className="guidance-list">
-                <li>
-                  <strong>Ethical:</strong> purpose, consent boundaries and
-                  potential harms.
-                </li>
-                <li>
-                  <strong>Technical:</strong> dependencies, input/output schema
-                  and sample execution.
-                </li>
-                <li>
-                  <strong>Privacy:</strong> sensitive fields, minimization and
-                  output disclosure risks.
-                </li>
-                <li>
-                  <strong>Security:</strong> dependencies, secrets, network
-                  access and execution permissions.
-                </li>
-              </ul>
-              <p className="micro-copy">
-                Evidence is previewed locally. No repository scan or backend
-                execution is performed.
-              </p>
-            </details>
-          </div>
-        )}
-        {step === 2 && (
-          <div className="form-stack submission-summary">
-            <div className="section-title">
-              <h3>
-                {form.name} · {proposedVersion}
-              </h3>
-              <Button size="small" onClick={() => setStep(0)}>
-                Edit source
-              </Button>
-            </div>
-            <p className="muted">{form.description}</p>
-            <dl className="metadata-list">
-              {[
-                ["Version", proposedVersion],
-                ["Repository", form.repo],
-                ["Branch / tag", form.branch],
-                ["Category", form.category],
-              ].map(([key, value]) => (
-                <div key={key}>
-                  <dt>{key}</dt>
-                  <dd>{value}</dd>
+              {field("name", "Pipeline name", {
+                autoFocus: true,
+                required: true,
+                disabled: Boolean(source),
+              })}
+              {field("description", "Research purpose", {
+                multiline: true,
+                minRows: 2,
+                required: true,
+              })}
+              {field("repo", "Repository URL", {
+                placeholder: "https://github.com/research/my-pipeline",
+                required: true,
+              })}
+              <details
+                className="disclosure"
+                open={sourceOpen}
+                onToggle={(event) => setSourceOpen(event.currentTarget.open)}
+              >
+                <summary>
+                  Source settings · {form.branch || "branch required"} ·{" "}
+                  {form.category}
+                </summary>
+                <div className="form-two-col disclosure-content">
+                  {field("branch", "Branch or tag", { required: true })}
+                  <TextField
+                    select
+                    label="Category"
+                    fullWidth
+                    value={form.category}
+                    onChange={(event) => update("category", event.target.value)}
+                  >
+                    {["Data processing", "ML model", "Privacy", "Audio"].map(
+                      (category) => (
+                        <MenuItem key={category} value={category}>
+                          {category}
+                        </MenuItem>
+                      ),
+                    )}
+                  </TextField>
                 </div>
-              ))}
-            </dl>
-            <div className="section-title">
-              <h3>Requirements and evidence</h3>
-              <Button size="small" onClick={() => setStep(1)}>
-                Edit requirements
-              </Button>
-            </div>
-            <dl className="metadata-list">
-              <div>
-                <dt>Input</dt>
-                <dd>{form.input}</dd>
-              </div>
-              <div>
-                <dt>Output</dt>
-                <dd>{form.output}</dd>
-              </div>
-              <div>
-                <dt>Evidence</dt>
-                <dd>
-                  {attachments.length
-                    ? attachments.map((a) => a.name).join(", ")
-                    : "No files attached · standard demo evidence is illustrative"}
-                </dd>
-              </div>
-            </dl>
-            <div className="next-owner">
-              <strong>Next: Ethical review</strong>
-              <span>Dr. Maya Patel · {proposedVersion}</span>
-            </div>
-            <details className="disclosure">
-              <summary>Required approval path</summary>
-              <StagePath illustrative />
-              <p className="muted">
-                All four reviews and separate author publication are required
-                before this version can run.
+              </details>
+              <p className="micro-copy">
+                Repository details are recorded for this demo. No source code is
+                fetched.
               </p>
-            </details>
-          </div>
-        )}
-        {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            {error}
-          </Alert>
-        )}
-      </DialogContent>
-      <DialogActionBar
-        primary={
-          step < 2 ? (
+            </div>
+          )}
+          {step === 1 && (
+            <div className="form-stack">
+              <h3>Define the processing contract</h3>
+              {field("input", "Input specification", {
+                required: true,
+                helperText:
+                  fieldErrors.input ||
+                  "Include the format and required fields, for example CSV with record_id and clinical_note.",
+              })}
+              {field("output", "Expected output", {
+                required: true,
+                helperText:
+                  fieldErrors.output ||
+                  "Describe the output format and fields reviewers should expect.",
+              })}
+              <div>
+                <h3>Review evidence · {attachments.length} attached files</h3>
+                <p className="muted">
+                  Add specifications, handling statements or synthetic examples
+                  for the reviewers.
+                </p>
+              </div>
+              <AttachmentPicker
+                attachments={attachments}
+                onChange={setAttachments}
+                onBusyChange={setEvidenceBusy}
+              />
+              <details className="disclosure">
+                <summary>Evidence guidance by review stage</summary>
+                <ul className="guidance-list">
+                  <li>
+                    <strong>Ethical:</strong> purpose, consent boundaries and
+                    potential harms.
+                  </li>
+                  <li>
+                    <strong>Technical:</strong> dependencies, input/output
+                    schema and sample execution.
+                  </li>
+                  <li>
+                    <strong>Privacy:</strong> sensitive fields, minimization and
+                    output disclosure risks.
+                  </li>
+                  <li>
+                    <strong>Security:</strong> dependencies, secrets, network
+                    access and execution permissions.
+                  </li>
+                </ul>
+                <p className="micro-copy">
+                  Evidence is previewed locally. No repository scan or backend
+                  execution is performed.
+                </p>
+              </details>
+            </div>
+          )}
+          {step === 2 && (
+            <div className="form-stack submission-summary">
+              <div className="section-title">
+                <h3>
+                  {form.name} · {proposedVersion}
+                </h3>
+                <Button size="small" onClick={() => setStep(0)}>
+                  Edit source
+                </Button>
+              </div>
+              <p className="muted">{form.description}</p>
+              <dl className="metadata-list">
+                {[
+                  ["Version", proposedVersion],
+                  ["Repository", form.repo],
+                  ["Branch / tag", form.branch],
+                  ["Category", form.category],
+                ].map(([key, value]) => (
+                  <div key={key}>
+                    <dt>{key}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="section-title">
+                <h3>Requirements and evidence</h3>
+                <Button size="small" onClick={() => setStep(1)}>
+                  Edit requirements
+                </Button>
+              </div>
+              <dl className="metadata-list">
+                <div>
+                  <dt>Input</dt>
+                  <dd>{form.input}</dd>
+                </div>
+                <div>
+                  <dt>Output</dt>
+                  <dd>{form.output}</dd>
+                </div>
+                <div>
+                  <dt>Evidence</dt>
+                  <dd>
+                    {attachments.length
+                      ? attachments.map((a) => a.name).join(", ")
+                      : "No files attached · standard demo evidence is illustrative"}
+                  </dd>
+                </div>
+              </dl>
+              <div className="next-owner">
+                <strong>Next: Ethical review</strong>
+                <span>Dr. Maya Patel · {proposedVersion}</span>
+              </div>
+              <details className="disclosure">
+                <summary>Required approval path</summary>
+                <StagePath illustrative />
+                <p className="muted">
+                  All four reviews and separate author publication are required
+                  before this version can run.
+                </p>
+              </details>
+            </div>
+          )}
+          {error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
+        </DialogContent>
+        <DialogActionBar
+          primary={
+            step < 2 ? (
+              <Button
+                variant="contained"
+                disabled={evidenceBusy || saving}
+                endIcon={<ArrowRight size={16} />}
+                onClick={() => {
+                  if (
+                    (step === 0 && valid()) ||
+                    (step === 1 && validRequirements())
+                  )
+                    changeStep(step + 1);
+                }}
+              >
+                Continue
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                disabled={evidenceBusy || saving}
+                onClick={() => submit(false)}
+              >
+                {pipeline ? "Resubmit for review" : "Submit for review"}
+              </Button>
+            )
+          }
+        >
+          <Button
+            variant="outlined"
+            disabled={evidenceBusy || saving}
+            onClick={() => submit(true)}
+          >
+            {pipeline && pipeline.status !== "Draft"
+              ? "Save revision draft"
+              : "Save draft"}
+          </Button>
+          <Button
+            onClick={step === 0 ? requestClose : () => changeStep(step - 1)}
+          >
+            {step === 0 ? "Cancel" : "Back"}
+          </Button>
+        </DialogActionBar>
+      </WorkspaceDialog>
+      <Dialog
+        open={confirmDiscard}
+        onClose={() => setConfirmDiscard(false)}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle>Save your changes?</DialogTitle>
+        <DialogContent>
+          Your edits have not been saved. Save a working draft, keep editing, or
+          discard these changes.
+        </DialogContent>
+        <DialogActionBar
+          primary={
             <Button
               variant="contained"
               disabled={evidenceBusy}
-              endIcon={<ArrowRight size={16} />}
               onClick={() => {
-                if (
-                  (step === 0 && valid()) ||
-                  (step === 1 && validRequirements())
-                )
-                  changeStep(step + 1);
+                setConfirmDiscard(false);
+                submit(true);
               }}
             >
-              Continue
+              {pipeline && pipeline.status !== "Draft"
+                ? "Save revision draft"
+                : "Save draft"}
             </Button>
-          ) : (
-            <Button
-              variant="contained"
-              disabled={evidenceBusy}
-              onClick={() => submit(false)}
-            >
-              {pipeline ? "Resubmit for review" : "Submit for review"}
-            </Button>
-          )
-        }
-      >
-        <Button
-          variant="outlined"
-          disabled={evidenceBusy}
-          onClick={() => submit(true)}
+          }
         >
-          {pipeline && pipeline.status !== "Draft"
-            ? "Save revision draft"
-            : "Save draft"}
-        </Button>
-        <Button onClick={step === 0 ? onClose : () => changeStep(step - 1)}>
-          {step === 0 ? "Cancel" : "Back"}
-        </Button>
-      </DialogActionBar>
-    </WorkspaceDialog>
+          <Button
+            variant="outlined"
+            autoFocus
+            onClick={() => setConfirmDiscard(false)}
+          >
+            Keep editing
+          </Button>
+          <Button color="error" disabled={evidenceBusy} onClick={onClose}>
+            Discard changes
+          </Button>
+        </DialogActionBar>
+      </Dialog>
+    </>
   );
 }
 

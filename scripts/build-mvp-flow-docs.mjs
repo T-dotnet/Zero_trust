@@ -1,4 +1,5 @@
 import { colors, applyDocumentPalette } from './mvp-document-theme.mjs';
+import {roadmap, roadmapMarkdown, buildRoadmapPage} from './roadmap-docs.mjs';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -63,8 +64,10 @@ for (const s of model.screens) {
  md.push('| ID | Click / event | Required condition | Next screen / state | Result |','| --- | --- | --- | --- | --- |',...s.actions.map(a=>`| ${a.id} | ${cell(a.label)} (${a.kind}) | ${cell(a.guard)} | ${destination(a)} | ${cell(a.outcome)} |`),'',`**Source:** ${s.source.map(src=>`[${src}](${base+src.split(':')[0]})`).join(' · ')}`,'');
 }
 md.push('## Coverage checklist','','| Feature area | Screen coverage |','| --- | --- |',...model.coverage.map(x=>`| ${x.area} | ${x.screens.map(link).join(', ')} |`),'','## Maintain this document','','Edit `docs/mvp/user-flows.json` for screen, story and transition content. Edit `scripts/mvp-flow-viewer.html` for document presentation. With Graphviz installed (`dot` on PATH), run:','','```sh','npm run docs:mvp','```','','The generator validates stable IDs, transition endpoints, source-file references, screen reachability, journey membership and story acceptance criteria. It emits this Markdown document, a standalone interactive HTML document, a portable model JSON, and editable `.dot` plus SVG diagrams. Source commit identifies the app behavior reviewed, not a guarantee that later code has identical flows. Refresh the review after changes to `src/mvp`.','');
+md.push(...roadmapMarkdown('flows', model.journeys));
 writeFileSync(path.join(root,'docs/mvp/screen-flows.md'),md.join('\n'));
-const payload=JSON.stringify({...model,graphs}).replaceAll('<','\\u003c');
+buildRoadmapPage();
+const payload=JSON.stringify({...model,graphs,roadmap}).replaceAll('<','\\u003c');
 const template=applyDocumentPalette(readFileSync(path.join(root,'scripts/mvp-flow-viewer.html'),'utf8'));
 writeFileSync(path.join(root,'public/mvp-flows.html'),template.replace('/*__MODEL__*/',payload));
 console.log(`MVP docs validated: ${screens.size} reachable screens, ${model.journeys.length} journeys, ${model.screens.reduce((n,s)=>n+s.actions.length,0)} transitions. Generated Markdown, standalone HTML and SVG/DOT diagrams.`);

@@ -93,6 +93,7 @@ test("run cancellation and support lifecycle retain history and require a techni
   state = workspaceReducer(state, {
     type: "REPORT_ISSUE",
     id,
+    role: "Researcher",
     message: "Input mapping needs review.",
   });
   assert.equal(

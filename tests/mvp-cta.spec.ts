@@ -126,6 +126,9 @@ test("form actions put the primary first in layout and keyboard order at every s
     await page
       .getByRole("button", { name: "Close pipeline form", exact: true })
       .click();
+    await page
+      .getByRole("button", { name: "Discard changes", exact: true })
+      .click();
   }
 });
 

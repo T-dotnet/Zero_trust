@@ -1,6 +1,6 @@
 # User flows and diagrams — all features enabled
 
-[Documentation home](README.md) · [Personas](personas.md) · [All-features list and E1 configuration](feature-list.md) · [Settings reference](settings-and-feature-toggles.md)
+[Documentation home](README.md) · [Personas](personas.md) · [All-features list and E1 configuration](feature-list.md) · [Settings reference](settings-and-feature-toggles.md) · [Post MVP roadmap](post-mvp-roadmap.md)
 
 Every flow uses **E1: all exposed capability settings ON**, including Quality Gates, vulnerability detail, advanced architecture, and all readiness sub-settings. Core features with no toggle remain available. We do not switch features OFF to make a flow appear successful. **Internal View changes with the actor**, because author and reviewer controls are mutually conditional UI modes. All walkthroughs use **IA Layout = Current Layout** and `isReviewerView=false`; this state has no direct UI toggle.
 
@@ -283,3 +283,22 @@ flowchart TD
 ## Walkthrough checks
 
 For each journey, check that E1's capability switches remain ON, the current actor view matches the instructions, and the item has the required status/data. Record the resulting status rather than trusting a success notification. Use the J2 stop and J3 build precondition as documented implementation limits, not as reasons to silently disable a feature. Verify backend effects separately before using these flows as production acceptance criteria.
+
+## Post MVP journey improvements
+
+The [product roadmap](post-mvp-roadmap.md) groups proposed improvements by priority, dependencies and release criteria, without delivery dates. [Open the published roadmap](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html). These additions are plans, not implemented actions in the legacy flows above.
+
+| Existing journey | Relevant post MVP additions | Release group |
+| --- | --- | --- |
+| J1 Import and queue | Reusable input mappings, compatibility guidance, a first institution-required data connector and reproducible run configuration | R2; selected R3 integrations |
+| J2 Create a custom pipeline | Wizard templates, typed contracts, preflight examples and evaluated readiness assistance | R2; later assistance |
+| J3 Dry-run and submit | Repeatable test configurations, retained attempt history and evidence attached to the exact version | R2 |
+| J4 Review and publish | Reviewer assignment, personal inbox, reminders, structured author responses and revision comparison | R1 |
+| J5 Artifact review and export | Reviewable sampling, quality/disclosure summaries, annotations and reproducibility packages | R2 and selected R3 review tools |
+| J6 Failure and support | Immutable retry diagnostics, queue health, resource limits and contextual support handoffs | R2 and selected R3 operational controls |
+| J7 Container inspection | Verified build/scan evidence before richer registry comparisons and operational dashboards | G0 security foundation; later enhancements |
+| J8 Update or bug fix | Explicit version comparison, structured responses and traceable reruns | R1 and R2 |
+
+The current MVP and roadmap require Ethical → Technical → Privacy → Security reviews for every new version and revision, followed by separate author publication. The shorter legacy update path documented above is historical behavior, not the future approval policy. Real permissions, execution, ingestion and provenance remain G0 pilot requirements.
+
+The current [screen atlas](mvp/screen-flows.md#post-mvp-roadmap) and [screenshot customer journey](mvp/customer-journey.md#post-mvp-roadmap) include their own roadmap mappings. Their F01–F13 flow IDs and J01–J08 customer-stage IDs are separate from the legacy J1–J8 identifiers in this document.

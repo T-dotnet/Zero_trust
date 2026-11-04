@@ -4146,6 +4146,10 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
       // If not logged in, use initial data
       setFeaturesData(INITIAL_FEATURES);
       setUserStoriesData(INITIAL_USER_STORIES);
+      setDatasets(MOCK_DATASETS);
+      setPipelines(MOCK_PIPELINES);
+      setJobs(MOCK_JOBS);
+      setArtifacts(MOCK_ARTIFACTS);
       setIsDataLoaded(true);
       return;
     }
@@ -4170,59 +4174,27 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
     }, (error) => handleFirestoreError(error, OperationType.LIST, 'features'));
 
     // Listen to datasets
-    const unsubDatasets = onSnapshot(collection(db, 'datasets'), async (snapshot) => {
-      if (snapshot.empty) {
-        const batch = writeBatch(db);
-        MOCK_DATASETS.forEach(d => {
-          batch.set(doc(db, 'datasets', d.id), d);
-        });
-        await batch.commit();
-      } else {
-        const data = snapshot.docs.map(doc => doc.data() as any);
-        setDatasets(data);
-      }
+    const unsubDatasets = onSnapshot(collection(db, 'datasets'), (snapshot) => {
+      // Shared workflow records are read-only. Never seed or mutate them from a demo client.
+      setDatasets(snapshot.empty ? MOCK_DATASETS : snapshot.docs.map(doc => doc.data() as any));
     }, (error) => handleFirestoreError(error, OperationType.LIST, 'datasets'));
 
     // Listen to pipelines
-    const unsubPipelines = onSnapshot(collection(db, 'pipelines'), async (snapshot) => {
-      if (snapshot.empty) {
-        const batch = writeBatch(db);
-        MOCK_PIPELINES.forEach(p => {
-          batch.set(doc(db, 'pipelines', p.id), p);
-        });
-        await batch.commit();
-      } else {
-        const data = snapshot.docs.map(doc => doc.data() as Pipeline);
-        setPipelines(data);
-      }
+    const unsubPipelines = onSnapshot(collection(db, 'pipelines'), (snapshot) => {
+      // Shared workflow records are read-only. Never seed or mutate them from a demo client.
+      setPipelines(snapshot.empty ? MOCK_PIPELINES : snapshot.docs.map(doc => doc.data() as Pipeline));
     }, (error) => handleFirestoreError(error, OperationType.LIST, 'pipelines'));
 
     // Listen to jobs
-    const unsubJobs = onSnapshot(collection(db, 'jobs'), async (snapshot) => {
-      if (snapshot.empty) {
-        const batch = writeBatch(db);
-        MOCK_JOBS.forEach(j => {
-          batch.set(doc(db, 'jobs', j.id), j);
-        });
-        await batch.commit();
-      } else {
-        const data = snapshot.docs.map(doc => doc.data() as Job);
-        setJobs(data);
-      }
+    const unsubJobs = onSnapshot(collection(db, 'jobs'), (snapshot) => {
+      // Shared workflow records are read-only. Never seed or mutate them from a demo client.
+      setJobs(snapshot.empty ? MOCK_JOBS : snapshot.docs.map(doc => doc.data() as Job));
     }, (error) => handleFirestoreError(error, OperationType.LIST, 'jobs'));
 
     // Listen to artifacts
-    const unsubArtifacts = onSnapshot(collection(db, 'artifacts'), async (snapshot) => {
-      if (snapshot.empty) {
-        const batch = writeBatch(db);
-        MOCK_ARTIFACTS.forEach(a => {
-          batch.set(doc(db, 'artifacts', a.id), a);
-        });
-        await batch.commit();
-      } else {
-        const data = snapshot.docs.map(doc => doc.data() as Artifact);
-        setArtifacts(data);
-      }
+    const unsubArtifacts = onSnapshot(collection(db, 'artifacts'), (snapshot) => {
+      // Shared workflow records are read-only. Never seed or mutate them from a demo client.
+      setArtifacts(snapshot.empty ? MOCK_ARTIFACTS : snapshot.docs.map(doc => doc.data() as Artifact));
     }, (error) => handleFirestoreError(error, OperationType.LIST, 'artifacts'));
 
     // Listen to user stories
@@ -5521,11 +5493,7 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
         submissionMethod: 'git'
       };
       
-      if (user) {
-        setDoc(doc(db, 'pipelines', newPipeline.id), newPipeline).catch(e => handleFirestoreError(e, OperationType.CREATE, `pipelines/${newPipeline.id}`));
-      } else {
-        setPipelines([newPipeline, ...pipelines]);
-      }
+      setPipelines([newPipeline, ...pipelines]);
 
       if (buildContainer || showContainerPipelines) {
         const newContainer = {
@@ -5772,11 +5740,7 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
       artifactName: `Output - ${selectedDataset.name}`
     };
 
-    if (user) {
-      setDoc(doc(db, 'jobs', newJob.id), newJob).catch(e => handleFirestoreError(e, OperationType.CREATE, `jobs/${newJob.id}`));
-    } else {
-      setJobs([newJob, ...jobs]);
-    }
+    setJobs([newJob, ...jobs]);
     
     setIsRunModalOpen(false);
     setCurrentView('jobs');
@@ -5796,11 +5760,7 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
       status: importForm.requiresVault ? 'Secure Vault' : 'Standard',
     };
 
-    if (user) {
-      setDoc(doc(db, 'datasets', newDs.id), newDs).catch(e => handleFirestoreError(e, OperationType.CREATE, `datasets/${newDs.id}`));
-    } else {
-      setDatasets([newDs, ...datasets]);
-    }
+    setDatasets([newDs, ...datasets]);
 
     if (importPipelineId) {
       const pipeline = pipelines.find(p => p.id === importPipelineId);
@@ -5816,11 +5776,7 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
         artifactName: `Output - ${newDs.name}`
       };
 
-      if (user) {
-        setDoc(doc(db, 'jobs', newJob.id), newJob).catch(e => handleFirestoreError(e, OperationType.CREATE, `jobs/${newJob.id}`));
-      } else {
         setJobs([newJob, ...jobs]);
-      }
       showToast(`Dataset imported and job ${newJob.id} queued`);
     } else {
       showToast(`Dataset imported successfully`);
@@ -6434,7 +6390,7 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
                     {!isSidebarMinimized && (
                       <div className="flex-1 overflow-hidden">
                         <p className="text-xs font-bold text-slate-900 truncate">Guest User</p>
-                        <p className="text-[10px] text-slate-500 truncate">Sign in to save data</p>
+                        <p className="text-[10px] text-slate-500 truncate">Sign in for shared documentation</p>
                       </div>
                     )}
                     {!isSidebarMinimized && (
@@ -6458,6 +6414,9 @@ The "Draft" phase leverages synthetic simulation to prevent production regressio
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 bg-white relative">
+        <div role="note" className="px-6 py-3 bg-amber-50 text-amber-900 text-sm border-b border-amber-200">
+          Original workspace demo: dataset, pipeline, run and output changes stay in this tab and are not saved to the shared database.
+        </div>
         {/* Top Header */}
         {currentView !== 'requirements' && (
           <header className="h-14 border-b border-slate-200 flex items-center px-6 bg-white shrink-0 justify-between relative">
@@ -16442,9 +16401,6 @@ The Golden Path represents the most efficient, reliable, and secure workflow for
                         const updated = pipelines.map(pipe => pipe.id === p.id ? p : pipe);
                         setPipelines(updated);
                         setSelectedPipelineForDetails(p);
-                        if (user) {
-                          setDoc(doc(db, 'pipelines', p.id), p, { merge: true }).catch(e => handleFirestoreError(e, OperationType.UPDATE, `pipelines/${p.id}`));
-                        }
                       }}
                       onBuildImage={() => {
                         setPipelineModalView('build-confirmation');
@@ -16542,9 +16498,6 @@ The Golden Path represents the most efficient, reliable, and secure workflow for
                           setSelectedPipelineForDetails(updatedPipeline);
                           setPipelineModalView('details');
 
-                          if (user) {
-                            setDoc(doc(db, 'pipelines', p.id), updatedPipeline, { merge: true }).catch(e => handleFirestoreError(e, OperationType.UPDATE, `pipelines/${p.id}`));
-                          }
 
                           // 2. Create container based on specification
                           const newContainer: Container = {

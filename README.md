@@ -31,6 +31,18 @@ Phone and portrait-tablet layouts use **16px body/input text, 14px secondary lab
 
 **Prototype boundary:** role switching and processing are local simulations. There is no production authentication, backend execution, PHI detection, or external support integration. Use synthetic data. Dataset file contents are not uploaded; metadata and column names, attached text evidence, and workflow decisions are saved in browser storage. Import sample rows are discarded when the dialog closes. Run setup checks format compatibility only; it does not verify field mappings.
 
+## Saving and recovery
+
+Tabs synchronize saved actions using browser locks and a shared IndexedDB record, so a stale local-storage cache cannot overwrite another tab's save. Independent changes are combined against the latest saved workspace. If another tab changes the pipeline you are editing, saving keeps your form open and explains the conflict. Copy your edits before reopening the latest version. Browsers without browser locks or IndexedDB use session-only changes, with a storage warning.
+
+Unreadable saved data is never replaced automatically. The recovery screen pauses editing, lets you download the original bytes, and offers an explicit reset that first stores a browser recovery copy. If a save fails, changes remain in memory; a later successful save retains them. A concurrent save from another tab pauses editing and offers a download of your local copy before loading the saved workspace. Keep the download if browser storage is full or unavailable.
+
+Closing an edited pipeline form offers **Save draft**, **Keep editing**, and **Discard changes**. The browser also warns before leaving a page with an unsaved form or unsaved workspace changes.
+
+The original `/?view=full` workspace reads shared workflow records for reference; its dataset, pipeline, run and output interactions are local to the tab. The checked-in Firestore rules deny all client mutations of those collections, even for administrators. A trusted backend must implement authenticated ownership, stage-specific reviewer permissions, mandatory approval transitions and artifact validation before shared workflow writes can be enabled. The demo role selector is not an authorization source. Profile roles cannot be added, removed or changed by browser clients.
+
+These rule changes are local source changes until deployed. Rule validation uses the Firebase grammar and structural write-denial checks; it does not replace emulator or deployed-environment authorization tests.
+
 ## Preview
 
 ![MVP pipeline catalog](docs/mvp/screenshots/pipelines.png)
@@ -56,6 +68,7 @@ Browser tests use local Chromium. Set `CHROMIUM_PATH` if it is installed somewhe
 
 - [MVP walkthrough and implementation boundaries](docs/mvp/README.md)
 - [MVP scope and rationale](docs/mvp-scope.md)
+- [Post MVP product roadmap](docs/post-mvp-roadmap.md) · [Interactive roadmap](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html)
 - [Personas, objectives, pains, and gains](docs/personas.md)
 - [Full prototype features, settings, and diagrams](docs/README.md)
 
