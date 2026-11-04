@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Zero Trust MVP · Screen & flow atlas",
   "reviewedAt": "2026-11-04",
-  "sourceCommit": "b453c2b391ad42854113f4146276275b22ee37d2",
+  "sourceCommit": "b04e8a6601d2867794b2611494caaef640a3f972",
   "scope": "Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.",
   "boundaries": [
     "Role switching demonstrates five interfaces; it is not authentication or backend authorization.",
@@ -60,7 +60,8 @@
     "Edited pipeline forms require an explicit save, keep-editing or discard choice when closing. Browser navigation warns about unsaved forms.",
     "Workspace saves are serialized across tabs. Unreadable data is preserved for download and explicit recovery; unsupported atomic storage uses session-only changes.",
     "The visual palette is always on: mint #2BE1B0 primary fills with dark labels, dark secondary and tertiary labels, deeper green selection and focus, slate #8C91A4 accents, amber #FEAB3D warnings and coral #F8506D destructive accents. No theme or feature toggle is required.",
-    "Review progress uses green completed markers, amber current-step markers, dashed slate pending markers and coral markers for stages needing changes. A legend, marker sizes, checkmarks and text labels make the states clear beyond color."
+    "Review progress uses green completed markers, amber current-step markers, dashed slate pending markers and coral markers for stages needing changes. A legend, marker sizes, checkmarks and text labels make the states clear beyond color.",
+    "Progress states are always on: completed steps use green and checkmarks; active form, review and execution steps use amber; pending steps use slate and dashed markers; failed or changes-required states use coral. Run progress retains its percentage and explicit status. There is no feature or settings toggle."
   ],
   "screens": [
     {
