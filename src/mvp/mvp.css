@@ -1783,6 +1783,71 @@
 }
 
 /* Review progress has separate hues and marker shapes for each state. */
+.form-stepper .MuiStepIcon-root {
+  color: var(--zt-slate);
+}
+.form-stepper .MuiStepIcon-root.Mui-completed {
+  color: var(--zt-success);
+}
+.form-stepper .MuiStepIcon-root.Mui-active {
+  color: var(--zt-warning-accent);
+}
+.form-stepper .MuiStepIcon-root.Mui-active .MuiStepIcon-text {
+  fill: var(--zt-ink);
+}
+.form-stepper .MuiStepConnector-root.Mui-completed .MuiStepConnector-line {
+  border-color: var(--zt-success);
+}
+.compact-form-progress strong {
+  padding: 3px 8px;
+  border: 1px solid var(--zt-warning-accent);
+  border-radius: 5px;
+  background: var(--zt-warning-soft);
+  color: var(--zt-ink);
+}
+.run-progress .MuiLinearProgress-root {
+  height: 6px;
+  border-radius: 3px;
+}
+.run-meter.running .MuiLinearProgress-bar {
+  background: var(--zt-warning-accent);
+  box-shadow: inset 0 0 0 1px var(--zt-warning);
+}
+.run-meter.completed .MuiLinearProgress-bar {
+  background: var(--zt-success);
+}
+.run-meter.failed .MuiLinearProgress-bar {
+  background: var(--zt-error-accent);
+  box-shadow: inset 0 0 0 1px var(--zt-error);
+}
+.run-meter.cancelled .MuiLinearProgress-bar {
+  background: var(--zt-slate);
+}
+.execution-step.running {
+  background: var(--zt-warning-soft);
+}
+.execution-step.running > span {
+  background: var(--zt-warning-accent);
+  border-color: var(--zt-warning);
+  color: var(--zt-ink);
+}
+.execution-step.failed > span {
+  background: var(--zt-error-accent);
+  border-color: var(--zt-error);
+  color: var(--zt-ink);
+}
+.execution-step.pending > span {
+  border-style: dashed;
+  border-color: var(--zt-slate);
+  background: var(--zt-surface);
+}
+.execution-step.cancelled > span {
+  border-color: var(--zt-slate);
+  background: var(--zt-surface-hover);
+}
+.execution-step.running > small { color: var(--zt-warning); }
+.execution-step.failed > small { color: var(--zt-error); }
+.execution-step.complete > small { color: var(--zt-success); }
 .review-progress-legend {
   display: flex;
   flex-wrap: wrap;

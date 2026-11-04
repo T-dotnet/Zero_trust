@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import {
   ArrowRight,
+  Check,
   Database,
   Download,
   FileText,
@@ -345,9 +346,10 @@ export function RunsAndResults({
                     <TableCell role="cell" data-label="Progress">
                       <div className="run-progress">
                         <LinearProgress
+                          className={`run-meter ${r.status.toLowerCase()}`}
                           variant="determinate"
                           value={r.progress}
-                          color={r.status === "Failed" ? "error" : "primary"}
+                          aria-label={`${r.pipelineName}: ${r.status}`}
                         />
                         <small>{r.progress}%</small>
                       </div>
@@ -359,7 +361,9 @@ export function RunsAndResults({
                             ? "success"
                             : r.status === "Failed"
                               ? "error"
-                              : "neutral"
+                              : r.status === "Running"
+                                ? "warning"
+                                : "neutral"
                         }
                       >
                         {r.status}
@@ -580,9 +584,9 @@ export function RunsAndResults({
                   ].map((label, i) => {
                     const status = executionStepStatus(run, i);
                     return (
-                      <div key={label}>
-                        <span className={status === "Complete" ? "done" : ""}>
-                          {String(i + 1).padStart(2, "0")}
+                      <div key={label} className={`execution-step ${status.toLowerCase()}`} aria-current={status === "Running" ? "step" : undefined}>
+                        <span className={status === "Complete" ? "done" : ""} aria-hidden="true">
+                          {status === "Complete" ? <Check size={15} /> : String(i + 1).padStart(2, "0")}
                         </span>
                         <strong>{label}</strong>
                         <small>{status}</small>
