@@ -21,6 +21,7 @@ The `mvp` branch now opens the [MVP prototype](mvp/README.md) by default. Start 
 | [Feature list — all features enabled](feature-list.md) | All 59 seeded features and the canonical E1 selection |
 | [Personas, objectives, pains, and gains](personas.md) | Who uses the product, what they need, and which benefits are hypotheses |
 | [MVP scope and rationale](mvp-scope.md) | Recommended launch scope, including mandatory multistage approval and acceptance requirements |
+| [Post MVP product roadmap](post-mvp-roadmap.md) | Pilot release gates, prioritized enhancements, release sequencing, owners and success measures |
 | [Settings and feature toggles](settings-and-feature-toggles.md) | Exact control names, initial values, feature IDs, dependencies, presets, and known exceptions |
 | [User flows and diagrams](user-flows.md) | Step-by-step journeys with all capabilities ON, actor view selections, and feature associations |
 | [Diagram sources and SVG exports](diagrams/README.md) | Ten editable diagrams, portable SVG copies, and regeneration instructions |
