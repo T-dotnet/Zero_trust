@@ -1,5 +1,9 @@
 # MVP prototype checkpoint
 
+[Screen-by-screen flow reference](screen-flows.md) · [Clickable wireframes and attached user stories](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html)
+
+The flow atlas covers 41 screen states, 12 journeys and a user story attached to every state. Its action tables include conditions, destination, side effects, role handoffs and recovery. It documents this MVP checkpoint; the full-workspace flows elsewhere in `docs` describe the archived app. All included MVP features are always on.
+
 The `mvp` Git branch contains an interactive frontend prototype. The default entry is the MVP; `/?view=full` opens the original application. Run `npm run dev` and open port 3000.
 
 The prototype demonstrates dataset import, pipeline submission, mandatory Ethical → Technical → Privacy → Security review, feedback/rejection and revision, author publication, new pipeline versions, local evidence attachments/previews, simulated runs/retries/cancellation, support requests/resolution, log export, artifact validation/download, and a persisted/exportable activity history. All included MVP capabilities are enabled. The full-product feature list remains separate from this MVP's narrower scope.

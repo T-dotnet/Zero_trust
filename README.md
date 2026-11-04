@@ -49,6 +49,9 @@ Browser tests use local Chromium. Set `CHROMIUM_PATH` if it is installed somewhe
 
 ## Documentation
 
+- [MVP screen-by-screen flows and attached user stories](docs/mvp/screen-flows.md)
+- [Clickable MVP wireframe atlas](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html) — connected screens, action destinations, conditions and recovery paths.
+
 - [MVP walkthrough and implementation boundaries](docs/mvp/README.md)
 - [MVP scope and rationale](docs/mvp-scope.md)
 - [Personas, objectives, pains, and gains](docs/personas.md)

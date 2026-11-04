@@ -1,0 +1,4177 @@
+{
+  "schemaVersion": 1,
+  "title": "Zero Trust MVP · Screen & flow atlas",
+  "reviewedAt": "2026-11-04",
+  "sourceCommit": "6b83f7de5deb4d66ff99934e01a4e07f0ddcd131",
+  "scope": "Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.",
+  "boundaries": [
+    "Role switching demonstrates five interfaces; it is not authentication or backend authorization.",
+    "All decisions, dataset metadata, column names and attached text evidence are local browser state. Import preview rows are discarded when the import dialog closes.",
+    "Execution, repository evidence, output samples, approval shortcuts and support requests are demonstrations. No repository analysis, research code execution, PHI scanning, security enforcement or external support delivery occurs.",
+    "Screen IDs describe UI states, including dialogs and inline panels. They are documentation anchors, not routes in the live single-page app.",
+    "Wireframe clicks navigate this document; they never change the live prototype. Return means the actual originating page, not a fixed destination."
+  ],
+  "personas": [
+    {
+      "id": "R",
+      "name": "Researcher",
+      "objective": "Register data and describe, revise, publish and run a reviewed research method.",
+      "pain": "Unclear submission requirements, handoffs and usable output status.",
+      "gain": "A visible path from a named draft to a traceable, accepted output."
+    },
+    {
+      "id": "E",
+      "name": "Ethical reviewer",
+      "objective": "Assess intended use, consent boundaries, harms and limitations.",
+      "pain": "Research context and evidence are scattered.",
+      "gain": "Purpose and evidence appear beside an explicit stage decision."
+    },
+    {
+      "id": "T",
+      "name": "Technical reviewer",
+      "objective": "Assess runtime and input/output evidence; resolve local run-support requests.",
+      "pain": "Incomplete contracts and failures with little context.",
+      "gain": "A dedicated checklist, run log and recorded support resolution."
+    },
+    {
+      "id": "P",
+      "name": "Privacy reviewer",
+      "objective": "Assess handling and disclosure risks, then separately accept or reject generated output.",
+      "pain": "Pipeline approval can be confused with output validation.",
+      "gain": "A distinct output decision gates sample download."
+    },
+    {
+      "id": "S",
+      "name": "Security reviewer",
+      "objective": "Assess dependency, secrets, network and permission evidence.",
+      "pain": "Security can become an implicit or skipped handoff.",
+      "gain": "A mandatory final review before a separate author publication."
+    }
+  ],
+  "globalRules": [
+    "Initial entry is Pipelines as Researcher; valid saved workspace data is restored. Navigation and demo role are not persisted.",
+    "The six navigation destinations are Overview, Datasets, Pipelines, Runs & results, Approvals and Activity log. Mobile uses a closeable navigation drawer. Navigating closes the drawer and resets selected detail context.",
+    "Header role selector offers Researcher, Ethical reviewer, Technical reviewer, Privacy reviewer and Security reviewer. Changing role keeps the current page; controls and task eligibility update. It does not advance an approval.",
+    "Every submitted pipeline, revision and new version requires Ethical → Technical → Privacy → Security, followed by Researcher publication. A pipeline is runnable only when Approved.",
+    "At widths up to 900px all labelled CTA controls use full container width and their own row; the primary action comes first in visual and keyboard order. Utility icons remain compact touch targets. Task dialogs become fullscreen on phones/short mobile viewports.",
+    "Search, filters, disclosures, evidence preview, field errors and neutral decision selection are in-place states unless a transition below says otherwise. No extra screen is implied.",
+    "Browser refresh restores valid stored records and decisions, then returns to initial Pipelines / Researcher; running demos resume their timer. With unavailable storage the current session works and a warning says changes may not survive refresh.",
+    "Close, Cancel, Escape or backdrop dismiss a dismissible dialog to its underlying page. Unsaved wizard edits are discarded unless Save draft was used. Import preview rows are discarded. Reset requires its own confirmation."
+  ],
+  "screens": [
+    {
+      "id": "S01",
+      "title": "Workspace navigation & role controls",
+      "kind": "Shared shell",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Reach a workspace area and continue as the next demo participant.",
+      "source": [
+        "Shell.tsx:Shell",
+        "MvpApp.tsx:MvpApp"
+      ],
+      "layout": [
+        "Zero Trust / workspace identity",
+        "Six navigation items · mobile drawer",
+        "Demo role selector · Workspace options",
+        "Walkthrough guide · Simulation controls"
+      ],
+      "stories": [
+        {
+          "id": "US-S01",
+          "text": "As a participant, I want a consistent navigation and role switch so that I can follow a multi-person workflow alone.",
+          "acceptance": [
+            "All six destinations are reachable by keyboard and on mobile.",
+            "Changing role keeps the current page and updates available actions.",
+            "Workspace options expose guide, simulation, archived workspace and reset."
+          ]
+        }
+      ],
+      "notes": [
+        "This shell surrounds each page; it is not a separate landing page.",
+        "All features are on. Role and simulation controls are not feature toggles."
+      ],
+      "actions": [
+        {
+          "id": "T001",
+          "label": "Overview",
+          "to": "S02",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T002",
+          "label": "Datasets",
+          "to": "S04",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T003",
+          "label": "Pipelines",
+          "to": "S03",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T004",
+          "label": "Runs & results",
+          "to": "S24",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T005",
+          "label": "Approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T006",
+          "label": "Activity log",
+          "to": "S37",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T007",
+          "label": "Walkthrough guide",
+          "to": "S39",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T008",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T009",
+          "label": "Reset demo data",
+          "to": "S40",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T010",
+          "label": "Select demo role",
+          "to": "self",
+          "guard": "",
+          "outcome": "Same page, role-sensitive controls update; no review decision is made.",
+          "kind": "role",
+          "priority": "secondary"
+        },
+        {
+          "id": "T011",
+          "label": "Open / Close navigation",
+          "to": "self",
+          "guard": "",
+          "outcome": "Mobile drawer opens or closes; no page transition.",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T012",
+          "label": "Open original workspace",
+          "to": "external",
+          "guard": "",
+          "outcome": "Opens /?view=full in a new tab, outside MVP scope.",
+          "kind": "external",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "Overview · Workspace",
+      "kind": "Page",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "See attention items, workspace counts and approved methods.",
+      "source": [
+        "PipelineViews.tsx:Overview"
+      ],
+      "layout": [
+        "Workspace heading · role-specific CTA",
+        "Dataset / pipeline / run / output summary",
+        "Needs attention · pending output review",
+        "Approved pipeline list"
+      ],
+      "stories": [
+        {
+          "id": "US-S02",
+          "text": "As a participant, I want an overview of actionable work so that I know where to continue.",
+          "acceptance": [
+            "Attention items reflect the active role.",
+            "Researcher can start a pipeline or run an approved method.",
+            "Pending outputs lead to Results; reviewers reach the review queue."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T013",
+          "label": "New pipeline",
+          "to": "S08",
+          "guard": "Researcher",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T014",
+          "label": "View my tasks / View approvals",
+          "to": "S12",
+          "guard": "Reviewer / any role",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T015",
+          "label": "Open attention submission",
+          "to": "S13",
+          "guard": "Resolve selected record by status/role to S11/S13–S17/S19–S22.",
+          "outcome": "Resolve by selected record status (see S03).",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T016",
+          "label": "Review pending outputs",
+          "to": "S32",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T017",
+          "label": "Run approved pipeline",
+          "to": "S23",
+          "guard": "Researcher",
+          "outcome": "Pipeline preselected.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T018",
+          "label": "View approved pipeline",
+          "to": "S22",
+          "guard": "Reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "Pipeline catalog",
+      "kind": "Page",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Find a pipeline, see its next owner and choose the next action.",
+      "source": [
+        "PipelineViews.tsx:PipelineCatalog",
+        "model.ts:pipelineActionLabel",
+        "ui.tsx:ReviewGuide"
+      ],
+      "layout": [
+        "Pipelines · New pipeline / Review tasks",
+        "All / Needs action / Approved / In review",
+        "Search · Category filter",
+        "Pipeline name · version · status · next action",
+        "How pipeline approval works disclosure · Explore the review process"
+      ],
+      "stories": [
+        {
+          "id": "US-S03",
+          "text": "As a researcher or reviewer, I want searchable pipelines with clear status and actions so that I can resume the right work.",
+          "acceptance": [
+            "Status and category filters combine with search; clear restores results.",
+            "Phone status select replaces the desktop tab row.",
+            "Pipeline-name click opens details in Approvals; an approved Researcher row CTA opens Configure run."
+          ]
+        }
+      ],
+      "notes": [
+        "The selected record chooses a detail state; no intermediate selector screen exists.",
+        "No matches is an in-place empty state with Clear filters."
+      ],
+      "actions": [
+        {
+          "id": "T019",
+          "label": "New pipeline",
+          "to": "S08",
+          "guard": "Researcher",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T020",
+          "label": "Review tasks / Approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T021",
+          "label": "Open draft",
+          "to": "S11",
+          "guard": "Draft",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T022",
+          "label": "Open waiting submission",
+          "to": "S13",
+          "guard": "In review, not assigned reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T023",
+          "label": "Open Ethical task",
+          "to": "S14",
+          "guard": "In review at Ethical, active Ethical reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T024",
+          "label": "Open Technical task",
+          "to": "S15",
+          "guard": "In review at Technical, active Technical reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T025",
+          "label": "Open Privacy task",
+          "to": "S16",
+          "guard": "In review at Privacy, active Privacy reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T026",
+          "label": "Open Security task",
+          "to": "S17",
+          "guard": "In review at Security, active Security reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T027",
+          "label": "Open feedback",
+          "to": "S19",
+          "guard": "Changes requested",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T028",
+          "label": "Open rejection",
+          "to": "S20",
+          "guard": "Rejected",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T029",
+          "label": "Open publication-ready submission",
+          "to": "S21",
+          "guard": "Ready to publish",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T030",
+          "label": "Open approved pipeline name",
+          "to": "S22",
+          "guard": "Approved",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T031",
+          "label": "Run pipeline",
+          "to": "S23",
+          "guard": "Approved and Researcher",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T032",
+          "label": "Search / filter / clear",
+          "to": "self",
+          "guard": "",
+          "outcome": "Visible rows and count update; no match shows an empty state.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T213",
+          "label": "Explore the review process",
+          "to": "S12",
+          "guard": "Expand How pipeline approval works",
+          "outcome": "Open Approvals queue.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "Datasets",
+      "kind": "Page",
+      "roles": [
+        "All roles; import/run: Researcher"
+      ],
+      "goal": "Find locally registered source data.",
+      "source": [
+        "DataAndRuns.tsx:Datasets"
+      ],
+      "layout": [
+        "Datasets · Import dataset",
+        "Synthetic / local-data notice · Search",
+        "Name · format · records · size · access · date",
+        "Dataset name opens details · Run pipeline"
+      ],
+      "stories": [
+        {
+          "id": "US-S04",
+          "text": "As a researcher, I want a dataset catalog so that I can inspect and select data before running a method.",
+          "acceptance": [
+            "Import and run actions are disabled for other roles.",
+            "Search filters name and description; no matches stays on this page.",
+            "Restricted is a demo label, not enforced access control."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T033",
+          "label": "Import dataset",
+          "to": "S05",
+          "guard": "Researcher",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T034",
+          "label": "Open dataset name",
+          "to": "S07",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T035",
+          "label": "Run pipeline",
+          "to": "S23",
+          "guard": "Researcher",
+          "outcome": "Dataset preselected.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T036",
+          "label": "Search datasets",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "in-place",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "Import dataset · choose source",
+      "kind": "Dialog",
+      "roles": [
+        "Researcher"
+      ],
+      "goal": "Select a valid CSV or a synthetic example.",
+      "source": [
+        "Dialogs.tsx:ImportDialog",
+        "csv.ts:parseDatasetCsv"
+      ],
+      "layout": [
+        "Drop zone · Choose file",
+        "Use synthetic example",
+        "Dataset name * · Description",
+        "Inline validation / reading state"
+      ],
+      "stories": [
+        {
+          "id": "US-S05",
+          "text": "As a researcher, I want a safe sample or CSV import so that I can demonstrate a run without uploading research data.",
+          "acceptance": [
+            "Accepted CSV has a header and at least one row, unique nonempty header names, valid quoting and equal-width rows.",
+            "File must end in .csv and be at most 5 MiB; the UI copy says “up to 5 MB”.",
+            "Import stays disabled until file is valid, name is nonblank and reading has finished."
+          ]
+        }
+      ],
+      "notes": [
+        "Invalid file/read error stays here, explains the problem and allows choosing another file or sample.",
+        "No server upload occurs."
+      ],
+      "actions": [
+        {
+          "id": "T037",
+          "label": "Choose file / Drop valid CSV",
+          "to": "S06",
+          "guard": "Valid CSV, <= 5 MiB",
+          "outcome": "Read metadata, column names and up to 3 preview rows.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T038",
+          "label": "Use synthetic example",
+          "to": "S06",
+          "guard": "",
+          "outcome": "Prefills a 120-record synthetic cohort.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T039",
+          "label": "Invalid CSV / unreadable file",
+          "to": "self",
+          "guard": "",
+          "outcome": "Show validation error; Import remains disabled.",
+          "kind": "error",
+          "priority": "secondary"
+        },
+        {
+          "id": "T040",
+          "label": "Cancel / Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "Import dataset · preview & confirm",
+      "kind": "Dialog state",
+      "roles": [
+        "Researcher"
+      ],
+      "goal": "Inspect the selected source and register its metadata.",
+      "source": [
+        "Dialogs.tsx:ImportDialog"
+      ],
+      "layout": [
+        "Selected filename · records · size",
+        "Replace / Remove",
+        "Preview columns and sample rows disclosure",
+        "Dataset name * · Description"
+      ],
+      "stories": [
+        {
+          "id": "US-S06",
+          "text": "As a researcher, I want to preview columns and sample rows so that I can catch an incorrect source before registration.",
+          "acceptance": [
+            "Import requires a nonblank name and validated file.",
+            "Only metadata and column names are retained; preview rows are discarded on close.",
+            "Successful import closes the dialog and opens Datasets with a success message."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T041",
+          "label": "Import dataset",
+          "to": "S04",
+          "guard": "Valid source + nonblank name",
+          "outcome": "Add local record and activity event.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T042",
+          "label": "Replace",
+          "to": "S06",
+          "guard": "Choose another file",
+          "outcome": "A valid replacement stays in preview; invalid/unreadable replacement clears the file and shows choose/error state S05.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T043",
+          "label": "Remove",
+          "to": "S05",
+          "guard": "",
+          "outcome": "Clear selected file and its error; entered name may remain.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T044",
+          "label": "Preview columns and sample rows",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T045",
+          "label": "Cancel / Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S07",
+      "title": "Dataset details",
+      "kind": "Dialog",
+      "roles": [
+        "All roles; run: Researcher"
+      ],
+      "goal": "Inspect metadata and optional column names.",
+      "source": [
+        "DataAndRuns.tsx:Datasets"
+      ],
+      "layout": [
+        "Name · description",
+        "Format · records · size · imported · access",
+        "Dataset columns disclosure",
+        "Local metadata / no access enforcement notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S07",
+          "text": "As a researcher, I want dataset details beside a run action so that I can choose an appropriate source.",
+          "acceptance": [
+            "Column metadata expands when available.",
+            "Run opens Configure run with this dataset selected."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T046",
+          "label": "Run pipeline",
+          "to": "S23",
+          "guard": "Researcher",
+          "outcome": "Close details and preselect dataset.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T047",
+          "label": "Dataset columns",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T048",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S08",
+      "title": "Pipeline wizard · 1. Source & purpose",
+      "kind": "Dialog step",
+      "roles": [
+        "Researcher"
+      ],
+      "goal": "Describe the method and its repository source.",
+      "source": [
+        "Dialogs.tsx:PipelineForm"
+      ],
+      "layout": [
+        "New pipeline / Edit draft / Revise / New version",
+        "Step 1 of 3 · Source & purpose",
+        "Pipeline name * · Research purpose * · Repository URL *",
+        "Use example (new only) · Source settings disclosure",
+        "Branch/tag * · Category in disclosure"
+      ],
+      "stories": [
+        {
+          "id": "US-S08",
+          "text": "As a researcher, I want to describe the purpose and source in a short first step so that I can submit a reviewable method or save early work.",
+          "acceptance": [
+            "Continue requires a unique new name, research purpose, HTTP(S) repository URL and nonempty branch.",
+            "Save draft requires a name; incomplete fields are allowed.",
+            "Validation focuses the first invalid field and expands Source settings for a missing branch."
+          ]
+        }
+      ],
+      "notes": [
+        "Modes reuse the same three steps. New: v1.0.0. Saved draft: keeps version. Rejected/changes revision: next available patch at resubmission. Approved source: separate new record with next available minor version.",
+        "Draft/revision/new-version modes prefill fields. Identity is retained when editing an existing pipeline. No repository is fetched."
+      ],
+      "actions": [
+        {
+          "id": "T049",
+          "label": "Continue",
+          "to": "S09",
+          "guard": "Valid name, purpose, HTTP(S) URL and branch",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T050",
+          "label": "Save draft",
+          "to": "S11",
+          "guard": "Named new or existing Draft",
+          "outcome": "Save local draft and close wizard.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T051",
+          "label": "Save revision draft",
+          "to": "S19",
+          "guard": "Revision of Changes requested; Rejected returns S20.",
+          "outcome": "Keep reviewed version/status and save revision fields separately.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T052",
+          "label": "Use example / Source settings",
+          "to": "self",
+          "guard": "",
+          "outcome": "Prefill synthetic example (new only) or expand branch/category.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T053",
+          "label": "Validation error",
+          "to": "self",
+          "guard": "",
+          "outcome": "Show error and focus invalid field.",
+          "kind": "error",
+          "priority": "secondary"
+        },
+        {
+          "id": "T054",
+          "label": "Cancel / Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "Discard unsaved changes.",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S09",
+      "title": "Pipeline wizard · 2. Requirements & evidence",
+      "kind": "Dialog step",
+      "roles": [
+        "Researcher"
+      ],
+      "goal": "Define input/output expectations and optional evidence.",
+      "source": [
+        "Dialogs.tsx:PipelineForm",
+        "Evidence.tsx:AttachmentPicker"
+      ],
+      "layout": [
+        "Step 2 of 3 · Requirements",
+        "Input specification * · Expected output *",
+        "Optional evidence · Attach files · Remove",
+        "Attached filenames / sizes · Remove · validation feedback"
+      ],
+      "stories": [
+        {
+          "id": "US-S09",
+          "text": "As a researcher, I want explicit input/output contracts and supporting evidence so that each reviewer can assess the method.",
+          "acceptance": [
+            "Continue requires both input and output descriptions.",
+            "Up to four .txt/.md/.json/.csv/.yaml/.yml files, each <= 50,000 bytes.",
+            "Reading evidence disables progression and saving; rejected/unreadable files show an error.",
+            "Evidence text is retained locally and available to demo reviewers."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T055",
+          "label": "Continue",
+          "to": "S10",
+          "guard": "Input and output nonblank, evidence reading complete",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T056",
+          "label": "Back",
+          "to": "S08",
+          "guard": "",
+          "outcome": "Retain in-dialog edits.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T057",
+          "label": "Save draft",
+          "to": "S11",
+          "guard": "Named Draft; revision returns feedback state S19/S20.",
+          "outcome": "Save current working fields, close wizard.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T058",
+          "label": "Attach / remove evidence",
+          "to": "self",
+          "guard": "",
+          "outcome": "Update local evidence; invalid file shows inline error.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T059",
+          "label": "Cancel / Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S10",
+      "title": "Pipeline wizard · 3. Review & submit",
+      "kind": "Dialog step",
+      "roles": [
+        "Researcher"
+      ],
+      "goal": "Check the complete submission and start the approval path.",
+      "source": [
+        "Dialogs.tsx:PipelineForm",
+        "model.ts:workspaceReducer"
+      ],
+      "layout": [
+        "Step 3 of 3 · Review & submit",
+        "Source / branch / category / version summary",
+        "Input / output / evidence summary · Edit links",
+        "Required approval path disclosure"
+      ],
+      "stories": [
+        {
+          "id": "US-S10",
+          "text": "As a researcher, I want a final review with edit links so that I deliberately submit the intended version.",
+          "acceptance": [
+            "Final submit revalidates source and both contract fields.",
+            "Success closes wizard, opens submission detail and starts Ethical review.",
+            "No stage is bypassed for revised or new versions."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T060",
+          "label": "Submit for review / Resubmit for review",
+          "to": "S13",
+          "guard": "All required fields valid",
+          "outcome": "New record or revised record enters In review / Ethical; author sees receipt.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T061",
+          "label": "Edit source / Back to source",
+          "to": "S08",
+          "guard": "",
+          "outcome": "Preserve values.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T062",
+          "label": "Edit requirements / Back",
+          "to": "S09",
+          "guard": "",
+          "outcome": "Preserve values.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T063",
+          "label": "Save draft",
+          "to": "S11",
+          "guard": "Named Draft; revision returns S19/S20.",
+          "outcome": "No review begins.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T064",
+          "label": "Required approval path",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T065",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S11",
+      "title": "Pipeline details · Draft",
+      "kind": "Detail state",
+      "roles": [
+        "Researcher; others can switch role"
+      ],
+      "goal": "Resume a saved, possibly incomplete submission.",
+      "source": [
+        "ReviewView.tsx:ReviewView"
+      ],
+      "layout": [
+        "Draft status · Complete your draft",
+        "Submission details · Source and version disclosure",
+        "Evidence attachments · Activity timeline",
+        "Edit & submit draft"
+      ],
+      "stories": [
+        {
+          "id": "US-S11",
+          "text": "As a researcher, I want a named draft receipt so that I can return later without losing incomplete work.",
+          "acceptance": [
+            "Drafts cannot run or enter review until explicitly submitted.",
+            "Editing starts the same three-step wizard with saved fields."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T066",
+          "label": "Edit & submit draft",
+          "to": "S08",
+          "guard": "Researcher",
+          "outcome": "Edit mode keeps existing draft identity and version.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T067",
+          "label": "Continue as Researcher",
+          "to": "self",
+          "guard": "Other role",
+          "outcome": "Switch role only.",
+          "kind": "role",
+          "priority": "secondary"
+        },
+        {
+          "id": "T068",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T069",
+          "label": "Source / evidence / history disclosures",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T202",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S12",
+      "title": "Approvals queue",
+      "kind": "Page",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Find role-specific tasks or inspect all non-published submissions.",
+      "source": [
+        "PipelineViews.tsx:Approvals"
+      ],
+      "layout": [
+        "Approvals · mandatory review notice",
+        "My tasks / All submissions",
+        "Search submissions",
+        "Submission · version · progress · next actor · action"
+      ],
+      "stories": [
+        {
+          "id": "US-S12",
+          "text": "As a reviewer, I want my task queue separated from all submissions so that I can focus on work I can act on.",
+          "acceptance": [
+            "Reviewers initially see My tasks; Researcher initially sees All submissions.",
+            "Approved records are absent from this queue.",
+            "Empty task view offers viewing all submissions or clearing search."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T070",
+          "label": "Open waiting submission",
+          "to": "S13",
+          "guard": "In review, other role",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T071",
+          "label": "Review Ethical",
+          "to": "S14",
+          "guard": "Assigned Ethical reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T072",
+          "label": "Review Technical",
+          "to": "S15",
+          "guard": "Assigned Technical reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T073",
+          "label": "Review Privacy",
+          "to": "S16",
+          "guard": "Assigned Privacy reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T074",
+          "label": "Review Security",
+          "to": "S17",
+          "guard": "Assigned Security reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T075",
+          "label": "Open draft",
+          "to": "S11",
+          "guard": "Draft",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T076",
+          "label": "Open requested changes",
+          "to": "S19",
+          "guard": "Changes requested",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T077",
+          "label": "Open rejected submission",
+          "to": "S20",
+          "guard": "Rejected",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T078",
+          "label": "Open ready-to-publish submission",
+          "to": "S21",
+          "guard": "Ready to publish",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T079",
+          "label": "My tasks / All submissions / Search / Clear",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "in-place",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S13",
+      "title": "Pipeline review · Waiting / submission receipt",
+      "kind": "Detail state",
+      "roles": [
+        "Researcher or non-assigned reviewer"
+      ],
+      "goal": "Know the current stage, next owner and how the demo can continue.",
+      "source": [
+        "ReviewView.tsx:ReviewView"
+      ],
+      "layout": [
+        "In review · current stage · completed count",
+        "Submitted for review / Awaiting assigned reviewer",
+        "Status · next owner · what happens next · version",
+        "Submission details · evidence · history",
+        "Continue as assigned reviewer (demo)"
+      ],
+      "stories": [
+        {
+          "id": "US-S13",
+          "text": "As an author or observer, I want a clear review receipt and next owner so that I understand why I cannot approve this stage.",
+          "acceptance": [
+            "Only the assigned stage reviewer receives decision controls.",
+            "Demo handoff changes role on the same submission; no external user is required.",
+            "Approving one stage brings the previous role back to this waiting variant for the next stage."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T080",
+          "label": "Continue as Ethical reviewer",
+          "to": "S14",
+          "guard": "Current stage is Ethical",
+          "outcome": "Role switch only; stage still needs decision.",
+          "kind": "role",
+          "priority": "primary"
+        },
+        {
+          "id": "T081",
+          "label": "Continue as Technical reviewer",
+          "to": "S15",
+          "guard": "Current stage is Technical",
+          "outcome": "Role switch only; stage still needs decision.",
+          "kind": "role",
+          "priority": "primary"
+        },
+        {
+          "id": "T082",
+          "label": "Continue as Privacy reviewer",
+          "to": "S16",
+          "guard": "Current stage is Privacy",
+          "outcome": "Role switch only; stage still needs decision.",
+          "kind": "role",
+          "priority": "primary"
+        },
+        {
+          "id": "T083",
+          "label": "Continue as Security reviewer",
+          "to": "S17",
+          "guard": "Current stage is Security",
+          "outcome": "Role switch only; stage still needs decision.",
+          "kind": "role",
+          "priority": "primary"
+        },
+        {
+          "id": "T084",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T085",
+          "label": "View all stages / details / evidence / history",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T203",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S14",
+      "title": "Pipeline review · Ethical",
+      "kind": "Assigned reviewer state",
+      "roles": [
+        "Ethical reviewer"
+      ],
+      "goal": "Make the mandatory ethical decision.",
+      "source": [
+        "ReviewView.tsx:CHECKS",
+        "ReviewView.tsx:ReviewView",
+        "model.ts:workspaceReducer"
+      ],
+      "layout": [
+        "Current stage / purpose · assigned reviewer",
+        "Submission evidence disclosure · attachments",
+        "Research purpose and intended use are documented",
+        "Consent and data-use boundaries are appropriate",
+        "Potential harms and limitations are acknowledged",
+        "Review comments · decision actions"
+      ],
+      "stories": [
+        {
+          "id": "US-S14",
+          "text": "As a ethical reviewer, I want stage-specific criteria and evidence beside a deliberate decision so that the assessment is traceable.",
+          "acceptance": [
+            "All three unchecked criteria must be confirmed before Approve enables.",
+            "Approval comment is optional; requesting changes or rejection requires a nonblank explanation.",
+            "Wrong role cannot act; rejection opens a separate confirmation.",
+            "Decision and actor are recorded in pipeline and workspace history."
+          ]
+        }
+      ],
+      "notes": [
+        "Checklist confirms illustrative evidence; no scanner verifies the criteria.",
+        "Next stage requires switching to its reviewer role; Security approval does not publish."
+      ],
+      "actions": [
+        {
+          "id": "T086",
+          "label": "Approve Ethical",
+          "to": "S13",
+          "guard": "All 3 criteria checked",
+          "outcome": "Advance to next review stage; Security enters Ready to publish.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T087",
+          "label": "Request changes",
+          "to": "S19",
+          "guard": "Nonblank review comment",
+          "outcome": "Pause review and return ownership to Researcher.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T088",
+          "label": "Reject submission",
+          "to": "S18",
+          "guard": "Nonblank review comment",
+          "outcome": "Open confirmation; no decision until confirmed.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T089",
+          "label": "Check criteria / comments / disclosures",
+          "to": "self",
+          "guard": "",
+          "outcome": "Update local review form; missing reason shows inline error.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T090",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T204",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S15",
+      "title": "Pipeline review · Technical",
+      "kind": "Assigned reviewer state",
+      "roles": [
+        "Technical reviewer"
+      ],
+      "goal": "Make the mandatory technical decision.",
+      "source": [
+        "ReviewView.tsx:CHECKS",
+        "ReviewView.tsx:ReviewView",
+        "model.ts:workspaceReducer"
+      ],
+      "layout": [
+        "Current stage / purpose · assigned reviewer",
+        "Submission evidence disclosure · attachments",
+        "Dependencies and runtime are documented",
+        "Inputs and outputs are defined",
+        "Sample execution results are reviewed",
+        "Review comments · decision actions"
+      ],
+      "stories": [
+        {
+          "id": "US-S15",
+          "text": "As a technical reviewer, I want stage-specific criteria and evidence beside a deliberate decision so that the assessment is traceable.",
+          "acceptance": [
+            "All three unchecked criteria must be confirmed before Approve enables.",
+            "Approval comment is optional; requesting changes or rejection requires a nonblank explanation.",
+            "Wrong role cannot act; rejection opens a separate confirmation.",
+            "Decision and actor are recorded in pipeline and workspace history."
+          ]
+        }
+      ],
+      "notes": [
+        "Checklist confirms illustrative evidence; no scanner verifies the criteria.",
+        "Next stage requires switching to its reviewer role; Security approval does not publish."
+      ],
+      "actions": [
+        {
+          "id": "T091",
+          "label": "Approve Technical",
+          "to": "S13",
+          "guard": "All 3 criteria checked",
+          "outcome": "Advance to next review stage; Security enters Ready to publish.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T092",
+          "label": "Request changes",
+          "to": "S19",
+          "guard": "Nonblank review comment",
+          "outcome": "Pause review and return ownership to Researcher.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T093",
+          "label": "Reject submission",
+          "to": "S18",
+          "guard": "Nonblank review comment",
+          "outcome": "Open confirmation; no decision until confirmed.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T094",
+          "label": "Check criteria / comments / disclosures",
+          "to": "self",
+          "guard": "",
+          "outcome": "Update local review form; missing reason shows inline error.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T095",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T205",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S16",
+      "title": "Pipeline review · Privacy",
+      "kind": "Assigned reviewer state",
+      "roles": [
+        "Privacy reviewer"
+      ],
+      "goal": "Make the mandatory privacy decision.",
+      "source": [
+        "ReviewView.tsx:CHECKS",
+        "ReviewView.tsx:ReviewView",
+        "model.ts:workspaceReducer"
+      ],
+      "layout": [
+        "Current stage / purpose · assigned reviewer",
+        "Submission evidence disclosure · attachments",
+        "Sensitive fields and data access are documented",
+        "Redaction and minimization approach is appropriate",
+        "Output disclosure risks are reviewed",
+        "Review comments · decision actions"
+      ],
+      "stories": [
+        {
+          "id": "US-S16",
+          "text": "As a privacy reviewer, I want stage-specific criteria and evidence beside a deliberate decision so that the assessment is traceable.",
+          "acceptance": [
+            "All three unchecked criteria must be confirmed before Approve enables.",
+            "Approval comment is optional; requesting changes or rejection requires a nonblank explanation.",
+            "Wrong role cannot act; rejection opens a separate confirmation.",
+            "Decision and actor are recorded in pipeline and workspace history."
+          ]
+        }
+      ],
+      "notes": [
+        "Checklist confirms illustrative evidence; no scanner verifies the criteria.",
+        "Next stage requires switching to its reviewer role; Security approval does not publish."
+      ],
+      "actions": [
+        {
+          "id": "T096",
+          "label": "Approve Privacy",
+          "to": "S13",
+          "guard": "All 3 criteria checked",
+          "outcome": "Advance to next review stage; Security enters Ready to publish.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T097",
+          "label": "Request changes",
+          "to": "S19",
+          "guard": "Nonblank review comment",
+          "outcome": "Pause review and return ownership to Researcher.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T098",
+          "label": "Reject submission",
+          "to": "S18",
+          "guard": "Nonblank review comment",
+          "outcome": "Open confirmation; no decision until confirmed.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T099",
+          "label": "Check criteria / comments / disclosures",
+          "to": "self",
+          "guard": "",
+          "outcome": "Update local review form; missing reason shows inline error.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T100",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T206",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S17",
+      "title": "Pipeline review · Security",
+      "kind": "Assigned reviewer state",
+      "roles": [
+        "Security reviewer"
+      ],
+      "goal": "Make the mandatory security decision.",
+      "source": [
+        "ReviewView.tsx:CHECKS",
+        "ReviewView.tsx:ReviewView",
+        "model.ts:workspaceReducer"
+      ],
+      "layout": [
+        "Current stage / purpose · assigned reviewer",
+        "Submission evidence disclosure · attachments",
+        "Container and dependency risks are reviewed",
+        "Secrets and network access are documented",
+        "Execution permissions follow least privilege",
+        "Review comments · decision actions"
+      ],
+      "stories": [
+        {
+          "id": "US-S17",
+          "text": "As a security reviewer, I want stage-specific criteria and evidence beside a deliberate decision so that the assessment is traceable.",
+          "acceptance": [
+            "All three unchecked criteria must be confirmed before Approve enables.",
+            "Approval comment is optional; requesting changes or rejection requires a nonblank explanation.",
+            "Wrong role cannot act; rejection opens a separate confirmation.",
+            "Decision and actor are recorded in pipeline and workspace history."
+          ]
+        }
+      ],
+      "notes": [
+        "Checklist confirms illustrative evidence; no scanner verifies the criteria.",
+        "Next stage requires switching to its reviewer role; Security approval does not publish."
+      ],
+      "actions": [
+        {
+          "id": "T101",
+          "label": "Approve Security",
+          "to": "S21",
+          "guard": "All 3 criteria checked",
+          "outcome": "Advance to next review stage; Security enters Ready to publish.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T102",
+          "label": "Request changes",
+          "to": "S19",
+          "guard": "Nonblank review comment",
+          "outcome": "Pause review and return ownership to Researcher.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T103",
+          "label": "Reject submission",
+          "to": "S18",
+          "guard": "Nonblank review comment",
+          "outcome": "Open confirmation; no decision until confirmed.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T104",
+          "label": "Check criteria / comments / disclosures",
+          "to": "self",
+          "guard": "",
+          "outcome": "Update local review form; missing reason shows inline error.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T105",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T207",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S18",
+      "title": "Confirm pipeline rejection",
+      "kind": "Confirmation dialog",
+      "roles": [
+        "Assigned reviewer"
+      ],
+      "goal": "Confirm a consequential review decision.",
+      "source": [
+        "ReviewView.tsx:ReviewView"
+      ],
+      "layout": [
+        "Reject this submission?",
+        "Reviewer explanation retained",
+        "Confirm rejection · Keep reviewing"
+      ],
+      "stories": [
+        {
+          "id": "US-S18",
+          "text": "As a reviewer, I want a confirmation before rejecting so that an accidental click does not end the current review.",
+          "acceptance": [
+            "Confirm rejection records Rejected and the explanation.",
+            "Keep reviewing dismisses confirmation with review fields retained."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T106",
+          "label": "Confirm rejection",
+          "to": "S20",
+          "guard": "Assigned reviewer and comment",
+          "outcome": "Record rejection; author can revise.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T107",
+          "label": "Keep reviewing / dismiss",
+          "to": "origin",
+          "guard": "",
+          "outcome": "Return to the originating stage S14–S17.",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S19",
+      "title": "Pipeline details · Requested changes",
+      "kind": "Feedback state",
+      "roles": [
+        "Researcher; others can switch role"
+      ],
+      "goal": "Read feedback and prepare a revised submission.",
+      "source": [
+        "ReviewView.tsx:ReviewView",
+        "model.ts:SAVE_DRAFT / REVISE"
+      ],
+      "layout": [
+        "Changes requested status · Author action required",
+        "Latest reviewer feedback / reason",
+        "Revision draft saved note, if present",
+        "Source / evidence / timeline · Revise & resubmit"
+      ],
+      "stories": [
+        {
+          "id": "US-S19",
+          "text": "As a researcher, I want actionable reviewer feedback and a saved revision so that I can correct issues without losing the reviewed record.",
+          "acceptance": [
+            "Saving revision fields preserves current reviewed fields/version/status until resubmission.",
+            "Resubmission allocates the next available patch version and restarts Ethical review.",
+            "History remains attached; rejection is recoverable by revision in this prototype."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T108",
+          "label": "Revise & resubmit",
+          "to": "S08",
+          "guard": "Researcher",
+          "outcome": "Prefill revision draft if saved, otherwise reviewed fields.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T109",
+          "label": "Continue as Researcher",
+          "to": "self",
+          "guard": "Other role",
+          "outcome": "Switch role, no state change.",
+          "kind": "role",
+          "priority": "secondary"
+        },
+        {
+          "id": "T110",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T111",
+          "label": "Source / evidence / timeline",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T208",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S20",
+      "title": "Pipeline details · Rejected submission",
+      "kind": "Feedback state",
+      "roles": [
+        "Researcher; others can switch role"
+      ],
+      "goal": "Read feedback and prepare a revised submission.",
+      "source": [
+        "ReviewView.tsx:ReviewView",
+        "model.ts:SAVE_DRAFT / REVISE"
+      ],
+      "layout": [
+        "Rejected status · Author action required",
+        "Latest reviewer feedback / reason",
+        "Revision draft saved note, if present",
+        "Source / evidence / timeline · Revise & resubmit"
+      ],
+      "stories": [
+        {
+          "id": "US-S20",
+          "text": "As a researcher, I want actionable reviewer feedback and a saved revision so that I can correct issues without losing the reviewed record.",
+          "acceptance": [
+            "Saving revision fields preserves current reviewed fields/version/status until resubmission.",
+            "Resubmission allocates the next available patch version and restarts Ethical review.",
+            "History remains attached; rejection is recoverable by revision in this prototype."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T112",
+          "label": "Revise & resubmit",
+          "to": "S08",
+          "guard": "Researcher",
+          "outcome": "Prefill revision draft if saved, otherwise reviewed fields.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T113",
+          "label": "Continue as Researcher",
+          "to": "self",
+          "guard": "Other role",
+          "outcome": "Switch role, no state change.",
+          "kind": "role",
+          "priority": "secondary"
+        },
+        {
+          "id": "T114",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T115",
+          "label": "Source / evidence / timeline",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T209",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S21",
+      "title": "Pipeline details · Ready to publish",
+      "kind": "Detail state",
+      "roles": [
+        "Researcher; reviewers can hand off"
+      ],
+      "goal": "Publish only after all four approvals.",
+      "source": [
+        "ReviewView.tsx:ReviewView",
+        "model.ts:PUBLISH"
+      ],
+      "layout": [
+        "Ready to publish · 4 of 4 reviews",
+        "Review completion receipt · source / version",
+        "Publish pipeline / Continue as Researcher",
+        "Retained evidence and approval timeline"
+      ],
+      "stories": [
+        {
+          "id": "US-S21",
+          "text": "As a researcher, I want publication separate from review completion so that I control when an approved method becomes runnable.",
+          "acceptance": [
+            "Security approval stops here.",
+            "Researcher publication changes status to Approved and records a separate event."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T116",
+          "label": "Publish pipeline",
+          "to": "S22",
+          "guard": "Researcher and all four stages approved",
+          "outcome": "Status Approved; method becomes selectable for runs.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T117",
+          "label": "Continue as Researcher",
+          "to": "self",
+          "guard": "Reviewer",
+          "outcome": "",
+          "kind": "role",
+          "priority": "secondary"
+        },
+        {
+          "id": "T118",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T119",
+          "label": "View stages / source / history",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T210",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S22",
+      "title": "Pipeline details · Approved",
+      "kind": "Detail state",
+      "roles": [
+        "All roles; run/version: Researcher"
+      ],
+      "goal": "Use a published method or start an independently reviewed version.",
+      "source": [
+        "ReviewView.tsx:ReviewView",
+        "Dialogs.tsx:PipelineForm",
+        "model.ts:nextAvailableVersion"
+      ],
+      "layout": [
+        "Approved · Ready for research",
+        "Method purpose · source / version · input / output",
+        "Configure run · Submit new version",
+        "Evidence and retained decision timeline"
+      ],
+      "stories": [
+        {
+          "id": "US-S22",
+          "text": "As a researcher, I want an approved version to remain usable while I submit an update so that review does not interrupt the published method.",
+          "acceptance": [
+            "Configure run preselects this approved pipeline.",
+            "New version uses a separate ID, basedOn link and next available minor version.",
+            "Existing approved source remains runnable while the new version completes all four reviews."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T120",
+          "label": "Configure run",
+          "to": "S23",
+          "guard": "Researcher",
+          "outcome": "Preselect this pipeline.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T121",
+          "label": "Submit new version",
+          "to": "S08",
+          "guard": "Researcher",
+          "outcome": "Prefill approved source in new-version mode; save/submit creates separate record.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T122",
+          "label": "Continue as Researcher",
+          "to": "self",
+          "guard": "Reviewer",
+          "outcome": "",
+          "kind": "role",
+          "priority": "secondary"
+        },
+        {
+          "id": "T123",
+          "label": "Back to approvals",
+          "to": "S12",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T124",
+          "label": "Source / evidence / timeline",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T211",
+          "label": "Open attached evidence",
+          "to": "S41",
+          "guard": "At least one attached file; expand evidence section if needed",
+          "outcome": "Open text preview over the same pipeline.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S23",
+      "title": "Configure run",
+      "kind": "Dialog",
+      "roles": [
+        "Researcher"
+      ],
+      "goal": "Pair an approved method with a format-compatible dataset.",
+      "source": [
+        "Dialogs.tsx:RunDialog",
+        "model.ts:supportsDataset"
+      ],
+      "layout": [
+        "Approved pipeline select · Source dataset select",
+        "Expected input / declared output",
+        "Dataset records / format · compatibility warning",
+        "Inspect dataset columns disclosure · demo notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S23",
+          "text": "As a researcher, I want a visible input contract and compatibility check so that I can avoid starting an obviously incompatible demo run.",
+          "acceptance": [
+            "Only Approved pipelines are offered.",
+            "Start requires both selections and a matching file format.",
+            "Matching format does not verify schema mapping; the disclosure states this limit.",
+            "Success opens Runs & results; the new run is Running."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T125",
+          "label": "Start demo run",
+          "to": "S24",
+          "guard": "Approved pipeline + dataset + supported format",
+          "outcome": "Create Running record; no execution service is called.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T126",
+          "label": "Select method / dataset / inspect columns",
+          "to": "self",
+          "guard": "",
+          "outcome": "Update compatibility; mismatch warns and disables Start.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T127",
+          "label": "Cancel / Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S24",
+      "title": "Runs & results · Runs",
+      "kind": "Page tab",
+      "roles": [
+        "All roles; new run: Researcher"
+      ],
+      "goal": "Monitor runs and locate recovery or output actions.",
+      "source": [
+        "DataAndRuns.tsx:RunsAndResults"
+      ],
+      "layout": [
+        "Runs & results · New run",
+        "Runs / Results tabs · Search",
+        "Run ID / method / dataset / progress / status",
+        "Details · Fix input for failed run · View / Review output"
+      ],
+      "stories": [
+        {
+          "id": "US-S24",
+          "text": "As a researcher, I want a run list with status-specific actions so that I can monitor or recover work.",
+          "acceptance": [
+            "Search filters run ID, method and dataset.",
+            "Fix input opens failed Run details; retry/restart actions appear inside Run details and require Researcher.",
+            "No matches is an in-place empty state; execution is explicitly simulated."
+          ]
+        }
+      ],
+      "notes": [
+        "The run list has no direct Retry/Restart button; use Details or Fix input to reach recovery actions."
+      ],
+      "actions": [
+        {
+          "id": "T128",
+          "label": "New run",
+          "to": "S23",
+          "guard": "Researcher",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T129",
+          "label": "Open running run",
+          "to": "S25",
+          "guard": "Running",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T130",
+          "label": "Open completed run",
+          "to": "S26",
+          "guard": "Completed",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T131",
+          "label": "Open failed run",
+          "to": "S27",
+          "guard": "Failed",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T132",
+          "label": "Open cancelled run",
+          "to": "S28",
+          "guard": "Cancelled",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T133",
+          "label": "Fix input",
+          "to": "S27",
+          "guard": "Failed run",
+          "outcome": "Open Run details to inspect error and choose retry.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T134",
+          "label": "View output / Review output",
+          "to": "S33",
+          "guard": "Completed with artifact; resolve actual artifact status to S33–S36.",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T135",
+          "label": "Results tab",
+          "to": "S32",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T136",
+          "label": "Search runs",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T137",
+          "label": "Timer progresses running records",
+          "to": "self",
+          "guard": "",
+          "outcome": "Every 650ms add 12 progress points; completion creates Pending review output.",
+          "kind": "system",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S25",
+      "title": "Run details · Running",
+      "kind": "Dialog state",
+      "roles": [
+        "All roles; cancel: Researcher"
+      ],
+      "goal": "Inspect live synthetic progress and execution stages.",
+      "source": [
+        "DataAndRuns.tsx:RunsAndResults",
+        "useWorkspace.ts:useWorkspace",
+        "model.ts:executionStepStatus / TICK"
+      ],
+      "layout": [
+        "Run ID / Running · method / dataset / version",
+        "Validate input → Prepare environment",
+        "Process records → Write output",
+        "Progress statuses · synthetic execution notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S25",
+          "text": "As a researcher, I want execution progress and cancellation so that I can understand and stop the demonstration.",
+          "acceptance": [
+            "Timer advances by 12 points every 650ms, reaching completion in about 6 seconds.",
+            "Step labels reflect actual status, with future steps pending.",
+            "Cancellation stops progress and produces no output."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T138",
+          "label": "Timer completes / Complete waiting runs",
+          "to": "S26",
+          "guard": "Still Running",
+          "outcome": "Create synthetic artifact Pending review.",
+          "kind": "system",
+          "priority": "secondary"
+        },
+        {
+          "id": "T139",
+          "label": "Cancel run",
+          "to": "S28",
+          "guard": "Researcher",
+          "outcome": "Immediately Cancelled; no confirmation dialog.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T140",
+          "label": "Export log",
+          "to": "self",
+          "guard": "",
+          "outcome": "Download this run log without navigation.",
+          "kind": "download",
+          "priority": "secondary"
+        },
+        {
+          "id": "T141",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T142",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "Close Run details before opening simulator.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S26",
+      "title": "Run details · Completed",
+      "kind": "Dialog state",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Inspect the generated output and retain run context.",
+      "source": [
+        "DataAndRuns.tsx:RunsAndResults"
+      ],
+      "layout": [
+        "Completed · method / dataset / version",
+        "Four execution steps complete",
+        "Inspect output · Export log",
+        "Synthetic execution notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S26",
+          "text": "As a participant, I want completed-run provenance and an output link so that I can review the right result.",
+          "acceptance": [
+            "Inspect output closes Run details and opens the artifact dialog.",
+            "Artifact status decides pending, accepted or rejected variant."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T143",
+          "label": "Inspect output",
+          "to": "S33",
+          "guard": "Artifact Pending review; S35/S36 for decided output.",
+          "outcome": "Current role selects S33 vs S34.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T144",
+          "label": "Export log",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "download",
+          "priority": "secondary"
+        },
+        {
+          "id": "T145",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T146",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S27",
+      "title": "Run details · Failed",
+      "kind": "Dialog state",
+      "roles": [
+        "All roles; retry: Researcher"
+      ],
+      "goal": "Understand the seeded failure and choose recovery.",
+      "source": [
+        "DataAndRuns.tsx:RunsAndResults",
+        "model.ts:seedWorkspace / RETRY"
+      ],
+      "layout": [
+        "Failed · method / dataset / version",
+        "Data error · synthetic example mapping notice",
+        "Execution steps disclosure · support entry",
+        "Retry demo with example mapping · Export log"
+      ],
+      "stories": [
+        {
+          "id": "US-S27",
+          "text": "As a researcher, I want an error, log and recovery action so that I can continue a failed demonstration.",
+          "acceptance": [
+            "The seeded failed run provides this path; normal timer completion does not generate new failures.",
+            "Retry resets the same run to Running with error cleared; source data is unchanged.",
+            "A failed record may create one local support request."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T147",
+          "label": "Retry demo with example mapping",
+          "to": "S25",
+          "guard": "Researcher",
+          "outcome": "Reset same run progress/error; synthetic retry succeeds.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T148",
+          "label": "Need help with this run?",
+          "to": "S29",
+          "guard": "No support request yet",
+          "outcome": "Expand inline support form.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T149",
+          "label": "Export log",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "download",
+          "priority": "secondary"
+        },
+        {
+          "id": "T150",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T151",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S28",
+      "title": "Run details · Cancelled",
+      "kind": "Dialog state",
+      "roles": [
+        "All roles; restart: Researcher"
+      ],
+      "goal": "Restart a stopped run if needed.",
+      "source": [
+        "DataAndRuns.tsx:RunsAndResults",
+        "model.ts:CANCEL_RUN / RETRY"
+      ],
+      "layout": [
+        "Cancelled · method / dataset / version",
+        "Execution steps disclosure",
+        "Restart demo run · Export log",
+        "Existing support receipt if present"
+      ],
+      "stories": [
+        {
+          "id": "US-S28",
+          "text": "As a researcher, I want to restart a cancelled demonstration so that stopping once does not block completion.",
+          "acceptance": [
+            "Restart resets the same run to Running.",
+            "Cancelled run creates no artifact until restarted and completed."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T152",
+          "label": "Restart demo run",
+          "to": "S25",
+          "guard": "Researcher",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T153",
+          "label": "Export log",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "download",
+          "priority": "secondary"
+        },
+        {
+          "id": "T154",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T155",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S29",
+      "title": "Run support · New request",
+      "kind": "Inline panel in Run details",
+      "roles": [
+        "Any active demo role"
+      ],
+      "goal": "Record the issue with its run.",
+      "source": [
+        "RunSupport.tsx:RunSupport",
+        "model.ts:REPORT_ISSUE"
+      ],
+      "layout": [
+        "Request support",
+        "Describe the issue *",
+        "Create support request · Cancel",
+        "Run details remain visible around panel"
+      ],
+      "stories": [
+        {
+          "id": "US-S29",
+          "text": "As a participant, I want to describe a run problem in context so that a technical reviewer can respond.",
+          "acceptance": [
+            "Blank description disables creation.",
+            "Submission stores a local support ID, message and Submitted status.",
+            "No external support team is contacted."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T156",
+          "label": "Create support request",
+          "to": "S30",
+          "guard": "Nonblank issue description",
+          "outcome": "Record support request and activity.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T157",
+          "label": "Cancel",
+          "to": "S27",
+          "guard": "",
+          "outcome": "Collapse inline form; retain failed run details.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ],
+      "parentScreens": [
+        "S27"
+      ]
+    },
+    {
+      "id": "S30",
+      "title": "Run support · Submitted / technical resolution",
+      "kind": "Inline panel",
+      "roles": [
+        "All roles; resolve: Technical reviewer"
+      ],
+      "goal": "Hand off and record a resolution.",
+      "source": [
+        "RunSupport.tsx:RunSupport",
+        "model.ts:RESOLVE_ISSUE"
+      ],
+      "layout": [
+        "Support ID · Submitted · issue message",
+        "Switch to technical support role (if other role)",
+        "Resolution notes * (Technical reviewer)",
+        "Mark resolved · local demo notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S30",
+          "text": "As a technical reviewer, I want the issue and a resolution field so that I can record help without losing run context.",
+          "acceptance": [
+            "Other roles see a demo handoff, not a resolution form.",
+            "Mark resolved requires nonblank notes and Technical reviewer.",
+            "Resolution does not retry the run or change its execution status."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T158",
+          "label": "Switch to technical support role",
+          "to": "self",
+          "guard": "Not Technical reviewer",
+          "outcome": "Set Technical reviewer and expose resolution fields.",
+          "kind": "role",
+          "priority": "primary"
+        },
+        {
+          "id": "T159",
+          "label": "Mark resolved",
+          "to": "S31",
+          "guard": "Technical reviewer + nonblank resolution",
+          "outcome": "Record resolution and activity.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T160",
+          "label": "Retry run via Run details",
+          "to": "S25",
+          "guard": "Switch back to Researcher, Failed/Cancelled",
+          "outcome": "Support stays attached while execution restarts.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T161",
+          "label": "Close Run details",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ],
+      "parentScreens": [
+        "S25",
+        "S26",
+        "S27",
+        "S28"
+      ]
+    },
+    {
+      "id": "S31",
+      "title": "Run support · Resolved",
+      "kind": "Inline receipt",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Read the recorded response and continue recovery independently.",
+      "source": [
+        "RunSupport.tsx:RunSupport"
+      ],
+      "layout": [
+        "Support ID · Resolved",
+        "Original issue · Resolution notes",
+        "Parent run status and actions remain visible"
+      ],
+      "stories": [
+        {
+          "id": "US-S31",
+          "text": "As a researcher, I want a durable support receipt so that I can understand the response before rerunning.",
+          "acceptance": [
+            "Resolved note is read-only.",
+            "Resolving support does not itself make a run Completed or validate output."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T162",
+          "label": "Retry / Restart parent run",
+          "to": "S25",
+          "guard": "Researcher and Failed/Cancelled",
+          "outcome": "Same parent run restarts; receipt remains.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T163",
+          "label": "Close Run details",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ],
+      "parentScreens": [
+        "S25",
+        "S26",
+        "S27",
+        "S28"
+      ]
+    },
+    {
+      "id": "S32",
+      "title": "Runs & results · Results",
+      "kind": "Page tab",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Find output validation status and inspect provenance.",
+      "source": [
+        "DataAndRuns.tsx:RunsAndResults"
+      ],
+      "layout": [
+        "Results tab · Search results",
+        "Output / dataset / records / validation / created",
+        "Review output / View output",
+        "No results empty state · demo notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S32",
+          "text": "As a participant, I want a result list that separates generated from accepted output so that I know what is usable.",
+          "acceptance": [
+            "Search matches output name and dataset.",
+            "Pending, Validated and Not acceptable remain distinct.",
+            "Opening an output resolves to the role/status-specific artifact view."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T164",
+          "label": "Open pending output",
+          "to": "S33",
+          "guard": "Non-Privacy reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T165",
+          "label": "Review pending output",
+          "to": "S34",
+          "guard": "Privacy reviewer",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T166",
+          "label": "View validated output",
+          "to": "S35",
+          "guard": "Validated",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T167",
+          "label": "View rejected output",
+          "to": "S36",
+          "guard": "Not acceptable",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T168",
+          "label": "Runs tab",
+          "to": "S24",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T169",
+          "label": "New run",
+          "to": "S23",
+          "guard": "Researcher",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T170",
+          "label": "Search results",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "in-place",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S33",
+      "title": "Artifact review · Awaiting Privacy reviewer",
+      "kind": "Dialog state",
+      "roles": [
+        "Researcher and non-Privacy reviewers"
+      ],
+      "goal": "Inspect synthetic output and hand off to the validator.",
+      "source": [
+        "Dialogs.tsx:ArtifactDialog",
+        "artifactPreview.ts:artifactPreview"
+      ],
+      "layout": [
+        "Artifact name · Pending review",
+        "Source dataset · run / version · declared output",
+        "Declared record count vs synthetic preview row count",
+        "Output preview · privacy decision notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S33",
+          "text": "As a researcher, I want to see output before validation while understanding why download is blocked.",
+          "acceptance": [
+            "Sample download is disabled while Pending review.",
+            "Continue as Privacy reviewer changes role within the same open artifact.",
+            "Preview is synthetic and contract-specific, not the imported source rows."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T171",
+          "label": "Continue as Privacy reviewer",
+          "to": "S34",
+          "guard": "",
+          "outcome": "Role switch only; no acceptance implied.",
+          "kind": "role",
+          "priority": "primary"
+        },
+        {
+          "id": "T172",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T173",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "Close artifact and preselect it in simulator; closing simulator does not reopen it.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S34",
+      "title": "Artifact review · Privacy decision",
+      "kind": "Dialog state",
+      "roles": [
+        "Privacy reviewer"
+      ],
+      "goal": "Make an explicit output acceptance or rejection decision.",
+      "source": [
+        "Dialogs.tsx:ArtifactDialog",
+        "model.ts:REVIEW_ARTIFACT"
+      ],
+      "layout": [
+        "Pending review · provenance and synthetic preview",
+        "Validation decision · contract criteria",
+        "Acceptable / Not acceptable (neither selected)",
+        "Validation comments · decision CTA"
+      ],
+      "stories": [
+        {
+          "id": "US-S34",
+          "text": "As a privacy reviewer, I want an unselected decision and output preview so that acceptance is deliberate and separate from pipeline approval.",
+          "acceptance": [
+            "Decision CTA stays disabled until a radio option is chosen.",
+            "Acceptable allows optional comments; Not acceptable requires a reason.",
+            "Decision updates status and records reviewer, time, comment and activity."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T174",
+          "label": "Accept output",
+          "to": "S35",
+          "guard": "Acceptable selected",
+          "outcome": "Status Validated; sample download enabled.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T175",
+          "label": "Reject output",
+          "to": "S36",
+          "guard": "Not acceptable selected + nonblank reason",
+          "outcome": "Status Not acceptable; download blocked.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T176",
+          "label": "Choose outcome / add comment",
+          "to": "self",
+          "guard": "",
+          "outcome": "Choosing rejection without comment shows an error on submit.",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T177",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T178",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "Artifact closes; not automatically reopened after simulation.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S35",
+      "title": "Artifact review · Accepted / download",
+      "kind": "Dialog state",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Read validation receipt and download the synthetic sample.",
+      "source": [
+        "Dialogs.tsx:ArtifactDialog",
+        "DataAndRuns.tsx:downloadArtifact"
+      ],
+      "layout": [
+        "Validated · output preview / provenance",
+        "Output accepted · reviewer · time · comment",
+        "Download sample CSV · Close"
+      ],
+      "stories": [
+        {
+          "id": "US-S35",
+          "text": "As a researcher, I want the decision receipt beside a clearly labelled sample download so that I can use the accepted demonstration result.",
+          "acceptance": [
+            "Download is enabled only for Validated.",
+            "CSV contains the small synthetic preview fixture, not the declared dataset-sized output.",
+            "Download does not close the dialog."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T179",
+          "label": "Download sample CSV",
+          "to": "self",
+          "guard": "Validated",
+          "outcome": "Download synthetic fixture CSV, show toast.",
+          "kind": "download",
+          "priority": "primary"
+        },
+        {
+          "id": "T180",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T181",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S36",
+      "title": "Artifact review · Rejected",
+      "kind": "Dialog state",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Read the rejection and plan a fresh output.",
+      "source": [
+        "Dialogs.tsx:ArtifactDialog"
+      ],
+      "layout": [
+        "Not acceptable · preview / provenance",
+        "Output rejected · reviewer · time · reason",
+        "Investigate and rerun guidance",
+        "Close · disabled Download sample CSV"
+      ],
+      "stories": [
+        {
+          "id": "US-S36",
+          "text": "As a researcher, I want a visible output rejection reason so that I can investigate and create a new output for review.",
+          "acceptance": [
+            "Download remains disabled.",
+            "There is no direct re-open or overturn decision action.",
+            "Recovery requires closing, starting a new run and reviewing its new artifact."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T182",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "primary"
+        },
+        {
+          "id": "T183",
+          "label": "Simulation controls",
+          "to": "S38",
+          "guard": "",
+          "outcome": "Cannot accept an already rejected artifact; only Pending review artifacts can be simulated.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S37",
+      "title": "Activity log",
+      "kind": "Page",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Trace local workflow events and reopen their current entities.",
+      "source": [
+        "ActivityView.tsx:ActivityView",
+        "MvpApp.tsx:openEvent"
+      ],
+      "layout": [
+        "Activity log · Export history",
+        "Search activity",
+        "Filter by event type, specific entity and date disclosure",
+        "Timestamp · actor · event · entity · version / note"
+      ],
+      "stories": [
+        {
+          "id": "US-S37",
+          "text": "As a participant, I want searchable, exportable event context so that I can inspect who did what and continue from a related record.",
+          "acceptance": [
+            "Search, event type, specific entity and inclusive date range combine.",
+            "Export includes the filtered events, filter values and generation timestamp in JSON.",
+            "Entity links open current record state, not a frozen historical screen.",
+            "No matches offers Clear filters."
+          ]
+        }
+      ],
+      "notes": [
+        "Local history is not an immutable production audit trail."
+      ],
+      "actions": [
+        {
+          "id": "T184",
+          "label": "Export history",
+          "to": "self",
+          "guard": "",
+          "outcome": "Download filtered workspace activity JSON.",
+          "kind": "download",
+          "priority": "primary"
+        },
+        {
+          "id": "T185",
+          "label": "Search / filters / Clear filters",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "in-place",
+          "priority": "secondary"
+        },
+        {
+          "id": "T186",
+          "label": "Open pipeline event",
+          "to": "S13",
+          "guard": "Resolve by current status/role to S11/S13–S17/S19–S22.",
+          "outcome": "",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T187",
+          "label": "Open dataset event",
+          "to": "S07",
+          "guard": "",
+          "outcome": "Navigate to Datasets and open dataset detail.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T188",
+          "label": "Open run event",
+          "to": "S25",
+          "guard": "Resolve by current status to S25–S28.",
+          "outcome": "Navigate to Runs and open detail.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T189",
+          "label": "Open artifact event",
+          "to": "S33",
+          "guard": "Resolve role/status to S33–S36.",
+          "outcome": "Artifact opens over Activity log.",
+          "kind": "navigate",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S38",
+      "title": "Simulation controls",
+      "kind": "Dialog",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Unblock outside-person and timer events in a solo walkthrough.",
+      "source": [
+        "SimulationControls.tsx:SimulationControls",
+        "MvpApp.tsx:openSimulation"
+      ],
+      "layout": [
+        "Demo submission select · current stage/status",
+        "Simulate current review / remaining reviews",
+        "Simulate author publication (separate)",
+        "Execution events disclosure · Complete waiting runs",
+        "Output validation disclosure · Demo output · Simulate output acceptance"
+      ],
+      "stories": [
+        {
+          "id": "US-S38",
+          "text": "As a demo participant, I want quiet simulation shortcuts so that waiting for people or systems does not prevent completion.",
+          "acceptance": [
+            "Review shortcuts create attributed, explicitly simulated review events.",
+            "Remaining reviews stop at Ready to publish; publication remains a distinct action.",
+            "Complete waiting runs only finishes currently Running runs.",
+            "Output acceptance only applies to Pending review and records a simulated Privacy decision.",
+            "Return to prototype closes simulator; artifact/run dialogs closed on entry do not reopen."
+          ]
+        }
+      ],
+      "notes": [
+        "Drafts require submission before review shortcuts; rejected/feedback submissions require revision.",
+        "These shortcuts are always available in the local prototype, not feature toggles or production bypasses."
+      ],
+      "actions": [
+        {
+          "id": "T190",
+          "label": "Simulate current stage approval",
+          "to": "self",
+          "guard": "Selected submission In review",
+          "outcome": "Advance one stage; update controls and history.",
+          "kind": "simulation",
+          "priority": "primary"
+        },
+        {
+          "id": "T191",
+          "label": "Simulate remaining reviews",
+          "to": "self",
+          "guard": "In review",
+          "outcome": "Complete remaining stages, stop at Ready to publish.",
+          "kind": "simulation",
+          "priority": "secondary"
+        },
+        {
+          "id": "T192",
+          "label": "Simulate author publication",
+          "to": "self",
+          "guard": "Ready to publish",
+          "outcome": "Separate publish event; status Approved.",
+          "kind": "simulation",
+          "priority": "secondary"
+        },
+        {
+          "id": "T193",
+          "label": "Complete waiting runs",
+          "to": "self",
+          "guard": "At least one Running run",
+          "outcome": "Dispatch enough timer ticks to create Pending review outputs.",
+          "kind": "simulation",
+          "priority": "secondary"
+        },
+        {
+          "id": "T194",
+          "label": "Simulate output acceptance",
+          "to": "self",
+          "guard": "Selected artifact Pending review",
+          "outcome": "Status Validated; does not re-open artifact.",
+          "kind": "simulation",
+          "priority": "secondary"
+        },
+        {
+          "id": "T195",
+          "label": "Choose submission/output · expand event groups",
+          "to": "self",
+          "guard": "",
+          "outcome": "",
+          "kind": "disclosure",
+          "priority": "secondary"
+        },
+        {
+          "id": "T196",
+          "label": "Return to prototype",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S39",
+      "title": "Explore the MVP · Guide",
+      "kind": "Dialog",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Understand the demo sequence or jump to a starting task.",
+      "source": [
+        "Dialogs.tsx:HelpDialog",
+        "MvpApp.tsx:MvpApp"
+      ],
+      "layout": [
+        "Bring in data → Submit pipeline",
+        "Complete four reviews",
+        "Publish → Run → Validate → Download",
+        "Local simulation / browser persistence notice"
+      ],
+      "stories": [
+        {
+          "id": "US-S39",
+          "text": "As a first-time participant, I want a concise walkthrough so that I can demonstrate the complete journey.",
+          "acceptance": [
+            "Create and Import shortcuts explicitly set Researcher role.",
+            "Guide closes before a chosen task opens."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T197",
+          "label": "Create a pipeline",
+          "to": "S08",
+          "guard": "",
+          "outcome": "Set Researcher; start new wizard.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T198",
+          "label": "Import data",
+          "to": "S05",
+          "guard": "",
+          "outcome": "Set Researcher; open import.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T199",
+          "label": "Close",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S40",
+      "title": "Reset demo workspace",
+      "kind": "Confirmation dialog",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Restore seeded records deliberately.",
+      "source": [
+        "MvpApp.tsx:MvpApp",
+        "model.ts:RESET"
+      ],
+      "layout": [
+        "Reset demo workspace?",
+        "Local changes / decisions replaced by seed",
+        "Reset demo · Cancel"
+      ],
+      "stories": [
+        {
+          "id": "US-S40",
+          "text": "As a demo participant, I want a confirmed reset so that I can repeat the walkthrough from its original records.",
+          "acceptance": [
+            "Reset clears locally created records and decisions, restores seed and returns to Pipelines as Researcher.",
+            "Cancel leaves the workspace unchanged."
+          ]
+        }
+      ],
+      "notes": [],
+      "actions": [
+        {
+          "id": "T200",
+          "label": "Reset demo",
+          "to": "S03",
+          "guard": "",
+          "outcome": "Restore seeded workspace; close all selected context; role Researcher.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T201",
+          "label": "Cancel / dismiss",
+          "to": "origin",
+          "guard": "",
+          "outcome": "",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S41",
+      "title": "Evidence attachment · Text preview",
+      "kind": "Nested dialog",
+      "roles": [
+        "All roles viewing pipeline details"
+      ],
+      "goal": "Read locally attached evidence without leaving the selected pipeline.",
+      "source": [
+        "Evidence.tsx:EvidenceAttachments",
+        "ReviewView.tsx:ReviewView"
+      ],
+      "layout": [
+        "Selected attachment filename",
+        "Scrollable text preview · no execution",
+        "No text preview available fallback",
+        "Close preview"
+      ],
+      "stories": [
+        {
+          "id": "US-S41",
+          "text": "As a reviewer, I want to open the author’s attached text evidence so that I can assess the submission in context.",
+          "acceptance": [
+            "Clicking an attached filename opens a nested text preview.",
+            "Missing content displays “No text preview available.”",
+            "Close preview returns to the same pipeline detail and keeps the current stage and role.",
+            "Text is displayed as text; files are not executed or uploaded."
+          ]
+        }
+      ],
+      "notes": [
+        "Attachment previews are reachable from submission evidence or attached evidence in pipeline details. The wizard attachment picker itself lists/removes files; it has no preview dialog."
+      ],
+      "actions": [
+        {
+          "id": "T212",
+          "label": "Close preview",
+          "to": "origin",
+          "guard": "",
+          "outcome": "Return to the originating pipeline detail/review state.",
+          "kind": "return",
+          "priority": "primary"
+        }
+      ]
+    }
+  ],
+  "journeys": [
+    {
+      "id": "F01",
+      "title": "Find your way",
+      "goal": "Navigate the workspace and choose a starting task.",
+      "screens": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S12",
+        "S24",
+        "S37",
+        "S39",
+        "S38",
+        "S40"
+      ],
+      "edges": [
+        [
+          "S01",
+          "S02",
+          "Overview"
+        ],
+        [
+          "S01",
+          "S03",
+          "Pipelines (initial)"
+        ],
+        [
+          "S01",
+          "S04",
+          "Datasets"
+        ],
+        [
+          "S01",
+          "S12",
+          "Approvals"
+        ],
+        [
+          "S01",
+          "S24",
+          "Runs & results"
+        ],
+        [
+          "S01",
+          "S37",
+          "Activity log"
+        ],
+        [
+          "S01",
+          "S39",
+          "Guide"
+        ],
+        [
+          "S01",
+          "S38",
+          "Simulation"
+        ],
+        [
+          "S01",
+          "S40",
+          "Reset"
+        ]
+      ],
+      "entry": "Initial Pipelines; shell is shared by every page.",
+      "done": "A destination is selected; role remains the same unless a guide shortcut sets Researcher."
+    },
+    {
+      "id": "F02",
+      "title": "Import & inspect a dataset",
+      "goal": "Register a source before configuring a run.",
+      "screens": [
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S23"
+      ],
+      "edges": [
+        [
+          "S04",
+          "S05",
+          "Import dataset"
+        ],
+        [
+          "S05",
+          "S06",
+          "Valid CSV or synthetic example"
+        ],
+        [
+          "S05",
+          "S05",
+          "Invalid CSV → explain / retry"
+        ],
+        [
+          "S06",
+          "S05",
+          "Remove selected source"
+        ],
+        [
+          "S06",
+          "S04",
+          "Import metadata"
+        ],
+        [
+          "S04",
+          "S07",
+          "Click dataset name"
+        ],
+        [
+          "S07",
+          "S23",
+          "Run pipeline"
+        ]
+      ],
+      "entry": "Researcher; Datasets or guide Import data.",
+      "done": "Dataset metadata exists locally; source is preselected for a run."
+    },
+    {
+      "id": "F03",
+      "title": "Create, save & submit",
+      "goal": "Work through the three-step wizard, including incomplete drafts.",
+      "screens": [
+        "S03",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S13"
+      ],
+      "edges": [
+        [
+          "S03",
+          "S08",
+          "New pipeline"
+        ],
+        [
+          "S08",
+          "S09",
+          "Continue · valid source"
+        ],
+        [
+          "S09",
+          "S10",
+          "Continue · valid contracts"
+        ],
+        [
+          "S10",
+          "S08",
+          "Edit source"
+        ],
+        [
+          "S10",
+          "S09",
+          "Edit requirements / Back"
+        ],
+        [
+          "S08",
+          "S11",
+          "Save named draft"
+        ],
+        [
+          "S09",
+          "S11",
+          "Save named draft"
+        ],
+        [
+          "S10",
+          "S11",
+          "Save draft"
+        ],
+        [
+          "S11",
+          "S08",
+          "Edit & submit draft"
+        ],
+        [
+          "S10",
+          "S13",
+          "Submit → Ethical"
+        ]
+      ],
+      "entry": "Researcher; new name or a saved draft.",
+      "done": "Author sees submission receipt; Ethical review is pending."
+    },
+    {
+      "id": "F04",
+      "title": "Four reviews & author publication",
+      "goal": "Complete each required organizational stage before publishing.",
+      "screens": [
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S21",
+        "S22"
+      ],
+      "edges": [
+        [
+          "S12",
+          "S13",
+          "Open submission"
+        ],
+        [
+          "S13",
+          "S14",
+          "Continue as Ethical reviewer"
+        ],
+        [
+          "S14",
+          "S15",
+          "Approve → switch to Technical"
+        ],
+        [
+          "S15",
+          "S16",
+          "Approve → switch to Privacy"
+        ],
+        [
+          "S16",
+          "S17",
+          "Approve → switch to Security"
+        ],
+        [
+          "S17",
+          "S21",
+          "Approve Security"
+        ],
+        [
+          "S21",
+          "S22",
+          "Switch to Researcher → Publish"
+        ]
+      ],
+      "entry": "Submitted pipeline; role selector or Continue as actions supply each handoff.",
+      "done": "Pipeline Approved after a separate Researcher publish event. Edge labels that combine approval + role switch represent two actions; after approval the UI first shows S13 waiting for the next reviewer."
+    },
+    {
+      "id": "F05",
+      "title": "Feedback, rejection & revision",
+      "goal": "Recover a paused review without losing its evidence or history.",
+      "screens": [
+        "S14",
+        "S18",
+        "S19",
+        "S20",
+        "S08",
+        "S09",
+        "S10",
+        "S13"
+      ],
+      "edges": [
+        [
+          "S14",
+          "S19",
+          "Request changes + reason"
+        ],
+        [
+          "S14",
+          "S18",
+          "Reject + reason"
+        ],
+        [
+          "S18",
+          "S14",
+          "Keep reviewing"
+        ],
+        [
+          "S18",
+          "S20",
+          "Confirm rejection"
+        ],
+        [
+          "S19",
+          "S08",
+          "Researcher · Revise"
+        ],
+        [
+          "S20",
+          "S08",
+          "Researcher · Revise"
+        ],
+        [
+          "S08",
+          "S19",
+          "Save revision draft · retains status"
+        ],
+        [
+          "S08",
+          "S09",
+          "Continue"
+        ],
+        [
+          "S09",
+          "S10",
+          "Continue"
+        ],
+        [
+          "S10",
+          "S13",
+          "Resubmit → patch + Ethical"
+        ]
+      ],
+      "entry": "Any assigned stage can request changes/reject; Ethical is shown as the example.",
+      "done": "Revised version starts all four reviews again. For a rejected record, Save revision draft returns to S20, not S19."
+    },
+    {
+      "id": "F06",
+      "title": "Submit a new version",
+      "goal": "Keep a published source available while reviewing an update.",
+      "screens": [
+        "S22",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S13"
+      ],
+      "edges": [
+        [
+          "S22",
+          "S08",
+          "Submit new version"
+        ],
+        [
+          "S08",
+          "S09",
+          "Prefilled source · Continue"
+        ],
+        [
+          "S09",
+          "S10",
+          "Review updated contracts"
+        ],
+        [
+          "S10",
+          "S11",
+          "Save separate new-version draft"
+        ],
+        [
+          "S11",
+          "S08",
+          "Edit draft"
+        ],
+        [
+          "S10",
+          "S13",
+          "Submit new minor version → Ethical"
+        ]
+      ],
+      "entry": "Researcher on an Approved pipeline.",
+      "done": "A separate basedOn record enters full review; the earlier approved version remains runnable."
+    },
+    {
+      "id": "F07",
+      "title": "Run & inspect output",
+      "goal": "Configure a compatible run and inspect the synthetic result.",
+      "screens": [
+        "S22",
+        "S07",
+        "S23",
+        "S24",
+        "S25",
+        "S26",
+        "S33",
+        "S34"
+      ],
+      "edges": [
+        [
+          "S22",
+          "S23",
+          "Configure run · method preselected"
+        ],
+        [
+          "S07",
+          "S23",
+          "Run pipeline · dataset preselected"
+        ],
+        [
+          "S23",
+          "S23",
+          "Missing / incompatible → fix selection"
+        ],
+        [
+          "S23",
+          "S24",
+          "Start demo run"
+        ],
+        [
+          "S24",
+          "S25",
+          "Open Running record"
+        ],
+        [
+          "S25",
+          "S26",
+          "Timer completes (~6 s)"
+        ],
+        [
+          "S26",
+          "S33",
+          "Inspect output · other role"
+        ],
+        [
+          "S33",
+          "S34",
+          "Continue as Privacy reviewer"
+        ]
+      ],
+      "entry": "Researcher; Approved method and registered format-compatible dataset.",
+      "done": "Completed run has a distinct Pending review artifact; no download yet."
+    },
+    {
+      "id": "F08",
+      "title": "Failure, cancellation & support",
+      "goal": "Recover a seeded failure or a cancelled run.",
+      "screens": [
+        "S24",
+        "S27",
+        "S29",
+        "S30",
+        "S31",
+        "S25",
+        "S28",
+        "S26"
+      ],
+      "edges": [
+        [
+          "S24",
+          "S27",
+          "Open seeded Failed run"
+        ],
+        [
+          "S27",
+          "S25",
+          "Researcher · Retry example mapping"
+        ],
+        [
+          "S27",
+          "S29",
+          "Need help?"
+        ],
+        [
+          "S29",
+          "S30",
+          "Create request + description"
+        ],
+        [
+          "S30",
+          "S31",
+          "Technical role + notes → Resolve"
+        ],
+        [
+          "S31",
+          "S25",
+          "Researcher → Retry"
+        ],
+        [
+          "S25",
+          "S28",
+          "Researcher · Cancel"
+        ],
+        [
+          "S28",
+          "S25",
+          "Researcher · Restart"
+        ],
+        [
+          "S25",
+          "S26",
+          "Timer completion"
+        ]
+      ],
+      "entry": "Seeded Failed run or an active Running run.",
+      "done": "Recovery creates a new pending output on completion; resolving support alone does not change run status."
+    },
+    {
+      "id": "F09",
+      "title": "Validate, reject or download output",
+      "goal": "Make a deliberate Privacy decision before sample download.",
+      "screens": [
+        "S32",
+        "S33",
+        "S34",
+        "S35",
+        "S36",
+        "S23"
+      ],
+      "edges": [
+        [
+          "S32",
+          "S33",
+          "Open pending output · other role"
+        ],
+        [
+          "S33",
+          "S34",
+          "Continue as Privacy reviewer"
+        ],
+        [
+          "S32",
+          "S34",
+          "Open pending output · Privacy role"
+        ],
+        [
+          "S34",
+          "S35",
+          "Acceptable → Accept output"
+        ],
+        [
+          "S34",
+          "S36",
+          "Not acceptable + reason → Reject"
+        ],
+        [
+          "S35",
+          "S35",
+          "Download synthetic sample CSV"
+        ],
+        [
+          "S36",
+          "S23",
+          "Close → Researcher → New run"
+        ]
+      ],
+      "entry": "Completed artifact Pending review; neither radio option is selected initially.",
+      "done": "Accepted output enables sample download; rejected output requires a fresh run for a new decision. The rejected-to-configure wire is a recovery sequence through the underlying Runs/Results page, not a CTA inside the rejected dialog."
+    },
+    {
+      "id": "F10",
+      "title": "Trace, export & reopen",
+      "goal": "Inspect local history and open the related current record.",
+      "screens": [
+        "S37",
+        "S07",
+        "S13",
+        "S25",
+        "S33"
+      ],
+      "edges": [
+        [
+          "S37",
+          "S37",
+          "Search / filter / clear / export JSON"
+        ],
+        [
+          "S37",
+          "S07",
+          "Dataset entity link"
+        ],
+        [
+          "S37",
+          "S13",
+          "Pipeline entity link · resolve status"
+        ],
+        [
+          "S37",
+          "S25",
+          "Run entity link · resolve status"
+        ],
+        [
+          "S37",
+          "S33",
+          "Artifact entity link · resolve role/status"
+        ]
+      ],
+      "entry": "Any role; Activity log.",
+      "done": "Filtered history downloads as JSON, or the current related entity opens. Link destinations vary with current record status; this is not a historical replay."
+    },
+    {
+      "id": "F11",
+      "title": "Solo demo shortcuts & reset",
+      "goal": "Continue across external-person and timer dependencies.",
+      "screens": [
+        "S01",
+        "S38",
+        "S13",
+        "S21",
+        "S22",
+        "S26",
+        "S35",
+        "S40",
+        "S03"
+      ],
+      "edges": [
+        [
+          "S01",
+          "S38",
+          "Quiet Simulation controls link"
+        ],
+        [
+          "S38",
+          "S13",
+          "Return · after one simulated review"
+        ],
+        [
+          "S38",
+          "S21",
+          "Return · after remaining reviews"
+        ],
+        [
+          "S38",
+          "S22",
+          "Return · after separate publication"
+        ],
+        [
+          "S38",
+          "S26",
+          "Return → reopen completed Run details"
+        ],
+        [
+          "S38",
+          "S35",
+          "Return → reopen accepted artifact"
+        ],
+        [
+          "S01",
+          "S40",
+          "Reset demo data"
+        ],
+        [
+          "S40",
+          "S03",
+          "Confirm reset → Researcher / seed"
+        ]
+      ],
+      "entry": "Any role; sidebar, Demo mode, workspace menu or run/artifact dialog shortcut.",
+      "done": "Simulator actions happen inside S38; wires show outcomes after returning/reopening the applicable record. The underlying page is preserved. Reset is a separate confirmed action."
+    },
+    {
+      "id": "F12",
+      "title": "Attach & inspect review evidence",
+      "goal": "Carry local text evidence from a submission into each reviewer’s assessment.",
+      "screens": [
+        "S08",
+        "S09",
+        "S10",
+        "S13",
+        "S14",
+        "S41"
+      ],
+      "edges": [
+        [
+          "S08",
+          "S09",
+          "Continue to Requirements"
+        ],
+        [
+          "S09",
+          "S09",
+          "Attach / remove text evidence"
+        ],
+        [
+          "S09",
+          "S10",
+          "Continue to summary"
+        ],
+        [
+          "S10",
+          "S13",
+          "Submit; evidence retained locally"
+        ],
+        [
+          "S13",
+          "S14",
+          "Continue as Ethical reviewer"
+        ],
+        [
+          "S14",
+          "S41",
+          "Expand evidence → click attachment"
+        ],
+        [
+          "S41",
+          "S14",
+          "Close preview"
+        ]
+      ],
+      "entry": "Researcher in the submission wizard; optional supported text files.",
+      "done": "A reviewer reads the exact locally attached text and returns to the same assessment. Any pipeline detail may open this preview; Ethical is shown as an example."
+    }
+  ],
+  "coverage": [
+    {
+      "area": "Navigation, mobile drawer, role selector, workspace menu, persistence warning",
+      "screens": [
+        "S01",
+        "S39",
+        "S40"
+      ]
+    },
+    {
+      "area": "Overview, counts, attention and approved pipeline shortcuts",
+      "screens": [
+        "S02"
+      ]
+    },
+    {
+      "area": "Catalog, search, status/category filters and empty states",
+      "screens": [
+        "S03"
+      ]
+    },
+    {
+      "area": "Dataset catalog, CSV validation/preview, import, metadata details",
+      "screens": [
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ]
+    },
+    {
+      "area": "New / draft / revision / new-version wizard and evidence attachments",
+      "screens": [
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S19",
+        "S20",
+        "S22",
+        "S41"
+      ]
+    },
+    {
+      "area": "Queue, waiting handoffs, four checklists, changes/reject confirmation, publication",
+      "screens": [
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S21",
+        "S22"
+      ]
+    },
+    {
+      "area": "Run configuration, compatibility, list/tabs, timer, detail, retry/cancel/restart/log export",
+      "screens": [
+        "S23",
+        "S24",
+        "S25",
+        "S26",
+        "S27",
+        "S28"
+      ]
+    },
+    {
+      "area": "Local support form, role handoff and resolution receipt",
+      "screens": [
+        "S29",
+        "S30",
+        "S31"
+      ]
+    },
+    {
+      "area": "Results list, output preview, Privacy decision, rejection and sample download",
+      "screens": [
+        "S32",
+        "S33",
+        "S34",
+        "S35",
+        "S36"
+      ]
+    },
+    {
+      "area": "History, filters, export and entity navigation",
+      "screens": [
+        "S37"
+      ]
+    },
+    {
+      "area": "Single-stage/all-stage simulation, publication, timers and output acceptance",
+      "screens": [
+        "S38"
+      ]
+    },
+    {
+      "area": "Evidence text preview, empty-content fallback and close-to-same-review behavior",
+      "screens": [
+        "S41",
+        "S09",
+        "S14"
+      ]
+    }
+  ],
+  "personaEvidence": "Personas, pains and gains are inferred from the implemented workflow; they are not validated interview findings."
+}
