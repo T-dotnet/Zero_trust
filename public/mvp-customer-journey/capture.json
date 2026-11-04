@@ -1,0 +1,217 @@
+{
+  "capturedAt": "2026-11-04T01:52:51.047Z",
+  "sourceCommit": "415cbd6929133932a9697a2bbeae831b66452df7",
+  "appSourceCommit": "6b83f7de5deb4d66ff99934e01a4e07f0ddcd131",
+  "target": "http://localhost:3000",
+  "method": "Local Playwright Chromium. Browser runtime tools are not exposed in this session; the established local Playwright fallback is used.",
+  "scenario": "Fresh local workspace; synthetic example dataset and new Customer journey outcome classifier v1.0.0. All four reviews are performed through normal UI controls; simulation shortcuts are not used.",
+  "screenshots": [
+    {
+      "file": "screenshots/00-pipeline-catalog.png",
+      "title": "Initial pipeline catalog",
+      "screen": "S03",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1159
+    },
+    {
+      "file": "screenshots/01-import-dataset.png",
+      "title": "Preview synthetic dataset before import",
+      "screen": "S06",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/02-submission-summary.png",
+      "title": "Review the method before submission",
+      "screen": "S10",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1159
+    },
+    {
+      "file": "screenshots/03-submission-receipt.png",
+      "title": "Submission receipt and next reviewer",
+      "screen": "S13",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/04-ethical-review.png",
+      "title": "Ethical reviewer confirms stage-specific criteria",
+      "screen": "S14",
+      "actor": "Ethical reviewer",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1143
+    },
+    {
+      "file": "screenshots/05-technical-review.png",
+      "title": "Technical reviewer confirms stage-specific criteria",
+      "screen": "S15",
+      "actor": "Technical reviewer",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1143
+    },
+    {
+      "file": "screenshots/06-privacy-review.png",
+      "title": "Privacy reviewer confirms stage-specific criteria",
+      "screen": "S16",
+      "actor": "Privacy reviewer",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1143
+    },
+    {
+      "file": "screenshots/07-security-review.png",
+      "title": "Security reviewer confirms stage-specific criteria",
+      "screen": "S17",
+      "actor": "Security reviewer",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1143
+    },
+    {
+      "file": "screenshots/08-ready-to-publish.png",
+      "title": "Four reviews complete; author publication still required",
+      "screen": "S21",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/09-published-pipeline.png",
+      "title": "Published version is ready for research",
+      "screen": "S22",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/10-configure-run.png",
+      "title": "Pair published method with the imported source",
+      "screen": "S23",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/11-completed-run.png",
+      "title": "Completed run links to output awaiting separate validation",
+      "screen": "S26",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/12-output-validation.png",
+      "title": "Privacy reviewer makes the separate output decision",
+      "screen": "S34",
+      "actor": "Privacy reviewer",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/13-accepted-output.png",
+      "title": "Researcher can download the accepted synthetic sample",
+      "screen": "S35",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "file": "screenshots/15-mobile-accepted-output.png",
+      "title": "Accepted output on mobile with full-width primary action",
+      "screen": "S35",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "width": 390,
+      "height": 844
+    },
+    {
+      "file": "screenshots/14-activity-history.png",
+      "title": "Trace decisions, publication, run and output review",
+      "screen": "S37",
+      "actor": "Researcher",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "width": 1440,
+      "height": 1519
+    }
+  ],
+  "checks": {
+    "pageErrors": [],
+    "consoleErrors": [],
+    "download": {
+      "filename": "customer-journey-outcome-classifier-output-sample.csv",
+      "rowsIncludingHeader": 5,
+      "syntheticSample": true
+    },
+    "mobileNoPageOverflow": true,
+    "historyExport": {
+      "filename": "zero-trust-activity.json",
+      "events": 10,
+      "filter": "Customer journey"
+    }
+  }
+}

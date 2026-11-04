@@ -8,6 +8,8 @@ Reviewed 2026-11-04 against MVP source [`6b83f7d`](https://github.com/T-dotnet/Z
 
 Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.
 
+High-level companion: [Customer journey with real screenshots](customer-journey.md).
+
 ## How to read the wires
 
 A box is a page, dialog, step or meaningful state of an existing screen. Click a box in the interactive document to see its wireframe, actions and story. Wireframe action buttons navigate the documentation, not the live app. Diagrams show curated journey paths; the action tables below are the complete transition inventory. A wire may combine approval and a labelled role handoff; the intermediate waiting state is explicitly documented. “Same screen” covers filtering, validation, download, disclosure and simulation events. “Originating page” depends on where a dialog was opened.

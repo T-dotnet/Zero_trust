@@ -1,0 +1,343 @@
+{
+  "title": "Zero Trust MVP · Customer journey",
+  "subtitle": "From a research method and synthetic source data to a reviewed, accepted sample output.",
+  "persona": {
+    "name": "Researcher / method author",
+    "goal": "Use a reviewed research method on an appropriate source, understand each handoff, and obtain an accepted result with traceable context.",
+    "trigger": "A researcher has a method to introduce and a dataset to process.",
+    "endState": "The method is published after four reviews; a completed demo run has a separately accepted output and its synthetic sample can be downloaded."
+  },
+  "evidenceNote": "This is a source-backed journey of the implemented MVP, illustrated with fresh UI screenshots. Customer questions, pains and gains are hypotheses inferred from the workflow, not findings from interviews or measured customer outcomes.",
+  "configuration": [
+    {
+      "label": "Feature selection",
+      "value": "All included MVP capabilities are always on. There is no MVP feature-toggle setup."
+    },
+    {
+      "label": "Roles selected",
+      "value": "Researcher → Ethical reviewer → Technical reviewer → Privacy reviewer → Security reviewer → Researcher → Privacy reviewer for output → Researcher."
+    },
+    {
+      "label": "Review policy",
+      "value": "Every submitted pipeline/version requires all four separate reviews, followed by a separate Researcher publication."
+    },
+    {
+      "label": "Scenario",
+      "value": "New Customer journey outcome classifier v1.0.0, synthetic CSV cohort, and one optional synthetic text-evidence attachment."
+    },
+    {
+      "label": "Simulation controls",
+      "value": "Available for solo demos; not used for the captured main journey. Reviewer decisions and publication were exercised through their normal UI controls."
+    },
+    {
+      "label": "Capture viewports",
+      "value": "1440 × 1100 desktop; 390 × 844 mobile accepted-output example."
+    }
+  ],
+  "boundaries": [
+    "The prototype uses local browser state and demo role switching. It does not provide real authentication, enforced access control or organizational approval routing.",
+    "Dataset imports save metadata and column names. File contents are not uploaded; temporary import preview rows are discarded when the import dialog closes. Attached text evidence is retained locally.",
+    "The repository URL is recorded without fetching or analyzing code. Review checklists are human demonstration confirmations, not scanner findings.",
+    "Execution is simulated and output rows are synthetic fixtures. Format matching does not verify schema mapping. The CSV download contains the small synthetic sample, not a full processed dataset.",
+    "Activity and support records are local demonstrations, not an immutable audit service or external help desk. CSV downloads themselves are not recorded as activity events."
+  ],
+  "stages": [
+    {
+      "id": "J01",
+      "title": "Prepare the source data",
+      "shortTitle": "Prepare source",
+      "owner": "Researcher",
+      "goal": "Start with an identifiable, inspectable source.",
+      "customerQuestion": "Can I explore this without uploading real research data?",
+      "customerAction": "Open Datasets, choose Import dataset, use the synthetic example, inspect columns and sample rows, then import.",
+      "teamAction": "The browser validates the CSV shape and registers metadata and column names locally.",
+      "handoff": "Researcher retains ownership; the registered source can be selected later in Configure run.",
+      "successSignal": "The synthetic cohort appears in Datasets after import.",
+      "painHypothesis": "Unclear source identity or format could lead to choosing the wrong data.",
+      "gainHypothesis": "Preview and explicit metadata make the chosen source easier to recognize.",
+      "screenshot": "01-import-dataset.png",
+      "supportingScreenshots": [
+        "00-pipeline-catalog.png"
+      ],
+      "screenRefs": [
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "storyRef": "US-S06",
+      "flowRef": "F02",
+      "caption": "The import dialog shows the synthetic CSV, preview rows, dataset name and Import dataset action. The starting pipeline catalog is included as supporting context.",
+      "limit": "CSV shape validation is demonstrated; no dataset upload or enforced permission check occurs."
+    },
+    {
+      "id": "J02",
+      "title": "Describe and submit the method",
+      "shortTitle": "Describe & submit",
+      "owner": "Researcher",
+      "goal": "Give reviewers enough purpose, source and contract context.",
+      "customerQuestion": "What do reviewers need, and who owns the next step?",
+      "customerAction": "Complete the three-step pipeline wizard, attach optional synthetic evidence, inspect the final summary and submit for review. Save a named draft when not ready.",
+      "teamAction": "Submission records the method/version and starts Ethical review. The author receives a status receipt and next owner.",
+      "handoff": "Researcher → Ethical reviewer. The author cannot approve the pending stage.",
+      "successSignal": "The receipt says Submitted for review and identifies the Ethical reviewer as next owner.",
+      "painHypothesis": "Scattered requirements and unclear handoffs could cause repeated follow-up.",
+      "gainHypothesis": "A structured submission and clear receipt provide a shared starting point.",
+      "screenshot": "02-submission-summary.png",
+      "supportingScreenshots": [
+        "03-submission-receipt.png"
+      ],
+      "screenRefs": [
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S13"
+      ],
+      "storyRef": "US-S10",
+      "flowRef": "F03",
+      "caption": "The final wizard summary exposes the research purpose, source, version, contracts and attached evidence before submission. The receipt shows the subsequent reviewer handoff.",
+      "limit": "The repository URL is descriptive metadata; the prototype does not fetch research code."
+    },
+    {
+      "id": "J03",
+      "title": "Complete organizational review",
+      "shortTitle": "Four separate reviews",
+      "owner": "Review team",
+      "goal": "Resolve all required organizational decisions.",
+      "customerQuestion": "Which review is pending, and what would unblock it?",
+      "customerAction": "Track the submission and next owner. If a reviewer requests changes or rejects it, read the reason, revise and resubmit.",
+      "teamAction": "Ethical, Technical, Privacy and Security reviewers each inspect their own evidence, confirm three criteria and make a distinct decision, in that order.",
+      "handoff": "Ethical → Technical → Privacy → Security → Researcher. In the demo, switch roles to act as each participant.",
+      "successSignal": "After Security approval the status is Ready to publish; the method is still not published.",
+      "painHypothesis": "An opaque queue or one generic approval could hide accountability and missing review stages.",
+      "gainHypothesis": "Separate stage criteria, named owners and decision history make each handoff explicit.",
+      "screenshot": "04-ethical-review.png",
+      "supportingScreenshots": [
+        "05-technical-review.png",
+        "06-privacy-review.png",
+        "07-security-review.png"
+      ],
+      "screenRefs": [
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S21"
+      ],
+      "storyRef": "US-S14",
+      "flowRef": "F04",
+      "caption": "Four distinct reviewer screens show their stage-specific checklists. The captured run checked each criterion and used the normal approval action; it did not simulate approval.",
+      "limit": "Reviewers confirm illustrative evidence. No automated ethics, runtime, privacy or security assessment is claimed.",
+      "relatedStoryRefs": [
+        "US-S14",
+        "US-S15",
+        "US-S16",
+        "US-S17"
+      ]
+    },
+    {
+      "id": "J04",
+      "title": "Publish the reviewed version",
+      "shortTitle": "Author publication",
+      "owner": "Researcher",
+      "goal": "Decide when the reviewed method becomes available to run.",
+      "customerQuestion": "Are all reviews complete, and is this the version I want to release?",
+      "customerAction": "Return to Researcher and choose Publish pipeline after all four reviews are complete.",
+      "teamAction": "Publication records its own event and changes the pipeline to Approved.",
+      "handoff": "Review team → Researcher; publication is a separate author decision.",
+      "successSignal": "Pipeline details say Ready for research and offer Configure run and Submit new version.",
+      "painHypothesis": "Review completion could be mistaken for release, making availability unclear.",
+      "gainHypothesis": "Explicit author publication separates assessment from making a version runnable.",
+      "screenshot": "09-published-pipeline.png",
+      "supportingScreenshots": [
+        "08-ready-to-publish.png"
+      ],
+      "screenRefs": [
+        "S21",
+        "S22"
+      ],
+      "storyRef": "US-S21",
+      "flowRef": "F04",
+      "caption": "The published pipeline is ready for research. The supporting screen shows the previous Ready to publish state with a distinct Publish pipeline action.",
+      "limit": "Publication changes local prototype state; it does not deploy research code."
+    },
+    {
+      "id": "J05",
+      "title": "Run the approved method",
+      "shortTitle": "Configure & run",
+      "owner": "Researcher + demo system",
+      "goal": "Pair the published version with a compatible source and follow execution.",
+      "customerQuestion": "Does the source fit this method, and has the run actually finished?",
+      "customerAction": "Configure a run with the approved pipeline and imported cohort. Inspect the declared input and dataset columns, start the demo, then open run details.",
+      "teamAction": "A local timer advances four labelled execution steps and produces a synthetic artifact marked Pending review.",
+      "handoff": "Researcher → simulated execution → Privacy reviewer for the output decision.",
+      "successSignal": "Run status is Completed and Inspect output opens an artifact awaiting privacy validation.",
+      "painHypothesis": "A format mismatch or an unexplained run state could make recovery difficult.",
+      "gainHypothesis": "Visible contracts and separate run/output statuses clarify what is complete and what remains.",
+      "screenshot": "11-completed-run.png",
+      "supportingScreenshots": [
+        "10-configure-run.png"
+      ],
+      "screenRefs": [
+        "S23",
+        "S24",
+        "S25",
+        "S26"
+      ],
+      "storyRef": "US-S23",
+      "flowRef": "F07",
+      "caption": "Completed run details retain method, dataset and version context and link to the output. The supporting Configure run screen shows the chosen pipeline, dataset and columns.",
+      "limit": "The prototype checks format only, not schema mapping. No research code runs on a backend."
+    },
+    {
+      "id": "J06",
+      "title": "Validate the generated output",
+      "shortTitle": "Output privacy decision",
+      "owner": "Privacy reviewer",
+      "goal": "Assess this particular output before it becomes downloadable.",
+      "customerQuestion": "Does approving the method also mean its output is acceptable?",
+      "customerAction": "Inspect the synthetic output preview and provenance. In the demo, use Continue as Privacy reviewer to perform the output handoff.",
+      "teamAction": "The Privacy reviewer deliberately chooses Acceptable or Not acceptable and submits the decision. Rejection requires an explanation.",
+      "handoff": "Researcher → Privacy reviewer → Researcher after acceptance. This is separate from the pipeline Privacy review.",
+      "successSignal": "Acceptance changes the artifact to Validated; a rejection keeps download blocked.",
+      "painHypothesis": "A generated output could be mistaken for an already validated one.",
+      "gainHypothesis": "A distinct output decision and receipt make download eligibility understandable.",
+      "screenshot": "12-output-validation.png",
+      "supportingScreenshots": [],
+      "screenRefs": [
+        "S32",
+        "S33",
+        "S34",
+        "S35",
+        "S36"
+      ],
+      "storyRef": "US-S34",
+      "flowRef": "F09",
+      "caption": "The output review shows synthetic rows, provenance, a deliberately selected Acceptable option, validation comments and Accept output. The capture also verified download was blocked before acceptance.",
+      "limit": "The output preview is a fixture for demonstration, not a PHI scan or a computation over imported source records."
+    },
+    {
+      "id": "J07",
+      "title": "Retrieve the accepted sample",
+      "shortTitle": "Download accepted sample",
+      "owner": "Researcher",
+      "goal": "Obtain the accepted demonstration result.",
+      "customerQuestion": "What am I downloading, and why is it available now?",
+      "customerAction": "Return to Researcher, reopen the accepted output, read the validation receipt and choose Download sample CSV.",
+      "teamAction": "The browser downloads the small synthetic preview fixture; the artifact remains Validated.",
+      "handoff": "The researcher obtains a local file and keeps the run/version/decision context in the prototype.",
+      "successSignal": "The Download sample CSV action is enabled and the browser emits a CSV download.",
+      "painHypothesis": "Unclear output labels could imply a full processed result when only a sample exists.",
+      "gainHypothesis": "The sample label and acceptance receipt set the right expectation for this prototype.",
+      "screenshot": "13-accepted-output.png",
+      "supportingScreenshots": [
+        "15-mobile-accepted-output.png"
+      ],
+      "screenRefs": [
+        "S35"
+      ],
+      "storyRef": "US-S35",
+      "flowRef": "F09",
+      "caption": "The researcher sees Output accepted and the enabled sample-download action. A supporting phone capture shows the same accepted artifact with full-width mobile CTAs. The capture run exercised and checked the CSV download.",
+      "limit": "The downloaded file is a synthetic sample, not the declared full-record-count output."
+    },
+    {
+      "id": "J08",
+      "title": "Trace decisions and improve the method",
+      "shortTitle": "Trace & iterate",
+      "owner": "Researcher / all participants",
+      "goal": "Understand the recorded decisions and choose the next iteration.",
+      "customerQuestion": "Which version and decisions led to this output, and how do I continue?",
+      "customerAction": "Open Activity log, search/filter the relevant work, export its history or reopen an entity. To improve the method, open the published pipeline and choose Submit new version.",
+      "teamAction": "History shows recorded actors, versions, review decisions, publication and execution/output events. A new version starts all four reviews again while the earlier approved version stays runnable.",
+      "handoff": "Any participant can inspect history. A new-version journey returns ownership to the researcher and then the review team.",
+      "successSignal": "Filtered history exports as JSON; related entities reopen their current state. Iteration is available from the approved version.",
+      "painHypothesis": "Context scattered across versions and handoffs could make it hard to explain how an output was reached.",
+      "gainHypothesis": "Linked lifecycle history and explicit versioning provide a readable record and a route to the next cycle.",
+      "screenshot": "14-activity-history.png",
+      "supportingScreenshots": [],
+      "screenRefs": [
+        "S37",
+        "S22",
+        "S08"
+      ],
+      "storyRef": "US-S37",
+      "flowRef": "F10",
+      "caption": "The activity history is filtered to the captured customer-journey scenario and shows its decision trail. The capture run verified a filtered JSON export. New-version creation is documented in the linked F06 flow, not separately executed in this screenshot run.",
+      "limit": "Local history is not immutable or shared audit infrastructure. Downloading the sample does not add an activity event.",
+      "additionalFlowRefs": [
+        {
+          "flowRef": "F06",
+          "screen": "S22",
+          "title": "Submit a new version"
+        }
+      ]
+    }
+  ],
+  "recovery": [
+    {
+      "title": "Not ready to submit",
+      "when": "Source, contracts or evidence still need work.",
+      "recovery": "Save a named draft, then reopen Edit & submit draft. Incomplete drafts are allowed; submission still requires all required fields.",
+      "flowRef": "F03",
+      "screenRefs": [
+        "S08",
+        "S11"
+      ]
+    },
+    {
+      "title": "Reviewer asks for changes or rejects",
+      "when": "A stage cannot approve the current submission.",
+      "recovery": "Researcher reads the required reason and revises. Saving a revision draft preserves the reviewed state; explicit resubmission creates the next patch version and restarts all four stages.",
+      "flowRef": "F05",
+      "screenRefs": [
+        "S19",
+        "S20",
+        "S08"
+      ]
+    },
+    {
+      "title": "Run fails or is cancelled",
+      "when": "Use the seeded Failed run, or cancel an active demo run.",
+      "recovery": "Open Run details, retry with the example mapping or restart. A local support request can be resolved by the Technical reviewer. Resolving support alone does not complete the run.",
+      "flowRef": "F08",
+      "screenRefs": [
+        "S27",
+        "S28",
+        "S29",
+        "S30",
+        "S31"
+      ]
+    },
+    {
+      "title": "Output is not acceptable",
+      "when": "Privacy reviewer rejects a specific artifact.",
+      "recovery": "Download stays blocked. Read the reason, investigate and start a new run to produce a fresh output for review; there is no direct decision-overturn action.",
+      "flowRef": "F09",
+      "screenRefs": [
+        "S36",
+        "S23"
+      ]
+    },
+    {
+      "title": "The solo walkthrough is waiting",
+      "when": "A review, publication, timer or output decision prevents continuing alone.",
+      "recovery": "Use the quiet Simulation controls link. Simulate one/all reviews, separately simulate author publication, finish running demos or accept a pending output. Draft/revision submission rules still apply.",
+      "flowRef": "F11",
+      "screenRefs": [
+        "S38"
+      ]
+    }
+  ],
+  "alternateEntry": {
+    "title": "Already have an approved method?",
+    "text": "Select or import a dataset, then start at Configure & run (J05) with an existing Approved pipeline. Its existing version does not repeat pipeline review for each run; the newly generated output still needs the separate Privacy decision. A new or revised method/version requires the full review path.",
+    "stage": "J05"
+  }
+}

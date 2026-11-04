@@ -49,6 +49,8 @@ Browser tests use local Chromium. Set `CHROMIUM_PATH` if it is installed somewhe
 
 ## Documentation
 
+- [High-level customer journey with screenshots](docs/mvp/customer-journey.md) · [Interactive journey](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-customer-journey.html) · [PDF](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-customer-journey.pdf)
+
 - [MVP screen-by-screen flows and attached user stories](docs/mvp/screen-flows.md)
 - [Clickable MVP wireframe atlas](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html) — connected screens, action destinations, conditions and recovery paths.
 

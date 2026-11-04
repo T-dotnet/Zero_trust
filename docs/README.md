@@ -8,6 +8,8 @@ The repository calls the application **Ready Validator v5b** in [metadata.json](
 
 ## Interactive MVP checkpoint
 
+The [high-level customer journey](mvp/customer-journey.md) adds real screenshots and customer goals to the detailed screen atlas. [Open the screenshot walkthrough](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-customer-journey.html) or [download its PDF](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-customer-journey.pdf).
+
 Use the current [MVP screen-by-screen reference](mvp/screen-flows.md) and [clickable wireframe atlas](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html) for the `mvp` checkpoint. Each screen has an attached user story, acceptance criteria and explicit click-to-next-screen connections.
 
 The `mvp` branch now opens the [MVP prototype](mvp/README.md) by default. Start it with `npm run dev` on port 3000; `/?view=full` preserves the original full prototype. The original persona/feature/flow documentation below describes the full prototype at its reviewed source commit.

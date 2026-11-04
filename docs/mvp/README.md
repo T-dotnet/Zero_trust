@@ -1,5 +1,9 @@
 # MVP prototype checkpoint
 
+[High-level customer journey](customer-journey.md) · [Screenshot walkthrough](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-customer-journey.html) · [PDF](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-customer-journey.pdf)
+
+The customer journey presents eight customer-level stages with 16 fresh MVP screenshots, customer goals, role handoffs, success signals, hypothesized pains/gains, recovery paths and linked user stories. It distinguishes the four method reviews, author publication, and the later output Privacy decision. The screenshot run used normal review controls; the existing simulation shortcuts remain available.
+
 [Screen-by-screen flow reference](screen-flows.md) · [Clickable wireframes and attached user stories](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html)
 
 The flow atlas covers 41 screen states, 12 journeys and a user story attached to every state. Its action tables include conditions, destination, side effects, role handoffs and recovery. It documents this MVP checkpoint; the full-workspace flows elsewhere in `docs` describe the archived app. All included MVP features are always on.
