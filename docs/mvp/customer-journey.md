@@ -14,7 +14,7 @@ From a research method and synthetic source data to a reviewed, accepted sample 
 
 This is a source-backed journey of the implemented MVP, illustrated with fresh UI screenshots. Customer questions, pains and gains are hypotheses inferred from the workflow, not findings from interviews or measured customer outcomes.
 
-Screenshots captured 2026-11-04 from source [`415cbd6`](https://github.com/T-dotnet/Zero_trust/tree/415cbd6929133932a9697a2bbeae831b66452df7); the last app change is [`6b83f7d`](https://github.com/T-dotnet/Zero_trust/tree/6b83f7de5deb4d66ff99934e01a4e07f0ddcd131/src/mvp). 16 unedited browser screenshots; the primary journey uses normal review/publication controls, not approval shortcuts.
+Screenshots captured 2026-11-04 from source [`3cf5ed3`](https://github.com/T-dotnet/Zero_trust/tree/3cf5ed34d836290aa15a1761712cfd708cd13a1e); the last app change is [`3cf5ed3`](https://github.com/T-dotnet/Zero_trust/tree/3cf5ed34d836290aa15a1761712cfd708cd13a1e/src/mvp). 16 unedited browser screenshots; the primary journey uses normal review/publication controls, not approval shortcuts.
 
 ## Journey at a glance
 

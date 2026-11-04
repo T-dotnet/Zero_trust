@@ -9,86 +9,86 @@
 <g id="edge1" class="edge">
 <title>S32&#45;&gt;S33</title>
 <g id="a_edge1"><a xlink:title="Open pending output · other role">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M268.15,-299.12C340.94,-318.6 431.64,-342.86 508.39,-363.4"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="507.85,-365.97 515.77,-365.37 509.21,-360.9 507.85,-365.97"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M268.15,-299.12C340.94,-318.6 431.64,-342.86 508.39,-363.4"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="507.85,-365.97 515.77,-365.37 509.21,-360.9 507.85,-365.97"/>
 </a>
 </g>
-<text text-anchor="middle" x="392" y="-354.9" font-family="Arial" font-size="12.00" fill="#42526b">Open pending output · other role</text>
+<text text-anchor="middle" x="392" y="-354.9" font-family="Arial" font-size="12.00" fill="#495268">Open pending output · other role</text>
 </g>
 <!-- S32&#45;&gt;S34 -->
 <g id="edge3" class="edge">
 <title>S32&#45;&gt;S34</title>
 <g id="a_edge3"><a xlink:title="Open pending output · Privacy role">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M268.26,-258.95C378.12,-255.2 516,-250.5 516,-250.5 516,-250.5 825,-250.5 825,-250.5 825,-250.5 944.87,-254.57 1050.4,-258.16"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1050.39,-260.79 1057.97,-258.42 1050.57,-255.54 1050.39,-260.79"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M268.26,-258.95C378.12,-255.2 516,-250.5 516,-250.5 516,-250.5 825,-250.5 825,-250.5 825,-250.5 944.87,-254.57 1050.4,-258.16"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1050.39,-260.79 1057.97,-258.42 1050.57,-255.54 1050.39,-260.79"/>
 </a>
 </g>
-<text text-anchor="middle" x="670.5" y="-253.9" font-family="Arial" font-size="12.00" fill="#42526b">Open pending output · Privacy role</text>
+<text text-anchor="middle" x="670.5" y="-253.9" font-family="Arial" font-size="12.00" fill="#495268">Open pending output · Privacy role</text>
 </g>
 <!-- S33&#45;&gt;S34 -->
 <g id="edge2" class="edge">
 <title>S33&#45;&gt;S34</title>
 <g id="a_edge2"><a xlink:title="Continue as Privacy reviewer">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M825.1,-365.52C895.68,-346.69 979.29,-324.38 1050.31,-305.44"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1051.01,-307.97 1057.58,-303.5 1049.66,-302.89 1051.01,-307.97"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M825.1,-365.52C895.68,-346.69 979.29,-324.38 1050.31,-305.44"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1051.01,-307.97 1057.58,-303.5 1049.66,-302.89 1051.01,-307.97"/>
 </a>
 </g>
-<text text-anchor="middle" x="941.5" y="-354.9" font-family="Arial" font-size="12.00" fill="#42526b">Continue as Privacy reviewer</text>
+<text text-anchor="middle" x="941.5" y="-354.9" font-family="Arial" font-size="12.00" fill="#495268">Continue as Privacy reviewer</text>
 </g>
 <!-- S34&#45;&gt;S35 -->
 <g id="edge4" class="edge">
 <title>S34&#45;&gt;S35</title>
 <g id="a_edge4"><a xlink:title="Acceptable → Accept output">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1359.14,-303.52C1437.84,-324.56 1533.64,-350.18 1610.46,-370.72"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1609.91,-373.29 1617.84,-372.69 1611.27,-368.22 1609.91,-373.29"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1359.14,-303.52C1437.84,-324.56 1533.64,-350.18 1610.46,-370.72"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1609.91,-373.29 1617.84,-372.69 1611.27,-368.22 1609.91,-373.29"/>
 </a>
 </g>
-<text text-anchor="middle" x="1488.5" y="-363.9" font-family="Arial" font-size="12.00" fill="#42526b">Acceptable → Accept output</text>
+<text text-anchor="middle" x="1488.5" y="-363.9" font-family="Arial" font-size="12.00" fill="#495268">Acceptable → Accept output</text>
 </g>
 <!-- S34&#45;&gt;S36 -->
 <g id="edge5" class="edge">
 <title>S34&#45;&gt;S36</title>
 <g id="a_edge5"><a xlink:title="Not acceptable + reason → Reject">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1359.14,-224.04C1437.84,-203.29 1533.64,-178.03 1610.46,-157.77"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1611.25,-160.27 1617.84,-155.82 1609.91,-155.2 1611.25,-160.27"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1359.14,-224.04C1437.84,-203.29 1533.64,-178.03 1610.46,-157.77"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1611.25,-160.27 1617.84,-155.82 1609.91,-155.2 1611.25,-160.27"/>
 </a>
 </g>
-<text text-anchor="middle" x="1488.5" y="-217.9" font-family="Arial" font-size="12.00" fill="#42526b">Not acceptable + reason → Reject</text>
+<text text-anchor="middle" x="1488.5" y="-217.9" font-family="Arial" font-size="12.00" fill="#495268">Not acceptable + reason → Reject</text>
 </g>
 <!-- S35&#45;&gt;S35 -->
 <g id="edge6" class="edge">
 <title>S35&#45;&gt;S35</title>
 <g id="a_edge6"><a xlink:title="Download synthetic sample CSV">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1702.76,-529.09C1707.71,-554.07 1723.12,-572 1749,-572 1772.25,-572 1787.05,-557.53 1793.41,-536.48"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1795.98,-537.01 1795.24,-529.09 1790.89,-535.74 1795.98,-537.01"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1702.76,-529.09C1707.71,-554.07 1723.12,-572 1749,-572 1772.25,-572 1787.05,-557.53 1793.41,-536.48"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1795.98,-537.01 1795.24,-529.09 1790.89,-535.74 1795.98,-537.01"/>
 </a>
 </g>
-<text text-anchor="middle" x="1749" y="-575.4" font-family="Arial" font-size="12.00" fill="#42526b">Download synthetic sample CSV</text>
+<text text-anchor="middle" x="1749" y="-575.4" font-family="Arial" font-size="12.00" fill="#495268">Download synthetic sample CSV</text>
 </g>
 <!-- S36&#45;&gt;S23 -->
 <g id="edge7" class="edge">
 <title>S36&#45;&gt;S23</title>
 <g id="a_edge7"><a xlink:title="Close → Researcher → New run">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1880.25,-121.5C1953.9,-121.5 2046.26,-121.5 2122.75,-121.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="2123.07,-124.13 2130.57,-121.5 2123.07,-118.88 2123.07,-124.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1880.25,-121.5C1953.9,-121.5 2046.26,-121.5 2122.75,-121.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="2123.07,-124.13 2130.57,-121.5 2123.07,-118.88 2123.07,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="2005.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#42526b">Close → Researcher → New run</text>
+<text text-anchor="middle" x="2005.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#495268">Close → Researcher → New run</text>
 </g>
 <!-- S32 -->
 <g id="node&#45;S32" class="node">
 <title>S32</title>
 <g id="a_node&#45;S32"><a xlink:href="#screen=S32&amp;journey=F09" xlink:title="Runs &amp; results · Results">
 <polygon fill="white" stroke="transparent" points="0,-142 0,-385 268,-385 268,-142 0,-142"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1,-346.5 1,-383.5 267,-383.5 267,-346.5 1,-346.5"/>
-<text text-anchor="start" x="13" y="-361.9" font-family="Arial" font-size="12.00" fill="#5147cb">S32 · Page tab</text>
-<text text-anchor="start" x="13" y="-322.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Runs &amp; results</text>
-<text text-anchor="start" x="40.5" y="-306.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Results</text>
-<text text-anchor="start" x="13" y="-268.9" font-family="Arial" font-size="12.00" fill="#52617a">Results tab · Search results</text>
-<text text-anchor="start" x="13" y="-231.9" font-family="Arial" font-size="12.00" fill="#52617a">Output / dataset / records / validation / created</text>
-<text text-anchor="start" x="13" y="-194.9" font-family="Arial" font-size="12.00" fill="#52617a">Review output / View output</text>
-<text text-anchor="start" x="13" y="-157.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="0,-142 0,-385 268,-385 268,-142 0,-142"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1,-346.5 1,-383.5 267,-383.5 267,-346.5 1,-346.5"/>
+<text text-anchor="start" x="13" y="-361.9" font-family="Arial" font-size="12.00" fill="#006b50">S32 · Page tab</text>
+<text text-anchor="start" x="13" y="-322.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Runs &amp; results</text>
+<text text-anchor="start" x="40.5" y="-306.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Results</text>
+<text text-anchor="start" x="13" y="-268.9" font-family="Arial" font-size="12.00" fill="#626a7e">Results tab · Search results</text>
+<text text-anchor="start" x="13" y="-231.9" font-family="Arial" font-size="12.00" fill="#626a7e">Output / dataset / records / validation / created</text>
+<text text-anchor="start" x="13" y="-194.9" font-family="Arial" font-size="12.00" fill="#626a7e">Review output / View output</text>
+<text text-anchor="start" x="13" y="-157.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="0,-142 0,-385 268,-385 268,-142 0,-142"/>
 </a>
 </g>
 </g>
@@ -97,15 +97,15 @@
 <title>S33</title>
 <g id="a_node&#45;S33"><a xlink:href="#screen=S33&amp;journey=F09" xlink:title="Artifact review · Awaiting Privacy reviewer">
 <polygon fill="white" stroke="transparent" points="516,-285 516,-528 825,-528 825,-285 516,-285"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="517.5,-489.5 517.5,-526.5 824.5,-526.5 824.5,-489.5 517.5,-489.5"/>
-<text text-anchor="start" x="529.5" y="-504.9" font-family="Arial" font-size="12.00" fill="#5147cb">S33 · Dialog state</text>
-<text text-anchor="start" x="529.5" y="-465.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Artifact review</text>
-<text text-anchor="start" x="529.5" y="-449.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Awaiting Privacy reviewer</text>
-<text text-anchor="start" x="529.5" y="-411.9" font-family="Arial" font-size="12.00" fill="#52617a">Artifact name · Pending review</text>
-<text text-anchor="start" x="529.5" y="-374.9" font-family="Arial" font-size="12.00" fill="#52617a">Source dataset · run / version · declared output</text>
-<text text-anchor="start" x="529.5" y="-337.9" font-family="Arial" font-size="12.00" fill="#52617a">Declared record count vs synthetic preview row count</text>
-<text text-anchor="start" x="529.5" y="-300.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="516,-285 516,-528 825,-528 825,-285 516,-285"/>
+<polygon fill="#eafbf5" stroke="transparent" points="517.5,-489.5 517.5,-526.5 824.5,-526.5 824.5,-489.5 517.5,-489.5"/>
+<text text-anchor="start" x="529.5" y="-504.9" font-family="Arial" font-size="12.00" fill="#006b50">S33 · Dialog state</text>
+<text text-anchor="start" x="529.5" y="-465.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Artifact review</text>
+<text text-anchor="start" x="529.5" y="-449.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Awaiting Privacy reviewer</text>
+<text text-anchor="start" x="529.5" y="-411.9" font-family="Arial" font-size="12.00" fill="#626a7e">Artifact name · Pending review</text>
+<text text-anchor="start" x="529.5" y="-374.9" font-family="Arial" font-size="12.00" fill="#626a7e">Source dataset · run / version · declared output</text>
+<text text-anchor="start" x="529.5" y="-337.9" font-family="Arial" font-size="12.00" fill="#626a7e">Declared record count vs synthetic preview row count</text>
+<text text-anchor="start" x="529.5" y="-300.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="516,-285 516,-528 825,-528 825,-285 516,-285"/>
 </a>
 </g>
 </g>
@@ -114,15 +114,15 @@
 <title>S34</title>
 <g id="a_node&#45;S34"><a xlink:href="#screen=S34&amp;journey=F09" xlink:title="Artifact review · Privacy decision">
 <polygon fill="white" stroke="transparent" points="1058,-142 1058,-385 1359,-385 1359,-142 1058,-142"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1059.5,-346.5 1059.5,-383.5 1358.5,-383.5 1358.5,-346.5 1059.5,-346.5"/>
-<text text-anchor="start" x="1071.5" y="-361.9" font-family="Arial" font-size="12.00" fill="#5147cb">S34 · Dialog state</text>
-<text text-anchor="start" x="1071.5" y="-322.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Artifact review</text>
-<text text-anchor="start" x="1071.5" y="-306.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Privacy decision</text>
-<text text-anchor="start" x="1071.5" y="-268.9" font-family="Arial" font-size="12.00" fill="#52617a">Pending review · provenance and synthetic preview</text>
-<text text-anchor="start" x="1071.5" y="-231.9" font-family="Arial" font-size="12.00" fill="#52617a">Validation decision · contract criteria</text>
-<text text-anchor="start" x="1071.5" y="-194.9" font-family="Arial" font-size="12.00" fill="#52617a">Acceptable / Not acceptable (neither selected)</text>
-<text text-anchor="start" x="1071.5" y="-157.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="1058,-142 1058,-385 1359,-385 1359,-142 1058,-142"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1059.5,-346.5 1059.5,-383.5 1358.5,-383.5 1358.5,-346.5 1059.5,-346.5"/>
+<text text-anchor="start" x="1071.5" y="-361.9" font-family="Arial" font-size="12.00" fill="#006b50">S34 · Dialog state</text>
+<text text-anchor="start" x="1071.5" y="-322.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Artifact review</text>
+<text text-anchor="start" x="1071.5" y="-306.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Privacy decision</text>
+<text text-anchor="start" x="1071.5" y="-268.9" font-family="Arial" font-size="12.00" fill="#626a7e">Pending review · provenance and synthetic preview</text>
+<text text-anchor="start" x="1071.5" y="-231.9" font-family="Arial" font-size="12.00" fill="#626a7e">Validation decision · contract criteria</text>
+<text text-anchor="start" x="1071.5" y="-194.9" font-family="Arial" font-size="12.00" fill="#626a7e">Acceptable / Not acceptable (neither selected)</text>
+<text text-anchor="start" x="1071.5" y="-157.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="1058,-142 1058,-385 1359,-385 1359,-142 1058,-142"/>
 </a>
 </g>
 </g>
@@ -131,15 +131,15 @@
 <title>S35</title>
 <g id="a_node&#45;S35"><a xlink:href="#screen=S35&amp;journey=F09" xlink:title="Artifact review · Accepted / download">
 <polygon fill="white" stroke="transparent" points="1618,-286 1618,-529 1880,-529 1880,-286 1618,-286"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1619,-490.5 1619,-527.5 1879,-527.5 1879,-490.5 1619,-490.5"/>
-<text text-anchor="start" x="1631" y="-505.9" font-family="Arial" font-size="12.00" fill="#5147cb">S35 · Dialog state</text>
-<text text-anchor="start" x="1631" y="-466.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Artifact review</text>
-<text text-anchor="start" x="1631" y="-450.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Accepted / download</text>
-<text text-anchor="start" x="1631" y="-412.9" font-family="Arial" font-size="12.00" fill="#52617a">Validated · output preview / provenance</text>
-<text text-anchor="start" x="1631" y="-375.9" font-family="Arial" font-size="12.00" fill="#52617a">Output accepted · reviewer · time · comment</text>
-<text text-anchor="start" x="1631" y="-338.9" font-family="Arial" font-size="12.00" fill="#52617a">Download sample CSV · Close</text>
-<text text-anchor="start" x="1631" y="-301.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="1618,-286 1618,-529 1880,-529 1880,-286 1618,-286"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1619,-490.5 1619,-527.5 1879,-527.5 1879,-490.5 1619,-490.5"/>
+<text text-anchor="start" x="1631" y="-505.9" font-family="Arial" font-size="12.00" fill="#006b50">S35 · Dialog state</text>
+<text text-anchor="start" x="1631" y="-466.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Artifact review</text>
+<text text-anchor="start" x="1631" y="-450.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Accepted / download</text>
+<text text-anchor="start" x="1631" y="-412.9" font-family="Arial" font-size="12.00" fill="#626a7e">Validated · output preview / provenance</text>
+<text text-anchor="start" x="1631" y="-375.9" font-family="Arial" font-size="12.00" fill="#626a7e">Output accepted · reviewer · time · comment</text>
+<text text-anchor="start" x="1631" y="-338.9" font-family="Arial" font-size="12.00" fill="#626a7e">Download sample CSV · Close</text>
+<text text-anchor="start" x="1631" y="-301.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="1618,-286 1618,-529 1880,-529 1880,-286 1618,-286"/>
 </a>
 </g>
 </g>
@@ -148,15 +148,15 @@
 <title>S36</title>
 <g id="a_node&#45;S36"><a xlink:href="#screen=S36&amp;journey=F09" xlink:title="Artifact review · Rejected">
 <polygon fill="white" stroke="transparent" points="1618,0 1618,-243 1880,-243 1880,0 1618,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1619,-204.5 1619,-241.5 1879,-241.5 1879,-204.5 1619,-204.5"/>
-<text text-anchor="start" x="1631" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S36 · Dialog state</text>
-<text text-anchor="start" x="1631" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Artifact review</text>
-<text text-anchor="start" x="1653" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Rejected</text>
-<text text-anchor="start" x="1631" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">Not acceptable · preview / provenance</text>
-<text text-anchor="start" x="1631" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Output rejected · reviewer · time · reason</text>
-<text text-anchor="start" x="1631" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Investigate and rerun guidance</text>
-<text text-anchor="start" x="1631" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="1618,0 1618,-243 1880,-243 1880,0 1618,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1619,-204.5 1619,-241.5 1879,-241.5 1879,-204.5 1619,-204.5"/>
+<text text-anchor="start" x="1631" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S36 · Dialog state</text>
+<text text-anchor="start" x="1631" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Artifact review</text>
+<text text-anchor="start" x="1653" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Rejected</text>
+<text text-anchor="start" x="1631" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">Not acceptable · preview / provenance</text>
+<text text-anchor="start" x="1631" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Output rejected · reviewer · time · reason</text>
+<text text-anchor="start" x="1631" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Investigate and rerun guidance</text>
+<text text-anchor="start" x="1631" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="1618,0 1618,-243 1880,-243 1880,0 1618,0"/>
 </a>
 </g>
 </g>
@@ -165,14 +165,14 @@
 <title>S23</title>
 <g id="a_node&#45;S23"><a xlink:href="#screen=S23&amp;journey=F09" xlink:title="Configure run">
 <polygon fill="white" stroke="transparent" points="2131,-7 2131,-236 2414,-236 2414,-7 2131,-7"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="2132.5,-197.5 2132.5,-234.5 2413.5,-234.5 2413.5,-197.5 2132.5,-197.5"/>
-<text text-anchor="start" x="2144.5" y="-212.9" font-family="Arial" font-size="12.00" fill="#5147cb">S23 · Dialog</text>
-<text text-anchor="start" x="2144.5" y="-173.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Configure run</text>
-<text text-anchor="start" x="2144.5" y="-133.9" font-family="Arial" font-size="12.00" fill="#52617a">Approved pipeline select · Source dataset select</text>
-<text text-anchor="start" x="2144.5" y="-96.9" font-family="Arial" font-size="12.00" fill="#52617a">Expected input / declared output</text>
-<text text-anchor="start" x="2144.5" y="-59.9" font-family="Arial" font-size="12.00" fill="#52617a">Dataset records / format · compatibility warning</text>
-<text text-anchor="start" x="2144.5" y="-22.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="2131,-7 2131,-236 2414,-236 2414,-7 2131,-7"/>
+<polygon fill="#eafbf5" stroke="transparent" points="2132.5,-197.5 2132.5,-234.5 2413.5,-234.5 2413.5,-197.5 2132.5,-197.5"/>
+<text text-anchor="start" x="2144.5" y="-212.9" font-family="Arial" font-size="12.00" fill="#006b50">S23 · Dialog</text>
+<text text-anchor="start" x="2144.5" y="-173.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Configure run</text>
+<text text-anchor="start" x="2144.5" y="-133.9" font-family="Arial" font-size="12.00" fill="#626a7e">Approved pipeline select · Source dataset select</text>
+<text text-anchor="start" x="2144.5" y="-96.9" font-family="Arial" font-size="12.00" fill="#626a7e">Expected input / declared output</text>
+<text text-anchor="start" x="2144.5" y="-59.9" font-family="Arial" font-size="12.00" fill="#626a7e">Dataset records / format · compatibility warning</text>
+<text text-anchor="start" x="2144.5" y="-22.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="2131,-7 2131,-236 2414,-236 2414,-7 2131,-7"/>
 </a>
 </g>
 </g>

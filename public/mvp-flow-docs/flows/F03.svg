@@ -9,115 +9,115 @@
 <g id="edge1" class="edge">
 <title>S03&#45;&gt;S08</title>
 <g id="a_edge1"><a xlink:title="New pipeline">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M262.17,-360.5C305.96,-360.5 355.33,-360.5 401.14,-360.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="401.26,-363.13 408.76,-360.5 401.26,-357.88 401.26,-363.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M262.17,-360.5C305.96,-360.5 355.33,-360.5 401.14,-360.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="401.26,-363.13 408.76,-360.5 401.26,-357.88 401.26,-363.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="335.5" y="-363.9" font-family="Arial" font-size="12.00" fill="#42526b">New pipeline</text>
+<text text-anchor="middle" x="335.5" y="-363.9" font-family="Arial" font-size="12.00" fill="#495268">New pipeline</text>
 </g>
 <!-- S08&#45;&gt;S09 -->
 <g id="edge2" class="edge">
 <title>S08&#45;&gt;S09</title>
 <g id="a_edge2"><a xlink:title="Continue · valid source">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M715.18,-316.3C776.81,-298.4 847.46,-277.88 907.52,-260.43"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="908.32,-262.93 914.79,-258.32 906.85,-257.89 908.32,-262.93"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M715.18,-316.3C776.81,-298.4 847.46,-277.88 907.52,-260.43"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="908.32,-262.93 914.79,-258.32 906.85,-257.89 908.32,-262.93"/>
 </a>
 </g>
-<text text-anchor="middle" x="815" y="-305.9" font-family="Arial" font-size="12.00" fill="#42526b">Continue · valid source</text>
+<text text-anchor="middle" x="815" y="-305.9" font-family="Arial" font-size="12.00" fill="#495268">Continue · valid source</text>
 </g>
 <!-- S08&#45;&gt;S11 -->
 <g id="edge6" class="edge">
 <title>S08&#45;&gt;S11</title>
 <g id="a_edge6"><a xlink:title="Save named draft">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M715.07,-365.57C984.55,-374.57 1543.08,-393.2 1815.41,-402.29"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1815.4,-404.92 1822.98,-402.54 1815.57,-399.67 1815.4,-404.92"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M715.07,-365.57C984.55,-374.57 1543.08,-393.2 1815.41,-402.29"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1815.4,-404.92 1822.98,-402.54 1815.57,-399.67 1815.4,-404.92"/>
 </a>
 </g>
-<text text-anchor="middle" x="1283" y="-389.9" font-family="Arial" font-size="12.00" fill="#42526b">Save named draft</text>
+<text text-anchor="middle" x="1283" y="-389.9" font-family="Arial" font-size="12.00" fill="#495268">Save named draft</text>
 </g>
 <!-- S09&#45;&gt;S10 -->
 <g id="edge3" class="edge">
 <title>S09&#45;&gt;S10</title>
 <g id="a_edge3"><a xlink:title="Continue · valid contracts">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1177.3,-154.58C1199.2,-143.49 1215,-135.5 1215,-135.5 1215,-135.5 1300.44,-131.58 1380.95,-127.9"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1381.35,-130.5 1388.72,-127.54 1381.11,-125.26 1381.35,-130.5"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1177.3,-154.58C1199.2,-143.49 1215,-135.5 1215,-135.5 1215,-135.5 1300.44,-131.58 1380.95,-127.9"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1381.35,-130.5 1388.72,-127.54 1381.11,-125.26 1381.35,-130.5"/>
 </a>
 </g>
-<text text-anchor="middle" x="1283" y="-138.9" font-family="Arial" font-size="12.00" fill="#42526b">Continue · valid contracts</text>
+<text text-anchor="middle" x="1283" y="-138.9" font-family="Arial" font-size="12.00" fill="#495268">Continue · valid contracts</text>
 </g>
 <!-- S09&#45;&gt;S11 -->
 <g id="edge7" class="edge">
 <title>S09&#45;&gt;S11</title>
 <g id="a_edge7"><a xlink:title="Save named draft">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1177.01,-246.8C1344.65,-280.71 1635.91,-339.62 1815.36,-375.92"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1814.89,-378.5 1822.76,-377.41 1815.93,-373.35 1814.89,-378.5"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1177.01,-246.8C1344.65,-280.71 1635.91,-339.62 1815.36,-375.92"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1814.89,-378.5 1822.76,-377.41 1815.93,-373.35 1814.89,-378.5"/>
 </a>
 </g>
-<text text-anchor="middle" x="1521.5" y="-344.9" font-family="Arial" font-size="12.00" fill="#42526b">Save named draft</text>
+<text text-anchor="middle" x="1521.5" y="-344.9" font-family="Arial" font-size="12.00" fill="#495268">Save named draft</text>
 </g>
 <!-- S10&#45;&gt;S08 -->
 <g id="edge4" class="edge">
 <title>S10&#45;&gt;S08</title>
 <g id="a_edge4"><a xlink:title="Edit source">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1388.68,-99.63C1291.81,-83.55 1177,-64.5 1177,-64.5 1177,-64.5 915,-64.5 915,-64.5 915,-64.5 809.26,-153.42 713.68,-233.79"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="711.75,-231.99 707.7,-238.82 715.13,-236.01 711.75,-231.99"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1388.68,-99.63C1291.81,-83.55 1177,-64.5 1177,-64.5 1177,-64.5 915,-64.5 915,-64.5 915,-64.5 809.26,-153.42 713.68,-233.79"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="711.75,-231.99 707.7,-238.82 715.13,-236.01 711.75,-231.99"/>
 </a>
 </g>
-<text text-anchor="middle" x="1046" y="-67.9" font-family="Arial" font-size="12.00" fill="#42526b">Edit source</text>
+<text text-anchor="middle" x="1046" y="-67.9" font-family="Arial" font-size="12.00" fill="#495268">Edit source</text>
 </g>
 <!-- S10&#45;&gt;S09 -->
 <g id="edge5" class="edge">
 <title>S10&#45;&gt;S09</title>
 <g id="a_edge5"><a xlink:title="Edit requirements / Back">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1388.72,-149.05C1325.08,-162.36 1248.76,-178.32 1184.4,-191.77"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1183.82,-189.21 1177.01,-193.32 1184.89,-194.35 1183.82,-189.21"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1388.72,-149.05C1325.08,-162.36 1248.76,-178.32 1184.4,-191.77"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1183.82,-189.21 1177.01,-193.32 1184.89,-194.35 1183.82,-189.21"/>
 </a>
 </g>
-<text text-anchor="middle" x="1283" y="-186.9" font-family="Arial" font-size="12.00" fill="#42526b">Edit requirements / Back</text>
+<text text-anchor="middle" x="1283" y="-186.9" font-family="Arial" font-size="12.00" fill="#495268">Edit requirements / Back</text>
 </g>
 <!-- S10&#45;&gt;S11 -->
 <g id="edge8" class="edge">
 <title>S10&#45;&gt;S11</title>
 <g id="a_edge8"><a xlink:title="Save draft">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1654.13,-203.24C1719.63,-243.91 1785,-284.5 1785,-284.5 1785,-284.5 1797.58,-292.8 1816.2,-305.08"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1815.03,-307.45 1822.74,-309.39 1817.93,-303.07 1815.03,-307.45"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1654.13,-203.24C1719.63,-243.91 1785,-284.5 1785,-284.5 1785,-284.5 1797.58,-292.8 1816.2,-305.08"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1815.03,-307.45 1822.74,-309.39 1817.93,-303.07 1815.03,-307.45"/>
 </a>
 </g>
-<text text-anchor="middle" x="1738.5" y="-287.9" font-family="Arial" font-size="12.00" fill="#42526b">Save draft</text>
+<text text-anchor="middle" x="1738.5" y="-287.9" font-family="Arial" font-size="12.00" fill="#495268">Save draft</text>
 </g>
 <!-- S10&#45;&gt;S13 -->
 <g id="edge10" class="edge">
 <title>S10&#45;&gt;S13</title>
 <g id="a_edge10"><a xlink:title="Submit → Ethical">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1654.18,-121.5C1705.96,-121.5 1765.73,-121.5 1819.34,-121.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1819.36,-124.13 1826.86,-121.5 1819.36,-118.88 1819.36,-124.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1654.18,-121.5C1705.96,-121.5 1765.73,-121.5 1819.34,-121.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1819.36,-124.13 1826.86,-121.5 1819.36,-118.88 1819.36,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="1738.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#42526b">Submit → Ethical</text>
+<text text-anchor="middle" x="1738.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#495268">Submit → Ethical</text>
 </g>
 <!-- S11&#45;&gt;S08 -->
 <g id="edge9" class="edge">
 <title>S11&#45;&gt;S08</title>
 <g id="a_edge9"><a xlink:title="Edit &amp; submit draft">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1822.74,-426.64C1800.58,-429.49 1785,-431.5 1785,-431.5 1785,-431.5 1692,-431.5 1692,-431.5 1692,-431.5 1389,-424.5 1389,-424.5 1389,-424.5 915,-408.5 915,-408.5 915,-408.5 753,-400.5 753,-400.5 753,-400.5 740.79,-397.93 722.57,-394.09"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="722.89,-391.48 715.01,-392.5 721.81,-396.62 722.89,-391.48"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1822.74,-426.64C1800.58,-429.49 1785,-431.5 1785,-431.5 1785,-431.5 1692,-431.5 1692,-431.5 1692,-431.5 1389,-424.5 1389,-424.5 1389,-424.5 915,-408.5 915,-408.5 915,-408.5 753,-400.5 753,-400.5 753,-400.5 740.79,-397.93 722.57,-394.09"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="722.89,-391.48 715.01,-392.5 721.81,-396.62 722.89,-391.48"/>
 </a>
 </g>
-<text text-anchor="middle" x="1283" y="-425.9" font-family="Arial" font-size="12.00" fill="#42526b">Edit &amp; submit draft</text>
+<text text-anchor="middle" x="1283" y="-425.9" font-family="Arial" font-size="12.00" fill="#495268">Edit &amp; submit draft</text>
 </g>
 <!-- S03 -->
 <g id="node&#45;S03" class="node">
 <title>S03</title>
 <g id="a_node&#45;S03"><a xlink:href="#screen=S03&amp;journey=F03" xlink:title="Pipeline catalog">
 <polygon fill="white" stroke="transparent" points="0,-246 0,-475 262,-475 262,-246 0,-246"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1,-436.5 1,-473.5 261,-473.5 261,-436.5 1,-436.5"/>
-<text text-anchor="start" x="13" y="-451.9" font-family="Arial" font-size="12.00" fill="#5147cb">S03 · Page</text>
-<text text-anchor="start" x="13" y="-412.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline catalog</text>
-<text text-anchor="start" x="13" y="-372.9" font-family="Arial" font-size="12.00" fill="#52617a">Pipelines · New pipeline / Review tasks</text>
-<text text-anchor="start" x="13" y="-335.9" font-family="Arial" font-size="12.00" fill="#52617a">All / Needs action / Approved / In review</text>
-<text text-anchor="start" x="13" y="-298.9" font-family="Arial" font-size="12.00" fill="#52617a">Search · Category filter</text>
-<text text-anchor="start" x="13" y="-261.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="0,-246 0,-475 262,-475 262,-246 0,-246"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1,-436.5 1,-473.5 261,-473.5 261,-436.5 1,-436.5"/>
+<text text-anchor="start" x="13" y="-451.9" font-family="Arial" font-size="12.00" fill="#006b50">S03 · Page</text>
+<text text-anchor="start" x="13" y="-412.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline catalog</text>
+<text text-anchor="start" x="13" y="-372.9" font-family="Arial" font-size="12.00" fill="#626a7e">Pipelines · New pipeline / Review tasks</text>
+<text text-anchor="start" x="13" y="-335.9" font-family="Arial" font-size="12.00" fill="#626a7e">All / Needs action / Approved / In review</text>
+<text text-anchor="start" x="13" y="-298.9" font-family="Arial" font-size="12.00" fill="#626a7e">Search · Category filter</text>
+<text text-anchor="start" x="13" y="-261.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="0,-246 0,-475 262,-475 262,-246 0,-246"/>
 </a>
 </g>
 </g>
@@ -126,15 +126,15 @@
 <title>S08</title>
 <g id="a_node&#45;S08"><a xlink:href="#screen=S08&amp;journey=F03" xlink:title="Pipeline wizard · 1. Source &amp; purpose">
 <polygon fill="white" stroke="transparent" points="409,-239 409,-482 715,-482 715,-239 409,-239"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="410,-443.5 410,-480.5 714,-480.5 714,-443.5 410,-443.5"/>
-<text text-anchor="start" x="422" y="-458.9" font-family="Arial" font-size="12.00" fill="#5147cb">S08 · Dialog step</text>
-<text text-anchor="start" x="422" y="-419.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline wizard</text>
-<text text-anchor="start" x="422" y="-403.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">1. Source &amp; purpose</text>
-<text text-anchor="start" x="422" y="-365.9" font-family="Arial" font-size="12.00" fill="#52617a">New pipeline / Edit draft / Revise / New version</text>
-<text text-anchor="start" x="422" y="-328.9" font-family="Arial" font-size="12.00" fill="#52617a">Step 1 of 3 · Source &amp; purpose</text>
-<text text-anchor="start" x="422" y="-291.9" font-family="Arial" font-size="12.00" fill="#52617a">Pipeline name * · Research purpose * · Repository…</text>
-<text text-anchor="start" x="422" y="-254.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="409,-239 409,-482 715,-482 715,-239 409,-239"/>
+<polygon fill="#eafbf5" stroke="transparent" points="410,-443.5 410,-480.5 714,-480.5 714,-443.5 410,-443.5"/>
+<text text-anchor="start" x="422" y="-458.9" font-family="Arial" font-size="12.00" fill="#006b50">S08 · Dialog step</text>
+<text text-anchor="start" x="422" y="-419.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline wizard</text>
+<text text-anchor="start" x="422" y="-403.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">1. Source &amp; purpose</text>
+<text text-anchor="start" x="422" y="-365.9" font-family="Arial" font-size="12.00" fill="#626a7e">New pipeline / Edit draft / Revise / New version</text>
+<text text-anchor="start" x="422" y="-328.9" font-family="Arial" font-size="12.00" fill="#626a7e">Step 1 of 3 · Source &amp; purpose</text>
+<text text-anchor="start" x="422" y="-291.9" font-family="Arial" font-size="12.00" fill="#626a7e">Pipeline name * · Research purpose * · Repository…</text>
+<text text-anchor="start" x="422" y="-254.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="409,-239 409,-482 715,-482 715,-239 409,-239"/>
 </a>
 </g>
 </g>
@@ -143,15 +143,15 @@
 <title>S09</title>
 <g id="a_node&#45;S09"><a xlink:href="#screen=S09&amp;journey=F03" xlink:title="Pipeline wizard · 2. Requirements &amp; evidence">
 <polygon fill="white" stroke="transparent" points="915,-99 915,-342 1177,-342 1177,-99 915,-99"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="916,-303.5 916,-340.5 1176,-340.5 1176,-303.5 916,-303.5"/>
-<text text-anchor="start" x="928" y="-318.9" font-family="Arial" font-size="12.00" fill="#5147cb">S09 · Dialog step</text>
-<text text-anchor="start" x="928" y="-279.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline wizard</text>
-<text text-anchor="start" x="928" y="-263.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">2. Requirements &amp; evidence</text>
-<text text-anchor="start" x="928" y="-225.9" font-family="Arial" font-size="12.00" fill="#52617a">Step 2 of 3 · Requirements</text>
-<text text-anchor="start" x="928" y="-188.9" font-family="Arial" font-size="12.00" fill="#52617a">Input specification * · Expected output *</text>
-<text text-anchor="start" x="928" y="-151.9" font-family="Arial" font-size="12.00" fill="#52617a">Optional evidence · Attach files · Remove</text>
-<text text-anchor="start" x="928" y="-114.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="915,-99 915,-342 1177,-342 1177,-99 915,-99"/>
+<polygon fill="#eafbf5" stroke="transparent" points="916,-303.5 916,-340.5 1176,-340.5 1176,-303.5 916,-303.5"/>
+<text text-anchor="start" x="928" y="-318.9" font-family="Arial" font-size="12.00" fill="#006b50">S09 · Dialog step</text>
+<text text-anchor="start" x="928" y="-279.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline wizard</text>
+<text text-anchor="start" x="928" y="-263.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">2. Requirements &amp; evidence</text>
+<text text-anchor="start" x="928" y="-225.9" font-family="Arial" font-size="12.00" fill="#626a7e">Step 2 of 3 · Requirements</text>
+<text text-anchor="start" x="928" y="-188.9" font-family="Arial" font-size="12.00" fill="#626a7e">Input specification * · Expected output *</text>
+<text text-anchor="start" x="928" y="-151.9" font-family="Arial" font-size="12.00" fill="#626a7e">Optional evidence · Attach files · Remove</text>
+<text text-anchor="start" x="928" y="-114.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="915,-99 915,-342 1177,-342 1177,-99 915,-99"/>
 </a>
 </g>
 </g>
@@ -160,15 +160,15 @@
 <title>S10</title>
 <g id="a_node&#45;S10"><a xlink:href="#screen=S10&amp;journey=F03" xlink:title="Pipeline wizard · 3. Review &amp; submit">
 <polygon fill="white" stroke="transparent" points="1389,0 1389,-243 1654,-243 1654,0 1389,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1390.5,-204.5 1390.5,-241.5 1653.5,-241.5 1653.5,-204.5 1390.5,-204.5"/>
-<text text-anchor="start" x="1402.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S10 · Dialog step</text>
-<text text-anchor="start" x="1402.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline wizard</text>
-<text text-anchor="start" x="1402.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">3. Review &amp; submit</text>
-<text text-anchor="start" x="1402.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">Step 3 of 3 · Review &amp; submit</text>
-<text text-anchor="start" x="1402.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Source / branch / category / version summary</text>
-<text text-anchor="start" x="1402.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Input / output / evidence summary · Edit links</text>
-<text text-anchor="start" x="1402.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="1389,0 1389,-243 1654,-243 1654,0 1389,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1390.5,-204.5 1390.5,-241.5 1653.5,-241.5 1653.5,-204.5 1390.5,-204.5"/>
+<text text-anchor="start" x="1402.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S10 · Dialog step</text>
+<text text-anchor="start" x="1402.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline wizard</text>
+<text text-anchor="start" x="1402.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">3. Review &amp; submit</text>
+<text text-anchor="start" x="1402.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">Step 3 of 3 · Review &amp; submit</text>
+<text text-anchor="start" x="1402.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Source / branch / category / version summary</text>
+<text text-anchor="start" x="1402.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Input / output / evidence summary · Edit links</text>
+<text text-anchor="start" x="1402.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="1389,0 1389,-243 1654,-243 1654,0 1389,0"/>
 </a>
 </g>
 </g>
@@ -177,15 +177,15 @@
 <title>S11</title>
 <g id="a_node&#45;S11"><a xlink:href="#screen=S11&amp;journey=F03" xlink:title="Pipeline details · Draft">
 <polygon fill="white" stroke="transparent" points="1823,-286 1823,-529 2122,-529 2122,-286 1823,-286"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1824.5,-490.5 1824.5,-527.5 2121.5,-527.5 2121.5,-490.5 1824.5,-490.5"/>
-<text text-anchor="start" x="1836.5" y="-505.9" font-family="Arial" font-size="12.00" fill="#5147cb">S11 · Detail state</text>
-<text text-anchor="start" x="1836.5" y="-466.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline details</text>
-<text text-anchor="start" x="1877" y="-450.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Draft</text>
-<text text-anchor="start" x="1836.5" y="-412.9" font-family="Arial" font-size="12.00" fill="#52617a">Draft status · Complete your draft</text>
-<text text-anchor="start" x="1836.5" y="-375.9" font-family="Arial" font-size="12.00" fill="#52617a">Submission details · Source and version disclosure</text>
-<text text-anchor="start" x="1836.5" y="-338.9" font-family="Arial" font-size="12.00" fill="#52617a">Evidence attachments · Activity timeline</text>
-<text text-anchor="start" x="1836.5" y="-301.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="1823,-286 1823,-529 2122,-529 2122,-286 1823,-286"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1824.5,-490.5 1824.5,-527.5 2121.5,-527.5 2121.5,-490.5 1824.5,-490.5"/>
+<text text-anchor="start" x="1836.5" y="-505.9" font-family="Arial" font-size="12.00" fill="#006b50">S11 · Detail state</text>
+<text text-anchor="start" x="1836.5" y="-466.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline details</text>
+<text text-anchor="start" x="1877" y="-450.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Draft</text>
+<text text-anchor="start" x="1836.5" y="-412.9" font-family="Arial" font-size="12.00" fill="#626a7e">Draft status · Complete your draft</text>
+<text text-anchor="start" x="1836.5" y="-375.9" font-family="Arial" font-size="12.00" fill="#626a7e">Submission details · Source and version disclosure</text>
+<text text-anchor="start" x="1836.5" y="-338.9" font-family="Arial" font-size="12.00" fill="#626a7e">Evidence attachments · Activity timeline</text>
+<text text-anchor="start" x="1836.5" y="-301.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="1823,-286 1823,-529 2122,-529 2122,-286 1823,-286"/>
 </a>
 </g>
 </g>
@@ -194,15 +194,15 @@
 <title>S13</title>
 <g id="a_node&#45;S13"><a xlink:href="#screen=S13&amp;journey=F03" xlink:title="Pipeline review · Waiting / submission receipt">
 <polygon fill="white" stroke="transparent" points="1827,0 1827,-243 2118,-243 2118,0 1827,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1828.5,-204.5 1828.5,-241.5 2117.5,-241.5 2117.5,-204.5 1828.5,-204.5"/>
-<text text-anchor="start" x="1840.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S13 · Detail state</text>
-<text text-anchor="start" x="1840.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline review</text>
-<text text-anchor="start" x="1840.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Waiting / submission receipt</text>
-<text text-anchor="start" x="1840.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">In review · current stage · completed count</text>
-<text text-anchor="start" x="1840.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Submitted for review / Awaiting assigned reviewer</text>
-<text text-anchor="start" x="1840.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Status · next owner · what happens next · version</text>
-<text text-anchor="start" x="1840.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="1827,0 1827,-243 2118,-243 2118,0 1827,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1828.5,-204.5 1828.5,-241.5 2117.5,-241.5 2117.5,-204.5 1828.5,-204.5"/>
+<text text-anchor="start" x="1840.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S13 · Detail state</text>
+<text text-anchor="start" x="1840.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline review</text>
+<text text-anchor="start" x="1840.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Waiting / submission receipt</text>
+<text text-anchor="start" x="1840.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">In review · current stage · completed count</text>
+<text text-anchor="start" x="1840.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Submitted for review / Awaiting assigned reviewer</text>
+<text text-anchor="start" x="1840.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Status · next owner · what happens next · version</text>
+<text text-anchor="start" x="1840.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="1827,0 1827,-243 2118,-243 2118,0 1827,0"/>
 </a>
 </g>
 </g>

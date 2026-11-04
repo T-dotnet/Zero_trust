@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Zero Trust MVP · Screen & flow atlas",
   "reviewedAt": "2026-11-04",
-  "sourceCommit": "6b83f7de5deb4d66ff99934e01a4e07f0ddcd131",
+  "sourceCommit": "3cf5ed34d836290aa15a1761712cfd708cd13a1e",
   "scope": "Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.",
   "boundaries": [
     "Role switching demonstrates five interfaces; it is not authentication or backend authorization.",
@@ -56,7 +56,9 @@
     "At widths up to 900px all labelled CTA controls use full container width and their own row; the primary action comes first in visual and keyboard order. Utility icons remain compact touch targets. Task dialogs become fullscreen on phones/short mobile viewports.",
     "Search, filters, disclosures, evidence preview, field errors and neutral decision selection are in-place states unless a transition below says otherwise. No extra screen is implied.",
     "Browser refresh restores valid stored records and decisions, then returns to initial Pipelines / Researcher; running demos resume their timer. With unavailable storage the current session works and a warning says changes may not survive refresh.",
-    "Close, Cancel, Escape or backdrop dismiss a dismissible dialog to its underlying page. Unsaved wizard edits are discarded unless Save draft was used. Import preview rows are discarded. Reset requires its own confirmation."
+    "Close, Cancel, Escape or backdrop dismiss a dismissible dialog to its underlying page. Unsaved wizard edits are discarded unless Save draft was used. Import preview rows are discarded. Reset requires its own confirmation.",
+    "The visual palette is always on: mint #2BE1B0 primary fills with dark labels, dark secondary and tertiary labels, deeper green selection and focus, slate #8C91A4 accents, amber #FEAB3D warnings and coral #F8506D destructive accents. No theme or feature toggle is required.",
+    "Review progress uses green completed markers, amber current-step markers, dashed slate pending markers and coral markers for stages needing changes. A legend, marker sizes, checkmarks and text labels make the states clear beyond color."
   ],
   "screens": [
     {
@@ -307,7 +309,8 @@
         "All / Needs action / Approved / In review",
         "Search · Category filter",
         "Pipeline name · version · status · next action",
-        "How pipeline approval works disclosure · Explore the review process"
+        "How pipeline approval works disclosure · Explore the review process",
+        "Progress legend · completed / current step / pending / needs changes"
       ],
       "stories": [
         {
@@ -1084,7 +1087,8 @@
         "Approvals · mandatory review notice",
         "My tasks / All submissions",
         "Search submissions",
-        "Submission · version · progress · next actor · action"
+        "Submission · version · progress · next actor · action",
+        "Progress legend · completed / current step / pending / needs changes"
       ],
       "stories": [
         {

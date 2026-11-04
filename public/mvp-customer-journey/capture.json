@@ -1,7 +1,7 @@
 {
-  "capturedAt": "2026-11-04T01:52:51.047Z",
-  "sourceCommit": "415cbd6929133932a9697a2bbeae831b66452df7",
-  "appSourceCommit": "6b83f7de5deb4d66ff99934e01a4e07f0ddcd131",
+  "capturedAt": "2026-11-04T05:17:07.188Z",
+  "sourceCommit": "3cf5ed34d836290aa15a1761712cfd708cd13a1e",
+  "appSourceCommit": "3cf5ed34d836290aa15a1761712cfd708cd13a1e",
   "target": "http://localhost:3000",
   "method": "Local Playwright Chromium. Browser runtime tools are not exposed in this session; the established local Playwright fallback is used.",
   "scenario": "Fresh local workspace; synthetic example dataset and new Customer journey outcome classifier v1.0.0. All four reviews are performed through normal UI controls; simulation shortcuts are not used.",
@@ -16,7 +16,7 @@
         "height": 1100
       },
       "width": 1440,
-      "height": 1159
+      "height": 1193
     },
     {
       "file": "screenshots/01-import-dataset.png",
@@ -40,7 +40,7 @@
         "height": 1100
       },
       "width": 1440,
-      "height": 1159
+      "height": 1193
     },
     {
       "file": "screenshots/03-submission-receipt.png",
@@ -199,6 +199,16 @@
       "height": 1519
     }
   ],
+  "visualPalette": {
+    "primary": "#2be1b0",
+    "slate": "#8c91a4",
+    "amber": "#feab3d",
+    "coral": "#f8506d",
+    "primaryText": "#18212f",
+    "secondaryActionText": "#18212f",
+    "tertiaryActionText": "#18212f",
+    "selection": "#006b50"
+  },
   "checks": {
     "pageErrors": [],
     "consoleErrors": [],

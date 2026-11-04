@@ -9,86 +9,86 @@
 <g id="edge1" class="edge">
 <title>S08&#45;&gt;S09</title>
 <g id="a_edge1"><a xlink:title="Continue to Requirements">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M306.12,-121.5C372.37,-121.5 449.45,-121.5 514.01,-121.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="514.32,-124.13 521.82,-121.5 514.32,-118.88 514.32,-124.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M306.12,-121.5C372.37,-121.5 449.45,-121.5 514.01,-121.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="514.32,-124.13 521.82,-121.5 514.32,-118.88 514.32,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="414" y="-124.9" font-family="Arial" font-size="12.00" fill="#42526b">Continue to Requirements</text>
+<text text-anchor="middle" x="414" y="-124.9" font-family="Arial" font-size="12.00" fill="#495268">Continue to Requirements</text>
 </g>
 <!-- S09&#45;&gt;S09 -->
 <g id="edge2" class="edge">
 <title>S09&#45;&gt;S09</title>
 <g id="a_edge2"><a xlink:title="Attach / remove text evidence">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M612.18,-243.09C616.55,-268.07 630.16,-286 653,-286 673.52,-286 686.59,-271.53 692.2,-250.48"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="694.78,-250.98 693.82,-243.09 689.65,-249.86 694.78,-250.98"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M612.18,-243.09C616.55,-268.07 630.16,-286 653,-286 673.52,-286 686.59,-271.53 692.2,-250.48"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="694.78,-250.98 693.82,-243.09 689.65,-249.86 694.78,-250.98"/>
 </a>
 </g>
-<text text-anchor="middle" x="653" y="-289.4" font-family="Arial" font-size="12.00" fill="#42526b">Attach / remove text evidence</text>
+<text text-anchor="middle" x="653" y="-289.4" font-family="Arial" font-size="12.00" fill="#495268">Attach / remove text evidence</text>
 </g>
 <!-- S09&#45;&gt;S10 -->
 <g id="edge3" class="edge">
 <title>S09&#45;&gt;S10</title>
 <g id="a_edge3"><a xlink:title="Continue to summary">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M784.29,-121.5C841.25,-121.5 908.15,-121.5 966.11,-121.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="966.36,-124.13 973.86,-121.5 966.36,-118.88 966.36,-124.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M784.29,-121.5C841.25,-121.5 908.15,-121.5 966.11,-121.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="966.36,-124.13 973.86,-121.5 966.36,-118.88 966.36,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="879" y="-124.9" font-family="Arial" font-size="12.00" fill="#42526b">Continue to summary</text>
+<text text-anchor="middle" x="879" y="-124.9" font-family="Arial" font-size="12.00" fill="#495268">Continue to summary</text>
 </g>
 <!-- S10&#45;&gt;S13 -->
 <g id="edge4" class="edge">
 <title>S10&#45;&gt;S13</title>
 <g id="a_edge4"><a xlink:title="Submit; evidence retained locally">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1239.28,-121.5C1313.54,-121.5 1406.64,-121.5 1484.04,-121.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="1484.45,-124.13 1491.95,-121.5 1484.45,-118.88 1484.45,-124.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1239.28,-121.5C1313.54,-121.5 1406.64,-121.5 1484.04,-121.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="1484.45,-124.13 1491.95,-121.5 1484.45,-118.88 1484.45,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="1365.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#42526b">Submit; evidence retained locally</text>
+<text text-anchor="middle" x="1365.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#495268">Submit; evidence retained locally</text>
 </g>
 <!-- S13&#45;&gt;S14 -->
 <g id="edge5" class="edge">
 <title>S13&#45;&gt;S14</title>
 <g id="a_edge5"><a xlink:title="Continue as Ethical reviewer">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M1783.13,-121.5C1851.91,-121.5 1934.39,-121.5 2005.2,-121.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="2005.39,-124.13 2012.89,-121.5 2005.39,-118.88 2005.39,-124.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1783.13,-121.5C1851.91,-121.5 1934.39,-121.5 2005.2,-121.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="2005.39,-124.13 2012.89,-121.5 2005.39,-118.88 2005.39,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="1898" y="-124.9" font-family="Arial" font-size="12.00" fill="#42526b">Continue as Ethical reviewer</text>
+<text text-anchor="middle" x="1898" y="-124.9" font-family="Arial" font-size="12.00" fill="#495268">Continue as Ethical reviewer</text>
 </g>
 <!-- S14&#45;&gt;S41 -->
 <g id="edge6" class="edge">
 <title>S14&#45;&gt;S41</title>
 <g id="a_edge6"><a xlink:title="Expand evidence → click attachment">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M2322.04,-121.5C2404.94,-121.5 2506.47,-121.5 2586.87,-121.5"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="2587.09,-124.13 2594.59,-121.5 2587.09,-118.88 2587.09,-124.13"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M2322.04,-121.5C2404.94,-121.5 2506.47,-121.5 2586.87,-121.5"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="2587.09,-124.13 2594.59,-121.5 2587.09,-118.88 2587.09,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="2458.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#42526b">Expand evidence → click attachment</text>
+<text text-anchor="middle" x="2458.5" y="-124.9" font-family="Arial" font-size="12.00" fill="#495268">Expand evidence → click attachment</text>
 </g>
 <!-- S41&#45;&gt;S14 -->
 <g id="edge7" class="edge">
 <title>S41&#45;&gt;S14</title>
 <g id="a_edge7"><a xlink:title="Close preview">
-<path fill="none" stroke="#8590a2" stroke-width="1.3" d="M2594.7,-103.66C2572.8,-100.66 2557,-98.5 2557,-98.5 2557,-98.5 2360,-98.5 2360,-98.5 2360,-98.5 2347.86,-99.96 2329.7,-102.14"/>
-<polygon fill="#8590a2" stroke="#8590a2" stroke-width="1.3" points="2329.3,-99.54 2322.17,-103.04 2329.93,-104.76 2329.3,-99.54"/>
+<path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M2594.7,-103.66C2572.8,-100.66 2557,-98.5 2557,-98.5 2557,-98.5 2360,-98.5 2360,-98.5 2360,-98.5 2347.86,-99.96 2329.7,-102.14"/>
+<polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="2329.3,-99.54 2322.17,-103.04 2329.93,-104.76 2329.3,-99.54"/>
 </a>
 </g>
-<text text-anchor="middle" x="2458.5" y="-101.9" font-family="Arial" font-size="12.00" fill="#42526b">Close preview</text>
+<text text-anchor="middle" x="2458.5" y="-101.9" font-family="Arial" font-size="12.00" fill="#495268">Close preview</text>
 </g>
 <!-- S08 -->
 <g id="node&#45;S08" class="node">
 <title>S08</title>
 <g id="a_node&#45;S08"><a xlink:href="#screen=S08&amp;journey=F12" xlink:title="Pipeline wizard · 1. Source &amp; purpose">
 <polygon fill="white" stroke="transparent" points="0,0 0,-243 306,-243 306,0 0,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1,-204.5 1,-241.5 305,-241.5 305,-204.5 1,-204.5"/>
-<text text-anchor="start" x="13" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S08 · Dialog step</text>
-<text text-anchor="start" x="13" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline wizard</text>
-<text text-anchor="start" x="13" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">1. Source &amp; purpose</text>
-<text text-anchor="start" x="13" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">New pipeline / Edit draft / Revise / New version</text>
-<text text-anchor="start" x="13" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Step 1 of 3 · Source &amp; purpose</text>
-<text text-anchor="start" x="13" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Pipeline name * · Research purpose * · Repository…</text>
-<text text-anchor="start" x="13" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="0,0 0,-243 306,-243 306,0 0,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1,-204.5 1,-241.5 305,-241.5 305,-204.5 1,-204.5"/>
+<text text-anchor="start" x="13" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S08 · Dialog step</text>
+<text text-anchor="start" x="13" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline wizard</text>
+<text text-anchor="start" x="13" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">1. Source &amp; purpose</text>
+<text text-anchor="start" x="13" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">New pipeline / Edit draft / Revise / New version</text>
+<text text-anchor="start" x="13" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Step 1 of 3 · Source &amp; purpose</text>
+<text text-anchor="start" x="13" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Pipeline name * · Research purpose * · Repository…</text>
+<text text-anchor="start" x="13" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="0,0 0,-243 306,-243 306,0 0,0"/>
 </a>
 </g>
 </g>
@@ -97,15 +97,15 @@
 <title>S09</title>
 <g id="a_node&#45;S09"><a xlink:href="#screen=S09&amp;journey=F12" xlink:title="Pipeline wizard · 2. Requirements &amp; evidence">
 <polygon fill="white" stroke="transparent" points="522,0 522,-243 784,-243 784,0 522,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="523,-204.5 523,-241.5 783,-241.5 783,-204.5 523,-204.5"/>
-<text text-anchor="start" x="535" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S09 · Dialog step</text>
-<text text-anchor="start" x="535" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline wizard</text>
-<text text-anchor="start" x="535" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">2. Requirements &amp; evidence</text>
-<text text-anchor="start" x="535" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">Step 2 of 3 · Requirements</text>
-<text text-anchor="start" x="535" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Input specification * · Expected output *</text>
-<text text-anchor="start" x="535" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Optional evidence · Attach files · Remove</text>
-<text text-anchor="start" x="535" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="522,0 522,-243 784,-243 784,0 522,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="523,-204.5 523,-241.5 783,-241.5 783,-204.5 523,-204.5"/>
+<text text-anchor="start" x="535" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S09 · Dialog step</text>
+<text text-anchor="start" x="535" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline wizard</text>
+<text text-anchor="start" x="535" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">2. Requirements &amp; evidence</text>
+<text text-anchor="start" x="535" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">Step 2 of 3 · Requirements</text>
+<text text-anchor="start" x="535" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Input specification * · Expected output *</text>
+<text text-anchor="start" x="535" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Optional evidence · Attach files · Remove</text>
+<text text-anchor="start" x="535" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="522,0 522,-243 784,-243 784,0 522,0"/>
 </a>
 </g>
 </g>
@@ -114,15 +114,15 @@
 <title>S10</title>
 <g id="a_node&#45;S10"><a xlink:href="#screen=S10&amp;journey=F12" xlink:title="Pipeline wizard · 3. Review &amp; submit">
 <polygon fill="white" stroke="transparent" points="974,0 974,-243 1239,-243 1239,0 974,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="975.5,-204.5 975.5,-241.5 1238.5,-241.5 1238.5,-204.5 975.5,-204.5"/>
-<text text-anchor="start" x="987.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S10 · Dialog step</text>
-<text text-anchor="start" x="987.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline wizard</text>
-<text text-anchor="start" x="987.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">3. Review &amp; submit</text>
-<text text-anchor="start" x="987.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">Step 3 of 3 · Review &amp; submit</text>
-<text text-anchor="start" x="987.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Source / branch / category / version summary</text>
-<text text-anchor="start" x="987.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Input / output / evidence summary · Edit links</text>
-<text text-anchor="start" x="987.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="974,0 974,-243 1239,-243 1239,0 974,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="975.5,-204.5 975.5,-241.5 1238.5,-241.5 1238.5,-204.5 975.5,-204.5"/>
+<text text-anchor="start" x="987.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S10 · Dialog step</text>
+<text text-anchor="start" x="987.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline wizard</text>
+<text text-anchor="start" x="987.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">3. Review &amp; submit</text>
+<text text-anchor="start" x="987.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">Step 3 of 3 · Review &amp; submit</text>
+<text text-anchor="start" x="987.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Source / branch / category / version summary</text>
+<text text-anchor="start" x="987.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Input / output / evidence summary · Edit links</text>
+<text text-anchor="start" x="987.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="974,0 974,-243 1239,-243 1239,0 974,0"/>
 </a>
 </g>
 </g>
@@ -131,15 +131,15 @@
 <title>S13</title>
 <g id="a_node&#45;S13"><a xlink:href="#screen=S13&amp;journey=F12" xlink:title="Pipeline review · Waiting / submission receipt">
 <polygon fill="white" stroke="transparent" points="1492,0 1492,-243 1783,-243 1783,0 1492,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="1493.5,-204.5 1493.5,-241.5 1782.5,-241.5 1782.5,-204.5 1493.5,-204.5"/>
-<text text-anchor="start" x="1505.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S13 · Detail state</text>
-<text text-anchor="start" x="1505.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline review</text>
-<text text-anchor="start" x="1505.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Waiting / submission receipt</text>
-<text text-anchor="start" x="1505.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">In review · current stage · completed count</text>
-<text text-anchor="start" x="1505.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Submitted for review / Awaiting assigned reviewer</text>
-<text text-anchor="start" x="1505.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Status · next owner · what happens next · version</text>
-<text text-anchor="start" x="1505.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="1492,0 1492,-243 1783,-243 1783,0 1492,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="1493.5,-204.5 1493.5,-241.5 1782.5,-241.5 1782.5,-204.5 1493.5,-204.5"/>
+<text text-anchor="start" x="1505.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S13 · Detail state</text>
+<text text-anchor="start" x="1505.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline review</text>
+<text text-anchor="start" x="1505.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Waiting / submission receipt</text>
+<text text-anchor="start" x="1505.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">In review · current stage · completed count</text>
+<text text-anchor="start" x="1505.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Submitted for review / Awaiting assigned reviewer</text>
+<text text-anchor="start" x="1505.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Status · next owner · what happens next · version</text>
+<text text-anchor="start" x="1505.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="1492,0 1492,-243 1783,-243 1783,0 1492,0"/>
 </a>
 </g>
 </g>
@@ -148,15 +148,15 @@
 <title>S14</title>
 <g id="a_node&#45;S14"><a xlink:href="#screen=S14&amp;journey=F12" xlink:title="Pipeline review · Ethical">
 <polygon fill="white" stroke="transparent" points="2013,0 2013,-243 2322,-243 2322,0 2013,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="2014.5,-204.5 2014.5,-241.5 2321.5,-241.5 2321.5,-204.5 2014.5,-204.5"/>
-<text text-anchor="start" x="2026.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S14 · Assigned reviewer state</text>
-<text text-anchor="start" x="2026.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Pipeline review</text>
-<text text-anchor="start" x="2058.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Ethical</text>
-<text text-anchor="start" x="2026.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">Current stage / purpose · assigned reviewer</text>
-<text text-anchor="start" x="2026.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Submission evidence disclosure · attachments</text>
-<text text-anchor="start" x="2026.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">Research purpose and intended use are documented</text>
-<text text-anchor="start" x="2026.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="2013,0 2013,-243 2322,-243 2322,0 2013,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="2014.5,-204.5 2014.5,-241.5 2321.5,-241.5 2321.5,-204.5 2014.5,-204.5"/>
+<text text-anchor="start" x="2026.5" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S14 · Assigned reviewer state</text>
+<text text-anchor="start" x="2026.5" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Pipeline review</text>
+<text text-anchor="start" x="2058.5" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Ethical</text>
+<text text-anchor="start" x="2026.5" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">Current stage / purpose · assigned reviewer</text>
+<text text-anchor="start" x="2026.5" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Submission evidence disclosure · attachments</text>
+<text text-anchor="start" x="2026.5" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">Research purpose and intended use are documented</text>
+<text text-anchor="start" x="2026.5" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="2013,0 2013,-243 2322,-243 2322,0 2013,0"/>
 </a>
 </g>
 </g>
@@ -165,15 +165,15 @@
 <title>S41</title>
 <g id="a_node&#45;S41"><a xlink:href="#screen=S41&amp;journey=F12" xlink:title="Evidence attachment · Text preview">
 <polygon fill="white" stroke="transparent" points="2595,0 2595,-243 2857,-243 2857,0 2595,0"/>
-<polygon fill="#f1f0ff" stroke="transparent" points="2596,-204.5 2596,-241.5 2856,-241.5 2856,-204.5 2596,-204.5"/>
-<text text-anchor="start" x="2608" y="-219.9" font-family="Arial" font-size="12.00" fill="#5147cb">S41 · Nested dialog</text>
-<text text-anchor="start" x="2608" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Evidence attachment</text>
-<text text-anchor="start" x="2640" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#152b42">Text preview</text>
-<text text-anchor="start" x="2608" y="-126.9" font-family="Arial" font-size="12.00" fill="#52617a">Selected attachment filename</text>
-<text text-anchor="start" x="2608" y="-89.9" font-family="Arial" font-size="12.00" fill="#52617a">Scrollable text preview · no execution</text>
-<text text-anchor="start" x="2608" y="-52.9" font-family="Arial" font-size="12.00" fill="#52617a">No text preview available fallback</text>
-<text text-anchor="start" x="2608" y="-15.9" font-family="Arial" font-size="12.00" fill="#5147cb">Open screen + user story →</text>
-<polygon fill="none" stroke="#cbd2df" points="2595,0 2595,-243 2857,-243 2857,0 2595,0"/>
+<polygon fill="#eafbf5" stroke="transparent" points="2596,-204.5 2596,-241.5 2856,-241.5 2856,-204.5 2596,-204.5"/>
+<text text-anchor="start" x="2608" y="-219.9" font-family="Arial" font-size="12.00" fill="#006b50">S41 · Nested dialog</text>
+<text text-anchor="start" x="2608" y="-180.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Evidence attachment</text>
+<text text-anchor="start" x="2640" y="-164.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Text preview</text>
+<text text-anchor="start" x="2608" y="-126.9" font-family="Arial" font-size="12.00" fill="#626a7e">Selected attachment filename</text>
+<text text-anchor="start" x="2608" y="-89.9" font-family="Arial" font-size="12.00" fill="#626a7e">Scrollable text preview · no execution</text>
+<text text-anchor="start" x="2608" y="-52.9" font-family="Arial" font-size="12.00" fill="#626a7e">No text preview available fallback</text>
+<text text-anchor="start" x="2608" y="-15.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
+<polygon fill="none" stroke="#e0e4ec" points="2595,0 2595,-243 2857,-243 2857,0 2595,0"/>
 </a>
 </g>
 </g>
