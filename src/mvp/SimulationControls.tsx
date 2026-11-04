@@ -1,7 +1,6 @@
 import { useState, type Dispatch } from "react";
 import {
   Button,
-  DialogActions,
   DialogContent,
   DialogTitle,
   MenuItem,
@@ -9,6 +8,7 @@ import {
 } from "@mui/material";
 import { STAGES, type Action, type Workspace } from "./model";
 import { WorkspaceDialog } from "./WorkspaceDialog";
+import { DialogActionBar } from "./DialogActionBar";
 
 export function SimulationControls({
   state,
@@ -197,11 +197,13 @@ export function SimulationControls({
           </p>
         )}
       </DialogContent>
-      <DialogActions>
-        <Button variant="contained" onClick={onClose}>
-          Return to prototype
-        </Button>
-      </DialogActions>
+      <DialogActionBar
+        primary={
+          <Button variant="contained" onClick={onClose}>
+            Return to prototype
+          </Button>
+        }
+      />
     </WorkspaceDialog>
   );
 }

@@ -1,14 +1,9 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import {
-  Alert,
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import { Alert, Button, DialogContent, DialogTitle } from "@mui/material";
 import { FileText, Paperclip, X } from "lucide-react";
 import { uid, type Attachment } from "./model";
 import { WorkspaceDialog } from "./WorkspaceDialog";
+import { DialogActionBar } from "./DialogActionBar";
 
 export function AttachmentPicker({
   attachments,
@@ -74,10 +69,11 @@ export function AttachmentPicker({
   };
   return (
     <div className="evidence-picker">
-      <div className="section-title">
+      <div className="section-title attachment-controls">
         <h3>Evidence attachments</h3>
         <Button
           component="label"
+          variant="outlined"
           ref={picker}
           disabled={busy}
           size="small"
@@ -165,9 +161,9 @@ export function EvidenceAttachments({
             {selected?.content || "No text preview available."}
           </pre>
         </DialogContent>
-        <DialogActions>
+        <DialogActionBar>
           <Button onClick={() => setSelected(null)}>Close preview</Button>
-        </DialogActions>
+        </DialogActionBar>
       </WorkspaceDialog>
     </>
   );

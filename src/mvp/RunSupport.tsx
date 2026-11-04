@@ -77,9 +77,8 @@ export function RunSupport({
             fullWidth
           />
           <div className="support-actions">
-            <Button onClick={() => setOpen(false)}>Cancel</Button>
             <Button
-              variant="outlined"
+              variant="contained"
               disabled={!message.trim()}
               onClick={() => {
                 onReport(message);
@@ -88,6 +87,7 @@ export function RunSupport({
             >
               Create support request
             </Button>
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
           </div>
           <p className="micro-copy">
             Saved locally for the demo. Nothing is sent externally.

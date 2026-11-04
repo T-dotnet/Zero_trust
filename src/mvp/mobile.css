@@ -559,10 +559,6 @@
     padding: 14px 20px !important;
     flex-wrap: wrap;
   }
-  .MuiDialogActions-root > .MuiButton-contained {
-    flex: 1 1 100%;
-    order: 2;
-  }
   .MuiDialogActions-root .dialog-action-spacer {
     display: none;
   }
@@ -573,6 +569,28 @@
   }
   .MuiDialogActions-root > :not(style) ~ :not(style) {
     margin-left: 0;
+  }
+  .dialog-action-bar.MuiDialogActions-root {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+  .dialog-action-bar.MuiDialogActions-root > .MuiButton-contained,
+  .dialog-action-bar.MuiDialogActions-root > .cta-wide,
+  .dialog-action-bar.MuiDialogActions-root > :only-child,
+  .dialog-action-bar.MuiDialogActions-root:has(
+      > .MuiButton-contained:first-child
+    )
+    > .MuiButton-root:nth-child(2):last-child {
+    grid-column: 1 / -1;
+  }
+  .dialog-action-bar .MuiButton-root {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .dialog-action-bar > .simulation-link {
+    text-align: center;
+    justify-self: stretch;
   }
   .dialog-close {
     display: grid;
@@ -734,7 +752,6 @@
     .MuiDialogActions-root
     > .MuiButton-contained {
     grid-column: 1 / -1;
-    order: 0;
   }
   .workspace-dialog .MuiDialog-paperFullScreen .form-stepper {
     display: none;
@@ -834,6 +851,44 @@
     flex-wrap: wrap;
     gap: 8px 16px;
   }
+  .form-section-heading,
+  .attachment-controls {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+  }
+  .form-section-heading h3,
+  .attachment-controls h3 {
+    flex: 1 0 auto;
+    max-width: 100%;
+    margin-bottom: 0;
+  }
+  .attachment-controls .MuiButton-root {
+    flex-shrink: 0;
+  }
+  .attachment-row > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .attachment-row > .MuiButton-root {
+    min-width: 48px;
+    width: 48px;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  .support-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .support-actions .MuiButton-root {
+    margin-top: 0;
+  }
+  .file-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
   .table-panel .mobile-card-table .MuiTableRow-root {
     padding: 16px;
     gap: 12px 16px;
@@ -902,6 +957,12 @@
     padding-top: calc(12px + env(safe-area-inset-top, 0px)) !important;
     padding-bottom: 8px !important;
   }
+  .workspace-dialog .MuiDialog-paperFullScreen .compact-form-progress {
+    margin-block: 12px 16px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 900px) and (max-height: 479px) {
   .workspace-dialog .MuiDialog-paperFullScreen .MuiDialogActions-root {
     display: flex;
     flex-wrap: wrap;
@@ -914,8 +975,5 @@
     > .MuiButton-contained {
     flex: 0 1 auto;
     grid-column: auto;
-  }
-  .workspace-dialog .MuiDialog-paperFullScreen .compact-form-progress {
-    margin-block: 12px 16px;
   }
 }

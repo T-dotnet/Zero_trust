@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import {
   Alert,
   Button,
-  DialogActions,
   DialogContent,
   DialogTitle,
   FormControlLabel,
@@ -41,6 +40,7 @@ import { StagePath, Status } from "./ui";
 import { AttachmentPicker } from "./Evidence";
 import { parseDatasetCsv } from "./csv";
 import { WorkspaceDialog } from "./WorkspaceDialog";
+import { DialogActionBar } from "./DialogActionBar";
 
 const PIPELINE_STEPS = ["Source & purpose", "Requirements", "Review & submit"];
 
@@ -262,7 +262,7 @@ export function PipelineForm({
         {step === 0 && (
           <div className="form-stack">
             <div className="form-section-heading">
-              <h3>What does this pipeline do?</h3>
+              <h3>Pipeline details</h3>
               {!source && (
                 <Button
                   size="small"
@@ -455,41 +455,47 @@ export function PipelineForm({
           </Alert>
         )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={step === 0 ? onClose : () => changeStep(step - 1)}>
-          {step === 0 ? "Cancel" : "Back"}
-        </Button>
-        <div className="dialog-action-spacer" />
-        <Button disabled={evidenceBusy} onClick={() => submit(true)}>
+      <DialogActionBar
+        primary={
+          step < 2 ? (
+            <Button
+              variant="contained"
+              disabled={evidenceBusy}
+              endIcon={<ArrowRight size={16} />}
+              onClick={() => {
+                if (
+                  (step === 0 && valid()) ||
+                  (step === 1 && validRequirements())
+                )
+                  changeStep(step + 1);
+              }}
+            >
+              Continue
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              disabled={evidenceBusy}
+              onClick={() => submit(false)}
+            >
+              {pipeline ? "Resubmit for review" : "Submit for review"}
+            </Button>
+          )
+        }
+      >
+        <Button
+          variant="outlined"
+          disabled={evidenceBusy}
+          onClick={() => submit(true)}
+        >
           {pipeline && pipeline.status !== "Draft"
             ? "Save revision draft"
             : "Save draft"}
         </Button>
-        {step < 2 ? (
-          <Button
-            variant="contained"
-            disabled={evidenceBusy}
-            endIcon={<ArrowRight size={16} />}
-            onClick={() => {
-              if (
-                (step === 0 && valid()) ||
-                (step === 1 && validRequirements())
-              )
-                changeStep(step + 1);
-            }}
-          >
-            Continue
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            disabled={evidenceBusy}
-            onClick={() => submit(false)}
-          >
-            {pipeline ? "Resubmit for review" : "Submit for review"}
-          </Button>
-        )}
-      </DialogActions>
+        <Button onClick={step === 0 ? onClose : () => changeStep(step - 1)}>
+          {step === 0 ? "Cancel" : "Back"}
+        </Button>
+      </DialogActionBar>
     </WorkspaceDialog>
   );
 }
@@ -600,7 +606,11 @@ export function ImportDialog({
                 </span>
               </div>
               <div className="file-actions">
-                <Button size="small" onClick={() => input.current?.click()}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => input.current?.click()}
+                >
                   Replace
                 </Button>
                 <Button
@@ -703,30 +713,33 @@ export function ImportDialog({
           </Alert>
         )}
       </DialogContent>
-      <DialogActions>
+      <DialogActionBar
+        primary={
+          <Button
+            variant="contained"
+            disabled={!file || !name.trim() || reading || Boolean(error)}
+            onClick={() => {
+              if (file && !reading && !error)
+                onImport({
+                  id: uid("data"),
+                  name: name.trim(),
+                  description:
+                    description.trim() ||
+                    "Imported dataset for research processing.",
+                  rows: file.rows,
+                  size: file.size,
+                  columns: file.columns,
+                  format: "CSV",
+                  date: now(),
+                });
+            }}
+          >
+            Import dataset
+          </Button>
+        }
+      >
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          variant="contained"
-          disabled={!file || !name.trim() || reading || Boolean(error)}
-          onClick={() => {
-            if (file && !reading && !error)
-              onImport({
-                id: uid("data"),
-                name: name.trim(),
-                description:
-                  description.trim() ||
-                  "Imported dataset for research processing.",
-                rows: file.rows,
-                size: file.size,
-                columns: file.columns,
-                format: "CSV",
-                date: now(),
-              });
-          }}
-        >
-          Import dataset
-        </Button>
-      </DialogActions>
+      </DialogActionBar>
     </WorkspaceDialog>
   );
 }
@@ -833,18 +846,21 @@ export function RunDialog({
           </Alert>
         </div>
       </DialogContent>
-      <DialogActions>
+      <DialogActionBar
+        primary={
+          <Button
+            variant="contained"
+            disabled={!compatible}
+            onClick={() => {
+              if (pipeline && dataset) onStart(pipeline, dataset);
+            }}
+          >
+            Start demo run
+          </Button>
+        }
+      >
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          variant="contained"
-          disabled={!compatible}
-          onClick={() => {
-            if (pipeline && dataset) onStart(pipeline, dataset);
-          }}
-        >
-          Start demo run
-        </Button>
-      </DialogActions>
+      </DialogActionBar>
     </WorkspaceDialog>
   );
 }
@@ -870,6 +886,52 @@ export function ArtifactDialog({
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const preview = artifactPreview(a);
+  const downloadAction = (
+    <Button
+      variant={a.status === "Validated" ? "contained" : "outlined"}
+      className={a.status !== "Validated" ? "cta-wide" : undefined}
+      startIcon={<Download size={16} />}
+      disabled={a.status !== "Validated"}
+      onClick={() => {
+        downloadArtifact(a);
+        notify("Synthetic sample CSV downloaded.");
+      }}
+    >
+      Download sample CSV
+    </Button>
+  );
+  const primaryAction =
+    a.status === "Validated" ? (
+      downloadAction
+    ) : a.status === "Not acceptable" ? (
+      <Button variant="contained" onClick={onClose}>
+        Close
+      </Button>
+    ) : role !== "Privacy reviewer" ? (
+      <Button variant="contained" onClick={() => setRole("Privacy reviewer")}>
+        Continue as Privacy reviewer
+      </Button>
+    ) : (
+      <Button
+        variant="contained"
+        color={outcome === "unacceptable" ? "error" : "primary"}
+        disabled={!outcome}
+        onClick={() => {
+          if (!outcome) return;
+          if (outcome === "unacceptable" && !comment.trim()) {
+            setError("Explain why this output is not acceptable.");
+            return;
+          }
+          onReview(outcome === "acceptable", comment.trim());
+        }}
+      >
+        {!outcome
+          ? "Choose a decision"
+          : outcome === "acceptable"
+            ? "Accept output"
+            : "Reject output"}
+      </Button>
+    );
   return (
     <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>Artifact review</DialogTitle>
@@ -957,16 +1019,9 @@ export function ArtifactDialog({
                   A privacy reviewer validates outputs before download. This
                   output is awaiting their decision.
                 </p>
-                <div className="demo-handoff">
-                  <span className="eyebrow">Demo controls</span>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => setRole("Privacy reviewer")}
-                  >
-                    Continue as Privacy reviewer
-                  </Button>
-                </div>
+                <p className="micro-copy">
+                  Use the demo role action below to continue the review.
+                </p>
               </>
             ) : (
               <>
@@ -1037,43 +1092,15 @@ export function ArtifactDialog({
           </div>
         )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Close</Button>
+      <DialogActionBar primary={primaryAction}>
+        {a.status !== "Validated" && downloadAction}
+        {a.status !== "Not acceptable" && (
+          <Button onClick={onClose}>Close</Button>
+        )}
         <button className="simulation-link" onClick={onSimulation}>
           Simulation controls
         </button>
-        {a.status === "Pending review" && role === "Privacy reviewer" && (
-          <Button
-            variant="contained"
-            disabled={!outcome}
-            onClick={() => {
-              if (!outcome) return;
-              if (outcome === "unacceptable" && !comment.trim()) {
-                setError("Explain why this output is not acceptable.");
-                return;
-              }
-              onReview(outcome === "acceptable", comment.trim());
-            }}
-          >
-            {!outcome
-              ? "Choose a decision"
-              : outcome === "acceptable"
-                ? "Accept output"
-                : "Reject output"}
-          </Button>
-        )}
-        <Button
-          variant={a.status === "Validated" ? "contained" : "outlined"}
-          startIcon={<Download size={16} />}
-          disabled={a.status !== "Validated"}
-          onClick={() => {
-            downloadArtifact(a);
-            notify("Synthetic sample CSV downloaded.");
-          }}
-        >
-          Download sample CSV
-        </Button>
-      </DialogActions>
+      </DialogActionBar>
     </WorkspaceDialog>
   );
 }
@@ -1130,13 +1157,18 @@ export function HelpDialog({
           browser. Reset the demo from the profile menu.
         </Alert>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Close</Button>
-        <Button onClick={onImport}>Import data</Button>
-        <Button variant="contained" onClick={onStart}>
-          Create a pipeline
+      <DialogActionBar
+        primary={
+          <Button variant="contained" onClick={onStart}>
+            Create a pipeline
+          </Button>
+        }
+      >
+        <Button variant="outlined" onClick={onImport}>
+          Import data
         </Button>
-      </DialogActions>
+        <Button onClick={onClose}>Close</Button>
+      </DialogActionBar>
     </WorkspaceDialog>
   );
 }

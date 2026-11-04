@@ -4,7 +4,6 @@ import {
   Button,
   CssBaseline,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   Snackbar,
@@ -36,6 +35,7 @@ import {
 } from "./model";
 import { useWorkspace } from "./useWorkspace";
 import { theme } from "./theme";
+import { DialogActionBar } from "./DialogActionBar";
 import "./mvp.css";
 import "./ux.css";
 import "./mobile.css";
@@ -395,23 +395,27 @@ export default function MvpApp() {
           This removes your local demo changes and restores the original
           synthetic records. No external data is affected.
         </DialogContent>
-        <DialogActions>
+        <DialogActionBar
+          primary={
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                dispatch({ type: "RESET" });
+                setDialog(null);
+                setArtifactId(null);
+                setSelectedPipelineId(null);
+                setRole("Researcher");
+                navigate("Pipelines");
+                setToast("Demo workspace reset.");
+              }}
+            >
+              Reset demo
+            </Button>
+          }
+        >
           <Button onClick={() => setDialog(null)}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              dispatch({ type: "RESET" });
-              setDialog(null);
-              setArtifactId(null);
-              setSelectedPipelineId(null);
-              setRole("Researcher");
-              navigate("Pipelines");
-              setToast("Demo workspace reset.");
-            }}
-          >
-            Reset demo
-          </Button>
-        </DialogActions>
+        </DialogActionBar>
       </Dialog>
       <Snackbar
         open={Boolean(toast.message)}

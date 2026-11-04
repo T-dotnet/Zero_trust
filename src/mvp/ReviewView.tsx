@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   TextField,
 } from "@mui/material";
 import { ArrowLeft, Check } from "lucide-react";
@@ -19,6 +18,7 @@ import {
 } from "./model";
 import { HistoryList, PageHeader, StagePath, Status } from "./ui";
 import { EvidenceAttachments } from "./Evidence";
+import { DialogActionBar } from "./DialogActionBar";
 
 const CHECKS = {
   Ethical: [
@@ -422,21 +422,24 @@ export function ReviewView({
             <strong>Reason:</strong> {comments}
           </p>
         </DialogContent>
-        <DialogActions>
+        <DialogActionBar
+          primary={
+            <Button
+              color="error"
+              variant="contained"
+              onClick={() => {
+                setConfirmReject(false);
+                onReview("reject", comments.trim());
+              }}
+            >
+              Confirm rejection
+            </Button>
+          }
+        >
           <Button onClick={() => setConfirmReject(false)}>
             Keep reviewing
           </Button>
-          <Button
-            color="error"
-            variant="contained"
-            onClick={() => {
-              setConfirmReject(false);
-              onReview("reject", comments.trim());
-            }}
-          >
-            Confirm rejection
-          </Button>
-        </DialogActions>
+        </DialogActionBar>
       </Dialog>
     </>
   );

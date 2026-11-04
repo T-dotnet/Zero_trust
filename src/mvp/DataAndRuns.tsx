@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Button,
-  DialogActions,
   DialogContent,
   DialogTitle,
   LinearProgress,
@@ -34,6 +33,7 @@ import {
 } from "./model";
 import { EmptyState, PageHeader, SearchField, Status } from "./ui";
 import { WorkspaceDialog } from "./WorkspaceDialog";
+import { DialogActionBar } from "./DialogActionBar";
 import { RunSupport } from "./RunSupport";
 import { downloadRunLog, downloadText } from "./files";
 import { encodeCsv } from "./csv";
@@ -206,19 +206,22 @@ export function Datasets({
             </details>
           )}
         </DialogContent>
-        <DialogActions>
+        <DialogActionBar
+          primary={
+            <Button
+              variant="contained"
+              disabled={!researcher}
+              onClick={() => {
+                if (selected) onRun(selected);
+                setSelected(null);
+              }}
+            >
+              Run pipeline
+            </Button>
+          }
+        >
           <Button onClick={() => setSelected(null)}>Close</Button>
-          <Button
-            variant="contained"
-            disabled={!researcher}
-            onClick={() => {
-              if (selected) onRun(selected);
-              setSelected(null);
-            }}
-          >
-            Run pipeline
-          </Button>
-        </DialogActions>
+        </DialogActionBar>
       </WorkspaceDialog>
     </>
   );
@@ -605,17 +608,41 @@ export function RunsAndResults({
             </>
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setSelectedRun(null)}>Close</Button>
-          <button
-            className="simulation-link"
-            onClick={() => {
-              setSelectedRun(null);
-              onSimulation();
-            }}
-          >
-            Simulation controls
-          </button>
+        <DialogActionBar
+          primary={
+            <>
+              {(run?.status === "Failed" || run?.status === "Cancelled") && (
+                <Button
+                  variant="contained"
+                  disabled={!researcher}
+                  startIcon={<RotateCcw size={16} />}
+                  onClick={() => {
+                    onRetry(run);
+                  }}
+                >
+                  {run.status === "Failed"
+                    ? "Retry demo with example mapping"
+                    : "Restart demo run"}
+                </Button>
+              )}
+              {run?.artifactId && (
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowRight size={16} />}
+                  onClick={() => {
+                    const a = state.artifacts.find(
+                      (a) => a.id === run.artifactId,
+                    );
+                    if (a) onArtifact(a);
+                    setSelectedRun(null);
+                  }}
+                >
+                  Inspect output
+                </Button>
+              )}
+            </>
+          }
+        >
           {run && (
             <Button
               startIcon={<Download size={15} />}
@@ -633,34 +660,17 @@ export function RunsAndResults({
               Cancel run
             </Button>
           )}
-          {(run?.status === "Failed" || run?.status === "Cancelled") && (
-            <Button
-              variant="contained"
-              disabled={!researcher}
-              startIcon={<RotateCcw size={16} />}
-              onClick={() => {
-                onRetry(run);
-              }}
-            >
-              {run.status === "Failed"
-                ? "Retry demo with example mapping"
-                : "Restart demo run"}
-            </Button>
-          )}
-          {run?.artifactId && (
-            <Button
-              variant="contained"
-              endIcon={<ArrowRight size={16} />}
-              onClick={() => {
-                const a = state.artifacts.find((a) => a.id === run.artifactId);
-                if (a) onArtifact(a);
-                setSelectedRun(null);
-              }}
-            >
-              Inspect output
-            </Button>
-          )}
-        </DialogActions>
+          <Button onClick={() => setSelectedRun(null)}>Close</Button>
+          <button
+            className="simulation-link"
+            onClick={() => {
+              setSelectedRun(null);
+              onSimulation();
+            }}
+          >
+            Simulation controls
+          </button>
+        </DialogActionBar>
       </WorkspaceDialog>
     </>
   );
