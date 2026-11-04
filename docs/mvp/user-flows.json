@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Zero Trust MVP · Screen & flow atlas",
   "reviewedAt": "2026-11-04",
-  "sourceCommit": "6b83f7de5deb4d66ff99934e01a4e07f0ddcd131",
+  "sourceCommit": "f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4",
   "scope": "Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.",
   "boundaries": [
     "Role switching demonstrates five interfaces; it is not authentication or backend authorization.",
@@ -56,7 +56,9 @@
     "At widths up to 900px all labelled CTA controls use full container width and their own row; the primary action comes first in visual and keyboard order. Utility icons remain compact touch targets. Task dialogs become fullscreen on phones/short mobile viewports.",
     "Search, filters, disclosures, evidence preview, field errors and neutral decision selection are in-place states unless a transition below says otherwise. No extra screen is implied.",
     "Browser refresh restores valid stored records and decisions, then returns to initial Pipelines / Researcher; running demos resume their timer. With unavailable storage the current session works and a warning says changes may not survive refresh.",
-    "Close, Cancel, Escape or backdrop dismiss a dismissible dialog to its underlying page. Unsaved wizard edits are discarded unless Save draft was used. Import preview rows are discarded. Reset requires its own confirmation."
+    "Close, Cancel, Escape or backdrop dismiss a dismissible dialog to its underlying page. Unsaved wizard edits are discarded unless Save draft was used. Import preview rows are discarded. Reset requires its own confirmation.",
+    "Edited pipeline forms require an explicit save, keep-editing or discard choice when closing. Browser navigation warns about unsaved forms.",
+    "Workspace saves are serialized across tabs. Unreadable data is preserved for download and explicit recovery; unsupported atomic storage uses session-only changes."
   ],
   "screens": [
     {
@@ -199,6 +201,15 @@
           "guard": "",
           "outcome": "Opens /?view=full in a new tab, outside MVP scope.",
           "kind": "external",
+          "priority": "secondary"
+        },
+        {
+          "id": "T217",
+          "label": "Saved workspace needs recovery",
+          "to": "S43",
+          "guard": "Unreadable saved data or another tab saved while this tab had unsaved work",
+          "outcome": "Pause edits and preserve the protected copy.",
+          "kind": "error",
           "priority": "secondary"
         }
       ]
@@ -768,7 +779,8 @@
       ],
       "notes": [
         "Modes reuse the same three steps. New: v1.0.0. Saved draft: keeps version. Rejected/changes revision: next available patch at resubmission. Approved source: separate new record with next available minor version.",
-        "Draft/revision/new-version modes prefill fields. Identity is retained when editing an existing pipeline. No repository is fetched."
+        "Draft/revision/new-version modes prefill fields. Identity is retained when editing an existing pipeline. No repository is fetched.",
+        "A stale save keeps the form open with its edits and a conflict message. Copy changes before reopening the latest version; it never silently overwrites another tab."
       ],
       "actions": [
         {
@@ -820,9 +832,18 @@
           "id": "T054",
           "label": "Cancel / Close",
           "to": "origin",
-          "guard": "",
-          "outcome": "Discard unsaved changes.",
+          "guard": "No unsaved form changes",
+          "outcome": "Close the unchanged form without a confirmation.",
           "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T214",
+          "label": "Close edited form / Escape / backdrop",
+          "to": "S42",
+          "guard": "Unsaved fields or evidence",
+          "outcome": "Offer Save draft, Keep editing and Discard changes.",
+          "kind": "navigate",
           "priority": "secondary"
         }
       ]
@@ -857,7 +878,9 @@
           ]
         }
       ],
-      "notes": [],
+      "notes": [
+        "A stale save keeps the form open with its edits and a conflict message. Copy changes before reopening the latest version; it never silently overwrites another tab."
+      ],
       "actions": [
         {
           "id": "T055",
@@ -899,9 +922,18 @@
           "id": "T059",
           "label": "Cancel / Close",
           "to": "origin",
-          "guard": "",
-          "outcome": "",
+          "guard": "No unsaved form changes",
+          "outcome": "Close the unchanged form without a confirmation.",
           "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T215",
+          "label": "Close edited form / Escape / backdrop",
+          "to": "S42",
+          "guard": "Unsaved fields or evidence",
+          "outcome": "Offer Save draft, Keep editing and Discard changes.",
+          "kind": "navigate",
           "priority": "secondary"
         }
       ]
@@ -935,7 +967,9 @@
           ]
         }
       ],
-      "notes": [],
+      "notes": [
+        "A stale save keeps the form open with its edits and a conflict message. Copy changes before reopening the latest version; it never silently overwrites another tab."
+      ],
       "actions": [
         {
           "id": "T060",
@@ -986,9 +1020,18 @@
           "id": "T065",
           "label": "Close",
           "to": "origin",
-          "guard": "",
-          "outcome": "",
+          "guard": "No unsaved form changes",
+          "outcome": "Close the unchanged form without a confirmation.",
           "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T216",
+          "label": "Close edited form / Escape / backdrop",
+          "to": "S42",
+          "guard": "Unsaved fields or evidence",
+          "outcome": "Offer Save draft, Keep editing and Discard changes.",
+          "kind": "navigate",
           "priority": "secondary"
         }
       ]
@@ -2534,7 +2577,8 @@
           "acceptance": [
             "Blank description disables creation.",
             "Submission stores a local support ID, message and Submitted status.",
-            "No external support team is contacted."
+            "No external support team is contacted.",
+            "The activity event attributes the support request to the active role, including reviewer requests."
           ]
         }
       ],
@@ -3308,7 +3352,8 @@
           "text": "As a demo participant, I want a confirmed reset so that I can repeat the walkthrough from its original records.",
           "acceptance": [
             "Reset clears locally created records and decisions, restores seed and returns to Pipelines as Researcher.",
-            "Cancel leaves the workspace unchanged."
+            "Cancel leaves the workspace unchanged.",
+            "When recovering unreadable data, save a separate recovery copy before replacing it; a failed backup or save keeps the recovery screen available."
           ]
         }
       ],
@@ -3376,6 +3421,136 @@
           "outcome": "Return to the originating pipeline detail/review state.",
           "kind": "return",
           "priority": "primary"
+        }
+      ]
+    },
+    {
+      "id": "S42",
+      "title": "Save your changes?",
+      "kind": "Confirmation dialog",
+      "roles": [
+        "Researcher"
+      ],
+      "goal": "Protect unsaved pipeline fields and evidence when closing the wizard.",
+      "source": [
+        "Dialogs.tsx:PipelineForm"
+      ],
+      "layout": [
+        "Save your changes?",
+        "Unsaved edits explanation",
+        "Save draft / Save revision draft",
+        "Keep editing",
+        "Discard changes"
+      ],
+      "stories": [
+        {
+          "id": "US-S42",
+          "text": "As an author, I want to choose whether to save or discard my edits so that closing a form does not silently lose work.",
+          "acceptance": [
+            "Escape, backdrop, Close and Cancel request confirmation when the form is edited.",
+            "Keep editing and dismissing the confirmation retain fields and evidence in the same wizard step.",
+            "Save draft validates the name and retains incomplete working fields; stale writes keep the form open.",
+            "Discard changes closes the form without changing the saved submission."
+          ]
+        }
+      ],
+      "notes": [
+        "The same confirmation protects all three wizard steps. Keep editing returns to the step that opened it.",
+        "The catalog is the representative discard destination; editing or revising from pipeline details returns to that original page."
+      ],
+      "actions": [
+        {
+          "id": "T218",
+          "label": "Save draft / Save revision draft",
+          "to": "S11",
+          "guard": "Named draft and evidence reading complete",
+          "outcome": "Save working fields; feedback/rejected revisions retain S19/S20 instead of changing their reviewed status.",
+          "kind": "navigate",
+          "priority": "primary"
+        },
+        {
+          "id": "T219",
+          "label": "Keep editing",
+          "to": "origin",
+          "guard": "",
+          "outcome": "Return to the same wizard step with every field and attachment retained.",
+          "kind": "return",
+          "priority": "secondary"
+        },
+        {
+          "id": "T220",
+          "label": "Discard changes",
+          "to": "S03",
+          "guard": "",
+          "outcome": "Close the wizard and return to the page that opened it; catalog shown as representative.",
+          "kind": "return",
+          "priority": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "S43",
+      "title": "Your saved workspace needs recovery",
+      "kind": "Recovery page",
+      "roles": [
+        "All roles"
+      ],
+      "goal": "Preserve unreadable saved data or an unsaved local copy before choosing how to recover.",
+      "source": [
+        "MvpApp.tsx:MvpApp",
+        "useWorkspace.ts:useWorkspace"
+      ],
+      "layout": [
+        "Your saved workspace needs recovery",
+        "Explanation of unreadable data or a concurrent-save conflict",
+        "Download recovery copy",
+        "Reset saved workspace OR Load saved workspace"
+      ],
+      "stories": [
+        {
+          "id": "US-S43",
+          "text": "As a participant, I want a recoverable copy of my work so that a damaged record or conflicting save cannot silently erase it.",
+          "acceptance": [
+            "Unreadable saved bytes remain unchanged until an explicit reset.",
+            "Download returns the exact protected copy.",
+            "A reset first stores a recovery backup, then starts a fresh demo; Cancel preserves the existing data.",
+            "After a failed local save and a conflicting remote save, the local copy remains downloadable and the remote copy is not overwritten.",
+            "Load saved workspace first backs up local changes and then resumes from the saved copy."
+          ]
+        }
+      ],
+      "notes": [
+        "This page replaces workspace editing until recovery completes.",
+        "A storage warning without a conflict does not require this page; session changes remain usable and can be saved later.",
+        "If backup or storage fails, keep the recovery download and resolve browser storage before retrying."
+      ],
+      "actions": [
+        {
+          "id": "T221",
+          "label": "Download recovery copy",
+          "to": "self",
+          "guard": "",
+          "outcome": "Download protected original bytes or the unsaved local workspace.",
+          "kind": "download",
+          "priority": "primary"
+        },
+        {
+          "id": "T222",
+          "label": "Reset saved workspace",
+          "to": "S40",
+          "guard": "Unreadable saved data",
+          "outcome": "Ask for explicit reset; preserve a recovery backup before replacement.",
+          "kind": "navigate",
+          "priority": "secondary"
+        },
+        {
+          "id": "T223",
+          "label": "Load saved workspace",
+          "to": "origin",
+          "guard": "Concurrent-save conflict and readable saved copy",
+          "outcome": "Back up local copy, load latest saved workspace and retain the current area.",
+          "kind": "return",
+          "priority": "secondary"
         }
       ]
     }
@@ -3508,7 +3683,8 @@
         "S09",
         "S10",
         "S11",
-        "S13"
+        "S13",
+        "S42"
       ],
       "edges": [
         [
@@ -3560,6 +3736,26 @@
           "S10",
           "S13",
           "Submit → Ethical"
+        ],
+        [
+          "S08",
+          "S42",
+          "Close edited form"
+        ],
+        [
+          "S42",
+          "S08",
+          "Keep editing"
+        ],
+        [
+          "S42",
+          "S11",
+          "Save draft"
+        ],
+        [
+          "S42",
+          "S03",
+          "Discard changes"
         ]
       ],
       "entry": "Researcher; new name or a saved draft.",
@@ -4062,6 +4258,96 @@
       ],
       "entry": "Researcher in the submission wizard; optional supported text files.",
       "done": "A reviewer reads the exact locally attached text and returns to the same assessment. Any pipeline detail may open this preview; Ethical is shown as an example."
+    },
+    {
+      "id": "F13",
+      "title": "Protect edits and recover saved work",
+      "goal": "Keep form edits and saved work recoverable when closing, saving in multiple tabs or encountering damaged storage.",
+      "entry": "Close an edited wizard, or encounter protected workspace recovery.",
+      "done": "A draft is saved, edits are explicitly discarded, or a protected copy is downloaded/backed up before recovery.",
+      "screens": [
+        "S01",
+        "S03",
+        "S08",
+        "S09",
+        "S10",
+        "S42",
+        "S11",
+        "S43",
+        "S40"
+      ],
+      "edges": [
+        [
+          "S03",
+          "S08",
+          "New pipeline"
+        ],
+        [
+          "S08",
+          "S09",
+          "Continue"
+        ],
+        [
+          "S09",
+          "S10",
+          "Continue"
+        ],
+        [
+          "S08",
+          "S42",
+          "Close edited form"
+        ],
+        [
+          "S09",
+          "S42",
+          "Close edited form"
+        ],
+        [
+          "S10",
+          "S42",
+          "Close edited form"
+        ],
+        [
+          "S42",
+          "S08",
+          "Keep editing (same step)"
+        ],
+        [
+          "S42",
+          "S11",
+          "Save draft"
+        ],
+        [
+          "S42",
+          "S03",
+          "Discard changes"
+        ],
+        [
+          "S01",
+          "S43",
+          "Unreadable data or save conflict"
+        ],
+        [
+          "S43",
+          "S40",
+          "Reset saved workspace"
+        ],
+        [
+          "S40",
+          "S43",
+          "Cancel reset"
+        ],
+        [
+          "S40",
+          "S03",
+          "Back up and reset"
+        ],
+        [
+          "S43",
+          "S03",
+          "Back up local copy and load saved workspace"
+        ]
+      ]
     }
   ],
   "coverage": [
@@ -4170,6 +4456,15 @@
         "S41",
         "S09",
         "S14"
+      ]
+    },
+    {
+      "area": "Unsaved forms, cross-tab conflicts and safe recovery",
+      "screens": [
+        "S08",
+        "S42",
+        "S43",
+        "S40"
       ]
     }
   ],

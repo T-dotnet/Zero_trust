@@ -68,7 +68,7 @@ Browser tests use local Chromium. Set `CHROMIUM_PATH` if it is installed somewhe
 
 - [MVP walkthrough and implementation boundaries](docs/mvp/README.md)
 - [MVP scope and rationale](docs/mvp-scope.md)
-- [Post MVP product roadmap](docs/post-mvp-roadmap.md)
+- [Post MVP product roadmap](docs/post-mvp-roadmap.md) · [Interactive roadmap](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html)
 - [Personas, objectives, pains, and gains](docs/personas.md)
 - [Full prototype features, settings, and diagrams](docs/README.md)
 

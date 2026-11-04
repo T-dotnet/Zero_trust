@@ -73,6 +73,8 @@ The import dialog shows the synthetic CSV, preview rows, dataset name and Import
 
 **Related story:** [US-S06](screen-flows.md#us-s06). **Screens:** [S04](screen-flows.md#s04), [S05](screen-flows.md#s05), [S06](screen-flows.md#s06), [S07](screen-flows.md#s07). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S04&journey=F02).
 
+**Planned post MVP improvements:** [Guided pipeline and dataset setup (R2)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-3) · [Institutional identity and a first data connector (R3 candidate; move blockers to G0)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-6). These are proposed capabilities, not behavior shown in the screenshots.
+
 <details>
 <summary>Supporting screens and handoff evidence</summary>
 
@@ -107,6 +109,8 @@ The final wizard summary exposes the research purpose, source, version, contract
 
 **Related story:** [US-S10](screen-flows.md#us-s10). **Screens:** [S08](screen-flows.md#s08), [S09](screen-flows.md#s09), [S10](screen-flows.md#s10), [S11](screen-flows.md#s11), [S13](screen-flows.md#s13). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S08&journey=F03).
 
+**Planned post MVP improvements:** [Structured feedback and revision comparison (R1)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-2) · [Guided pipeline and dataset setup (R2)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-3) · [Readiness automation and AI assistance (Later; validate demand first)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-10). These are proposed capabilities, not behavior shown in the screenshots.
+
 <details>
 <summary>Supporting screens and handoff evidence</summary>
 
@@ -140,6 +144,8 @@ Four distinct reviewer screens show their stage-specific checklists. The capture
 **Prototype limit:** Reviewers confirm illustrative evidence. No automated ethics, runtime, privacy or security assessment is claimed.
 
 **Related story:** [US-S14](screen-flows.md#us-s14) · [US-S15](screen-flows.md#us-s15) · [US-S16](screen-flows.md#us-s16) · [US-S17](screen-flows.md#us-s17). **Screens:** [S12](screen-flows.md#s12), [S13](screen-flows.md#s13), [S14](screen-flows.md#s14), [S15](screen-flows.md#s15), [S16](screen-flows.md#s16), [S17](screen-flows.md#s17), [S18](screen-flows.md#s18), [S19](screen-flows.md#s19), [S20](screen-flows.md#s20), [S21](screen-flows.md#s21). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S12&journey=F04).
+
+**Planned post MVP improvements:** [Assigned work and notifications (R1)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-1) · [Structured feedback and revision comparison (R1)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-2). These are proposed capabilities, not behavior shown in the screenshots.
 
 <details>
 <summary>Supporting screens and handoff evidence</summary>
@@ -183,6 +189,8 @@ The published pipeline is ready for research. The supporting screen shows the pr
 
 **Related story:** [US-S21](screen-flows.md#us-s21). **Screens:** [S21](screen-flows.md#s21), [S22](screen-flows.md#s22). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S21&journey=F04).
 
+**Planned post MVP improvements:** [Structured feedback and revision comparison (R1)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-2) · [Reproducible runs and lineage (R2)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-4). These are proposed capabilities, not behavior shown in the screenshots.
+
 <details>
 <summary>Supporting screens and handoff evidence</summary>
 
@@ -216,6 +224,8 @@ Completed run details retain method, dataset and version context and link to the
 **Prototype limit:** The prototype checks format only, not schema mapping. No research code runs on a backend.
 
 **Related story:** [US-S23](screen-flows.md#us-s23). **Screens:** [S23](screen-flows.md#s23), [S24](screen-flows.md#s24), [S25](screen-flows.md#s25), [S26](screen-flows.md#s26). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S23&journey=F07).
+
+**Planned post MVP improvements:** [Guided pipeline and dataset setup (R2)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-3) · [Reproducible runs and lineage (R2)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-4) · [Operational and resource controls (R3 candidate)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-5) · [Scheduled and batch processing (Later)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-9). These are proposed capabilities, not behavior shown in the screenshots.
 
 <details>
 <summary>Supporting screens and handoff evidence</summary>
@@ -251,6 +261,8 @@ The output review shows synthetic rows, provenance, a deliberately selected Acce
 
 **Related story:** [US-S34](screen-flows.md#us-s34). **Screens:** [S32](screen-flows.md#s32), [S33](screen-flows.md#s33), [S34](screen-flows.md#s34), [S35](screen-flows.md#s35), [S36](screen-flows.md#s36). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S32&journey=F09).
 
+**Planned post MVP improvements:** [Output quality and disclosure review tools (R3 candidate)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-7). These are proposed capabilities, not behavior shown in the screenshots.
+
 <a id="j07"></a>
 
 ### J07 · Retrieve the accepted sample
@@ -275,6 +287,8 @@ The researcher sees Output accepted and the enabled sample-download action. A su
 **Prototype limit:** The downloaded file is a synthetic sample, not the declared full-record-count output.
 
 **Related story:** [US-S35](screen-flows.md#us-s35). **Screens:** [S35](screen-flows.md#s35). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S35&journey=F09).
+
+**Planned post MVP improvements:** [Reproducible runs and lineage (R2)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-4) · [Output quality and disclosure review tools (R3 candidate)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-7). These are proposed capabilities, not behavior shown in the screenshots.
 
 <details>
 <summary>Supporting screens and handoff evidence</summary>
@@ -311,6 +325,8 @@ The activity history is filtered to the captured customer-journey scenario and s
 **Related story:** [US-S37](screen-flows.md#us-s37). **Screens:** [S37](screen-flows.md#s37), [S22](screen-flows.md#s22), [S08](screen-flows.md#s08). [Follow the detailed flow](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S37&journey=F10).
 
 [Submit a new version · F06](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html#screen=S22&journey=F06)
+
+**Planned post MVP improvements:** [Structured feedback and revision comparison (R1)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-2) · [Reproducible runs and lineage (R2)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-4) · [Catalog discovery and personal views (R2 stretch or R3; do not displace ranks 3–4)](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html#feature-8). These are proposed capabilities, not behavior shown in the screenshots.
 
 ## When the journey stalls
 
@@ -351,3 +367,30 @@ npm run docs:mvp:journey:pdf        # export printable journey
 ```
 
 Capture uses the installed Chromium (`CHROMIUM_PATH` can override its path) and Playwright. `MVP_CAPTURE_URL` can point at a local test host. The generator validates screenshot presence/dimensions, screen/story/flow links and capture checks. The PDF is a generated delivery artifact, not a separate content source.
+
+## Post MVP roadmap
+
+Proposed improvements are grouped by priority, dependencies and release criteria. They are not implemented screens or committed delivery dates. All four pipeline reviews and separate author publication remain required.
+
+[Read the full product roadmap](../post-mvp-roadmap.md) · [Open the published roadmap](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html)
+
+| Release group | Outcome |
+| --- | --- |
+| G0 Pilot readiness | An authorized user completes one real, traceable workflow |
+| R1 Review coordination | Authors and reviewers know who acts next and what needs to change |
+| R2 Reproducible self-service | Researchers configure compatible inputs and repeat work without engineering help |
+| R3 Institutional adoption | Teams can operate the product within their institution's access, support and resource policies |
+| Later | Broader workloads become economical to support |
+
+| Current journey | Planned improvements |
+| --- | --- |
+| J01 · Prepare the source data | 3. Guided pipeline and dataset setup (R2); 6. Institutional identity and a first data connector (R3 candidate; move blockers to G0) |
+| J02 · Describe and submit the method | 2. Structured feedback and revision comparison (R1); 3. Guided pipeline and dataset setup (R2); 10. Readiness automation and AI assistance (Later; validate demand first) |
+| J03 · Complete organizational review | 1. Assigned work and notifications (R1); 2. Structured feedback and revision comparison (R1) |
+| J04 · Publish the reviewed version | 2. Structured feedback and revision comparison (R1); 4. Reproducible runs and lineage (R2) |
+| J05 · Run the approved method | 3. Guided pipeline and dataset setup (R2); 4. Reproducible runs and lineage (R2); 5. Operational and resource controls (R3 candidate); 9. Scheduled and batch processing (Later) |
+| J06 · Validate the generated output | 7. Output quality and disclosure review tools (R3 candidate) |
+| J07 · Retrieve the accepted sample | 4. Reproducible runs and lineage (R2); 7. Output quality and disclosure review tools (R3 candidate) |
+| J08 · Trace decisions and improve the method | 2. Structured feedback and revision comparison (R1); 4. Reproducible runs and lineage (R2); 8. Catalog discovery and personal views (R2 stretch or R3; do not displace ranks 3–4) |
+
+Mappings: [roadmap links](roadmap-links.json). Scope and release gates: [canonical roadmap](../post-mvp-roadmap.md).

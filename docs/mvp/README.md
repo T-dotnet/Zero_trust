@@ -79,3 +79,9 @@ Additional regression coverage verifies incomplete draft persistence, working re
 Mobile readability and adaptive layout are always active at the responsive breakpoints and need no feature toggle. Phone task dialogs use the full available screen, primary footer actions take a full row, and transient notifications appear below the header so they do not cover download or submission controls. Regression tests cover readable type sizes, 48px touch targets, card/action visibility, responsive status/category filtering, larger reading text, short windows, and the complete mobile submission-to-download simulation.
 
 Current UI previews: [pipeline catalog](screenshots/pipelines.png) and [review screen](screenshots/approval.png). These are rendered prototype screenshots rather than the earlier design concept.
+
+## Post MVP roadmap
+
+The [product roadmap](../post-mvp-roadmap.md) is linked to both the [screen flows](screen-flows.md#post-mvp-roadmap) and [customer journey](customer-journey.md#post-mvp-roadmap). Open the [published roadmap](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/post-mvp-roadmap.html) for priorities, dependencies, release groups and acceptance criteria. No delivery dates are assigned. Planned additions are labelled separately from current MVP screens and captured behavior.
+
+The atlas now includes the implemented save/discard confirmation and protected workspace recovery path, alongside the original workflows. Regenerate the published HTML and journey PDF with the existing documentation scripts after changing source content.
