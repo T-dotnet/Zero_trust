@@ -8,6 +8,7 @@ export const colors = Object.freeze({
   line: "#e0e4ec",
   inputBorder: "#8c91a4",
   surface: "#f6f7fa",
+  neutralBorder: "#cbd0dc",
   surfaceHover: "#eceef4",
   primary: "#2be1b0",
   primaryHover: "#20cfa1",
@@ -18,6 +19,7 @@ export const colors = Object.freeze({
   focus: "#006b50",
   success: "#117557",
   successSoft: "#eaf8f2",
+  successBorder: "#9ed7c2",
   warningAccent: "#feab3d",
   warning: "#875000",
   warningSoft: "#fff4e3",
@@ -25,4 +27,5 @@ export const colors = Object.freeze({
   errorHover: "#ff6881",
   error: "#b01e3e",
   errorSoft: "#fff0f3",
+  errorBorder: "#f9abba",
 });

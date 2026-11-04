@@ -63,9 +63,12 @@ export const theme = createTheme({
             color: colors.muted,
           },
         }),
+        text: ({ ownerState }) => ({
+          color: ownerState.color === "error" ? colors.error : colors.ink,
+        }),
         outlined: ({ ownerState }) => ({
           borderColor: colors.inputBorder,
-          color: ownerState.color === "error" ? colors.error : colors.primaryDark,
+          color: ownerState.color === "error" ? colors.error : colors.ink,
           "&:hover": {
             borderColor: ownerState.color === "error" ? colors.error : colors.primaryDark,
             background: ownerState.color === "error" ? colors.errorSoft : colors.primarySoft,

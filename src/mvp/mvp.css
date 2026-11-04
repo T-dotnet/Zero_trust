@@ -1747,3 +1747,37 @@
 .status-label.error .status-dot {
   background: var(--zt-error-accent);
 }
+
+/* Secondary and tertiary actions share the primary button's dark label. */
+.sidebar-help,
+.demo-mode,
+.demo-mode:hover,
+.text-link.MuiButton-root,
+.attachment-button,
+.entity-name:hover {
+  color: var(--zt-ink);
+}
+
+/* Read-only status badges use semantic fills, borders and explicit labels. */
+.status-label {
+  max-width: 100%;
+  padding: 3px 8px;
+  border: 1px solid var(--zt-neutral-border);
+  border-radius: 5px;
+  background: var(--zt-surface);
+  font-weight: 600;
+  vertical-align: middle;
+}
+.status-label .status-dot { flex-shrink: 0; }
+.status-label.success {
+  background: var(--zt-success-soft);
+  border-color: var(--zt-success-border);
+}
+.status-label.warning {
+  background: var(--zt-warning-soft);
+  border-color: var(--zt-warning-accent);
+}
+.status-label.error {
+  background: var(--zt-error-soft);
+  border-color: var(--zt-error-border);
+}

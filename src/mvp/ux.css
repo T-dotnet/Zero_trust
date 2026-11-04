@@ -9,7 +9,7 @@
 .disclosure > summary {
   cursor: pointer;
   padding: 9px 2px;
-  color: var(--zt-primary-dark);
+  color: var(--zt-ink);
   font-weight: 600;
   line-height: 1.5;
   overflow-wrap: anywhere;
@@ -95,7 +95,7 @@
 }
 .criteria-count {
   font-size: 12px;
-  color: var(--zt-primary-dark);
+  color: var(--zt-ink);
   white-space: nowrap;
 }
 .review-criteria .MuiFormControlLabel-root {
@@ -157,7 +157,7 @@
   border: 0;
   padding: 7px 0;
   cursor: pointer;
-  color: var(--zt-muted);
+  color: var(--zt-ink);
   font:
     11px var(--zt-font);
   text-decoration: underline;
@@ -165,7 +165,7 @@
   text-align: left;
 }
 .simulation-link:hover {
-  color: var(--zt-primary-dark);
+  color: var(--zt-ink);
 }
 .simulation-section {
   padding: 16px 0;
