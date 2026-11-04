@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Zero Trust MVP · Screen & flow atlas",
   "reviewedAt": "2026-11-04",
-  "sourceCommit": "f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4",
+  "sourceCommit": "b453c2b391ad42854113f4146276275b22ee37d2",
   "scope": "Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.",
   "boundaries": [
     "Role switching demonstrates five interfaces; it is not authentication or backend authorization.",
@@ -3498,7 +3498,8 @@
       "goal": "Preserve unreadable saved data or an unsaved local copy before choosing how to recover.",
       "source": [
         "MvpApp.tsx:MvpApp",
-        "useWorkspace.ts:useWorkspace"
+        "useWorkspace.ts:useWorkspace",
+        "workspaceLedger.ts:workspaceLedger"
       ],
       "layout": [
         "Your saved workspace needs recovery",

@@ -1,6 +1,6 @@
 # Zero Trust MVP · Screen & flow atlas
 
-Reviewed 2026-11-04 against MVP source [`f7e38b3`](https://github.com/T-dotnet/Zero_trust/tree/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp).
+Reviewed 2026-11-04 against MVP source [`b453c2b`](https://github.com/T-dotnet/Zero_trust/tree/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp).
 
 [Open the clickable wireframes](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html) · [Download / open local HTML](../../public/mvp-flows.html) · [Canonical flow model](user-flows.json)
 
@@ -497,7 +497,7 @@ Behavior and limits:
 | T012 | Open original workspace (external) | — | Archived workspace (`/?view=full`) | Opens /?view=full in a new tab, outside MVP scope. |
 | T217 | Saved workspace needs recovery (error) | Unreadable saved data or another tab saved while this tab had unsaved work | [S43 · Your saved workspace needs recovery](#s43) | Pause edits and preserve the protected copy. |
 
-**Source:** [Shell.tsx:Shell](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Shell.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/MvpApp.tsx)
+**Source:** [Shell.tsx:Shell](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Shell.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/MvpApp.tsx)
 
 <a id="s02"></a>
 
@@ -533,7 +533,7 @@ Acceptance criteria:
 | T017 | Run approved pipeline (navigate) | Researcher | [S23 · Configure run](#s23) | Pipeline preselected. |
 | T018 | View approved pipeline (navigate) | Reviewer | [S22 · Pipeline details · Approved](#s22) | — |
 
-**Source:** [PipelineViews.tsx:Overview](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/PipelineViews.tsx)
+**Source:** [PipelineViews.tsx:Overview](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/PipelineViews.tsx)
 
 <a id="s03"></a>
 
@@ -584,7 +584,7 @@ Behavior and limits:
 | T032 | Search / filter / clear (in-place) | — | Same screen | Visible rows and count update; no match shows an empty state. |
 | T213 | Explore the review process (navigate) | Expand How pipeline approval works | [S12 · Approvals queue](#s12) | Open Approvals queue. |
 
-**Source:** [PipelineViews.tsx:PipelineCatalog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/PipelineViews.tsx) · [model.ts:pipelineActionLabel](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts) · [ui.tsx:ReviewGuide](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ui.tsx)
+**Source:** [PipelineViews.tsx:PipelineCatalog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/PipelineViews.tsx) · [model.ts:pipelineActionLabel](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts) · [ui.tsx:ReviewGuide](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ui.tsx)
 
 <a id="s04"></a>
 
@@ -618,7 +618,7 @@ Acceptance criteria:
 | T035 | Run pipeline (navigate) | Researcher | [S23 · Configure run](#s23) | Dataset preselected. |
 | T036 | Search datasets (in-place) | — | Same screen | — |
 
-**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx)
 
 <a id="s05"></a>
 
@@ -657,7 +657,7 @@ Behavior and limits:
 | T039 | Invalid CSV / unreadable file (error) | — | Same screen | Show validation error; Import remains disabled. |
 | T040 | Cancel / Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [csv.ts:parseDatasetCsv](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/csv.ts)
+**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [csv.ts:parseDatasetCsv](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/csv.ts)
 
 <a id="s06"></a>
 
@@ -692,7 +692,7 @@ Acceptance criteria:
 | T044 | Preview columns and sample rows (disclosure) | — | Same screen | — |
 | T045 | Cancel / Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx)
 
 <a id="s07"></a>
 
@@ -724,7 +724,7 @@ Acceptance criteria:
 | T047 | Dataset columns (disclosure) | — | Same screen | — |
 | T048 | Close (return) | — | Originating page / parent state | — |
 
-**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx)
 
 <a id="s08"></a>
 
@@ -768,7 +768,7 @@ Behavior and limits:
 | T054 | Cancel / Close (return) | No unsaved form changes | Originating page / parent state | Close the unchanged form without a confirmation. |
 | T214 | Close edited form / Escape / backdrop (navigate) | Unsaved fields or evidence | [S42 · Save your changes?](#s42) | Offer Save draft, Keep editing and Discard changes. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx)
 
 <a id="s09"></a>
 
@@ -809,7 +809,7 @@ Behavior and limits:
 | T059 | Cancel / Close (return) | No unsaved form changes | Originating page / parent state | Close the unchanged form without a confirmation. |
 | T215 | Close edited form / Escape / backdrop (navigate) | Unsaved fields or evidence | [S42 · Save your changes?](#s42) | Offer Save draft, Keep editing and Discard changes. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [Evidence.tsx:AttachmentPicker](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Evidence.tsx)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [Evidence.tsx:AttachmentPicker](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Evidence.tsx)
 
 <a id="s10"></a>
 
@@ -850,7 +850,7 @@ Behavior and limits:
 | T065 | Close (return) | No unsaved form changes | Originating page / parent state | Close the unchanged form without a confirmation. |
 | T216 | Close edited form / Escape / backdrop (navigate) | Unsaved fields or evidence | [S42 · Save your changes?](#s42) | Offer Save draft, Keep editing and Discard changes. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s11"></a>
 
@@ -884,7 +884,7 @@ Acceptance criteria:
 | T069 | Source / evidence / history disclosures (disclosure) | — | Same screen | — |
 | T202 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx)
 
 <a id="s12"></a>
 
@@ -924,7 +924,7 @@ Acceptance criteria:
 | T078 | Open ready-to-publish submission (navigate) | Ready to publish | [S21 · Pipeline details · Ready to publish](#s21) | — |
 | T079 | My tasks / All submissions / Search / Clear (in-place) | — | Same screen | — |
 
-**Source:** [PipelineViews.tsx:Approvals](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/PipelineViews.tsx)
+**Source:** [PipelineViews.tsx:Approvals](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/PipelineViews.tsx)
 
 <a id="s13"></a>
 
@@ -962,7 +962,7 @@ Acceptance criteria:
 | T085 | View all stages / details / evidence / history (disclosure) | — | Same screen | — |
 | T203 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx)
 
 <a id="s14"></a>
 
@@ -1006,7 +1006,7 @@ Behavior and limits:
 | T090 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T204 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s15"></a>
 
@@ -1050,7 +1050,7 @@ Behavior and limits:
 | T095 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T205 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s16"></a>
 
@@ -1094,7 +1094,7 @@ Behavior and limits:
 | T100 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T206 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s17"></a>
 
@@ -1138,7 +1138,7 @@ Behavior and limits:
 | T105 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T207 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s18"></a>
 
@@ -1168,7 +1168,7 @@ Acceptance criteria:
 | T106 | Confirm rejection (navigate) | Assigned reviewer and comment | [S20 · Pipeline details · Rejected submission](#s20) | Record rejection; author can revise. |
 | T107 | Keep reviewing / dismiss (return) | — | Originating page / parent state | Return to the originating stage S14–S17. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx)
 
 <a id="s19"></a>
 
@@ -1203,7 +1203,7 @@ Acceptance criteria:
 | T111 | Source / evidence / timeline (disclosure) | — | Same screen | — |
 | T208 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s20"></a>
 
@@ -1238,7 +1238,7 @@ Acceptance criteria:
 | T115 | Source / evidence / timeline (disclosure) | — | Same screen | — |
 | T209 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s21"></a>
 
@@ -1272,7 +1272,7 @@ Acceptance criteria:
 | T119 | View stages / source / history (disclosure) | — | Same screen | — |
 | T210 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [model.ts:PUBLISH](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [model.ts:PUBLISH](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s22"></a>
 
@@ -1308,7 +1308,7 @@ Acceptance criteria:
 | T124 | Source / evidence / timeline (disclosure) | — | Same screen | — |
 | T211 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx) · [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [model.ts:nextAvailableVersion](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx) · [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [model.ts:nextAvailableVersion](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s23"></a>
 
@@ -1342,7 +1342,7 @@ Acceptance criteria:
 | T126 | Select method / dataset / inspect columns (in-place) | — | Same screen | Update compatibility; mismatch warns and disables Start. |
 | T127 | Cancel / Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:RunDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [model.ts:supportsDataset](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [Dialogs.tsx:RunDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [model.ts:supportsDataset](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s24"></a>
 
@@ -1386,7 +1386,7 @@ Behavior and limits:
 | T136 | Search runs (in-place) | — | Same screen | — |
 | T137 | Timer progresses running records (system) | — | Same screen | Every 650ms add 12 progress points; completion creates Pending review output. |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx)
 
 <a id="s25"></a>
 
@@ -1421,7 +1421,7 @@ Acceptance criteria:
 | T141 | Close (return) | — | Originating page / parent state | — |
 | T142 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Close Run details before opening simulator. |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/useWorkspace.ts) · [model.ts:executionStepStatus / TICK](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/useWorkspace.ts) · [model.ts:executionStepStatus / TICK](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s26"></a>
 
@@ -1454,7 +1454,7 @@ Acceptance criteria:
 | T145 | Close (return) | — | Originating page / parent state | — |
 | T146 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx)
 
 <a id="s27"></a>
 
@@ -1489,7 +1489,7 @@ Acceptance criteria:
 | T150 | Close (return) | — | Originating page / parent state | — |
 | T151 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx) · [model.ts:seedWorkspace / RETRY](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx) · [model.ts:seedWorkspace / RETRY](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s28"></a>
 
@@ -1522,7 +1522,7 @@ Acceptance criteria:
 | T154 | Close (return) | — | Originating page / parent state | — |
 | T155 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx) · [model.ts:CANCEL_RUN / RETRY](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx) · [model.ts:CANCEL_RUN / RETRY](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s29"></a>
 
@@ -1557,7 +1557,7 @@ Acceptance criteria:
 | T156 | Create support request (navigate) | Nonblank issue description | [S30 · Run support · Submitted / technical resolution](#s30) | Record support request and activity. |
 | T157 | Cancel (navigate) | — | [S27 · Run details · Failed](#s27) | Collapse inline form; retain failed run details. |
 
-**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/RunSupport.tsx) · [model.ts:REPORT_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/RunSupport.tsx) · [model.ts:REPORT_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s30"></a>
 
@@ -1593,7 +1593,7 @@ Acceptance criteria:
 | T160 | Retry run via Run details (navigate) | Switch back to Researcher, Failed/Cancelled | [S25 · Run details · Running](#s25) | Support stays attached while execution restarts. |
 | T161 | Close Run details (return) | — | Originating page / parent state | — |
 
-**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/RunSupport.tsx) · [model.ts:RESOLVE_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/RunSupport.tsx) · [model.ts:RESOLVE_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s31"></a>
 
@@ -1625,7 +1625,7 @@ Acceptance criteria:
 | T162 | Retry / Restart parent run (navigate) | Researcher and Failed/Cancelled | [S25 · Run details · Running](#s25) | Same parent run restarts; receipt remains. |
 | T163 | Close Run details (return) | — | Originating page / parent state | — |
 
-**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/RunSupport.tsx)
+**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/RunSupport.tsx)
 
 <a id="s32"></a>
 
@@ -1662,7 +1662,7 @@ Acceptance criteria:
 | T169 | New run (navigate) | Researcher | [S23 · Configure run](#s23) | — |
 | T170 | Search results (in-place) | — | Same screen | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx)
 
 <a id="s33"></a>
 
@@ -1695,7 +1695,7 @@ Acceptance criteria:
 | T172 | Close (return) | — | Originating page / parent state | — |
 | T173 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Close artifact and preselect it in simulator; closing simulator does not reopen it. |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [artifactPreview.ts:artifactPreview](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/artifactPreview.ts)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [artifactPreview.ts:artifactPreview](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/artifactPreview.ts)
 
 <a id="s34"></a>
 
@@ -1730,7 +1730,7 @@ Acceptance criteria:
 | T177 | Close (return) | — | Originating page / parent state | — |
 | T178 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Artifact closes; not automatically reopened after simulation. |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [model.ts:REVIEW_ARTIFACT](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [model.ts:REVIEW_ARTIFACT](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s35"></a>
 
@@ -1762,7 +1762,7 @@ Acceptance criteria:
 | T180 | Close (return) | — | Originating page / parent state | — |
 | T181 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [DataAndRuns.tsx:downloadArtifact](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/DataAndRuns.tsx)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [DataAndRuns.tsx:downloadArtifact](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/DataAndRuns.tsx)
 
 <a id="s36"></a>
 
@@ -1794,7 +1794,7 @@ Acceptance criteria:
 | T182 | Close (return) | — | Originating page / parent state | — |
 | T183 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Cannot accept an already rejected artifact; only Pending review artifacts can be simulated. |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx)
 
 <a id="s37"></a>
 
@@ -1835,7 +1835,7 @@ Behavior and limits:
 | T188 | Open run event (navigate) | Resolve by current status to S25–S28. | [S25 · Run details · Running](#s25) | Navigate to Runs and open detail. |
 | T189 | Open artifact event (navigate) | Resolve role/status to S33–S36. | [S33 · Artifact review · Awaiting Privacy reviewer](#s33) | Artifact opens over Activity log. |
 
-**Source:** [ActivityView.tsx:ActivityView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ActivityView.tsx) · [MvpApp.tsx:openEvent](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/MvpApp.tsx)
+**Source:** [ActivityView.tsx:ActivityView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ActivityView.tsx) · [MvpApp.tsx:openEvent](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/MvpApp.tsx)
 
 <a id="s38"></a>
 
@@ -1880,7 +1880,7 @@ Behavior and limits:
 | T195 | Choose submission/output · expand event groups (disclosure) | — | Same screen | — |
 | T196 | Return to prototype (return) | — | Originating page / parent state | — |
 
-**Source:** [SimulationControls.tsx:SimulationControls](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/SimulationControls.tsx) · [MvpApp.tsx:openSimulation](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/MvpApp.tsx)
+**Source:** [SimulationControls.tsx:SimulationControls](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/SimulationControls.tsx) · [MvpApp.tsx:openSimulation](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/MvpApp.tsx)
 
 <a id="s39"></a>
 
@@ -1912,7 +1912,7 @@ Acceptance criteria:
 | T198 | Import data (navigate) | — | [S05 · Import dataset · choose source](#s05) | Set Researcher; open import. |
 | T199 | Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:HelpDialog](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/MvpApp.tsx)
+**Source:** [Dialogs.tsx:HelpDialog](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/MvpApp.tsx)
 
 <a id="s40"></a>
 
@@ -1943,7 +1943,7 @@ Acceptance criteria:
 | T200 | Reset demo (navigate) | — | [S03 · Pipeline catalog](#s03) | Restore seeded workspace; close all selected context; role Researcher. |
 | T201 | Cancel / dismiss (return) | — | Originating page / parent state | — |
 
-**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/MvpApp.tsx) · [model.ts:RESET](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/model.ts)
+**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/MvpApp.tsx) · [model.ts:RESET](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/model.ts)
 
 <a id="s41"></a>
 
@@ -1979,7 +1979,7 @@ Behavior and limits:
 | --- | --- | --- | --- | --- |
 | T212 | Close preview (return) | — | Originating page / parent state | Return to the originating pipeline detail/review state. |
 
-**Source:** [Evidence.tsx:EvidenceAttachments](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Evidence.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/ReviewView.tsx)
+**Source:** [Evidence.tsx:EvidenceAttachments](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Evidence.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/ReviewView.tsx)
 
 <a id="s42"></a>
 
@@ -2019,7 +2019,7 @@ Behavior and limits:
 | T219 | Keep editing (return) | — | Originating page / parent state | Return to the same wizard step with every field and attachment retained. |
 | T220 | Discard changes (return) | — | [S03 · Pipeline catalog](#s03) | Close the wizard and return to the page that opened it; catalog shown as representative. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/Dialogs.tsx)
 
 <a id="s43"></a>
 
@@ -2060,7 +2060,7 @@ Behavior and limits:
 | T222 | Reset saved workspace (navigate) | Unreadable saved data | [S40 · Reset demo workspace](#s40) | Ask for explicit reset; preserve a recovery backup before replacement. |
 | T223 | Load saved workspace (return) | Concurrent-save conflict and readable saved copy | Originating page / parent state | Back up local copy, load latest saved workspace and retain the current area. |
 
-**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/MvpApp.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/f7e38b3d5bb6ff8dff30b6bf7598b052f20ccbb4/src/mvp/useWorkspace.ts)
+**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/MvpApp.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/useWorkspace.ts) · [workspaceLedger.ts:workspaceLedger](https://github.com/T-dotnet/Zero_trust/blob/b453c2b391ad42854113f4146276275b22ee37d2/src/mvp/workspaceLedger.ts)
 
 ## Coverage checklist
 
