@@ -1,6 +1,6 @@
 import { chromium, expect } from '@playwright/test';
 import { colors } from '../src/mvp/palette.mjs';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -11,6 +11,8 @@ const output=path.join(root,'public/mvp-customer-journey');
 mkdirSync(path.join(output,'screenshots'),{recursive:true});
 const manifest={capturedAt:new Date().toISOString(),sourceCommit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),appSourceCommit:execFileSync('git',['log','-1','--format=%H','--','src/mvp'],{cwd:root,encoding:'utf8'}).trim(),target,method:'Local Playwright Chromium. Browser runtime tools are not exposed in this session; the established local Playwright fallback is used.',scenario:'Fresh local workspace; synthetic example dataset and new Customer journey outcome classifier v1.0.0. All four reviews are performed through normal UI controls; simulation shortcuts are not used.',screenshots:[],visualPalette:{primary:colors.primary,slate:colors.slate,amber:colors.warningAccent,coral:colors.errorAccent,primaryText:colors.ink,secondaryActionText:colors.ink,tertiaryActionText:colors.ink,selection:colors.primaryDark},checks:{pageErrors:[],consoleErrors:[]}};
 const scratch=mkdtempSync(path.join(tmpdir(),'mvp-customer-journey-'));
+const screenshotScratch=path.join(scratch,'screenshots');
+mkdirSync(screenshotScratch);
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
 try {
  const page=await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});
@@ -22,8 +24,10 @@ try {
   await page.evaluate(()=>document.fonts.ready);
   await page.locator('.MuiSnackbar-root').waitFor({state:'hidden',timeout:7000});
   await page.evaluate(()=>window.scrollTo(0,0));
-  await page.screenshot({path:path.join(output,'screenshots',file),fullPage:page.viewportSize().width>900,animations:'disabled',caret:'hide'});
-  const data=readFileSync(path.join(output,'screenshots',file));
+  // Publish captures only after the walkthrough ends: writing to Vite's public
+  // directory mid-flow can reload the browser and discard its current screen.
+  await page.screenshot({path:path.join(screenshotScratch,file),fullPage:page.viewportSize().width>900,animations:'disabled',caret:'hide'});
+  const data=readFileSync(path.join(screenshotScratch,file));
   manifest.screenshots.push({file:`screenshots/${file}`,title,screen,actor,viewport:page.viewportSize(),width:data.readUInt32BE(16),height:data.readUInt32BE(20)});
   console.log(`Captured ${file}: ${title}`);
  }
@@ -115,6 +119,7 @@ try {
  manifest.checks.historyExport={filename:history.suggestedFilename(),events:exported.events.length,filter:exported.filters.search};
  if(manifest.checks.pageErrors.length||manifest.checks.consoleErrors.length)throw Error('Browser errors: '+JSON.stringify(manifest.checks));
  if(!manifest.checks.mobileNoPageOverflow)throw Error('Mobile overflow');
+ for(const shot of manifest.screenshots)copyFileSync(path.join(scratch,shot.file),path.join(output,shot.file));
  writeFileSync(path.join(output,'capture.json'),JSON.stringify(manifest,null,2)+'\n');
  console.log(`Verified ${manifest.screenshots.length} screenshots; four normal UI reviews, publication, run, output decision, sample download and filtered history export passed.`);
 } finally {await browser.close();rmSync(scratch,{recursive:true,force:true});}
