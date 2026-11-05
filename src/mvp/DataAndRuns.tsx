@@ -627,8 +627,8 @@ export function RunsAndResults({
                   }}
                 >
                   {run.status === "Failed"
-                    ? "Retry demo with example mapping"
-                    : "Restart demo run"}
+                    ? "Retry run"
+                    : "Restart run"}
                 </Button>
               )}
               {run?.artifactId && (

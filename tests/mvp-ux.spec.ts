@@ -33,14 +33,14 @@ test("reviewers get their actionable queue and authors see a tracking receipt", 
   ).toHaveCount(2);
   await page.getByRole("button", { name: "Review", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "Approve technical review" }),
+    page.getByRole("button", { name: "Approve review" }),
   ).toBeDisabled();
   await role(page, "Researcher");
   await expect(
     page.getByRole("heading", { name: "Submitted for review", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Approve technical review" }),
+    page.getByRole("button", { name: "Approve review" }),
   ).toBeHidden();
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(
@@ -48,7 +48,7 @@ test("reviewers get their actionable queue and authors see a tracking receipt", 
   ).toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: "Continue as Technical reviewer",
+      name: "Switch role",
       exact: true,
     }),
   ).toBeVisible();
@@ -75,12 +75,12 @@ test("mobile review puts criteria in the first viewport and keeps all four stage
   await expect(page.locator(".stage-path li")).toHaveCount(5);
   await page.locator("summary").filter({ hasText: "View all stages" }).click();
   await expect(
-    page.getByRole("button", { name: "Approve technical review" }),
+    page.getByRole("button", { name: "Approve review" }),
   ).toBeDisabled();
   for (const checkbox of await page.getByRole("checkbox").all())
     await checkbox.check();
   await expect(
-    page.getByRole("button", { name: "Approve technical review" }),
+    page.getByRole("button", { name: "Approve review" }),
   ).toBeEnabled();
   expect(
     await page.evaluate(
@@ -106,7 +106,7 @@ test("incomplete named drafts persist and field-specific errors prevent prematur
     .getByRole("button", { name: "Incomplete research draft", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Edit & submit draft", exact: true })
+    .getByRole("button", { name: "Edit draft", exact: true })
     .click();
   await expect(page.getByLabel("Research purpose")).toHaveValue("");
   await page
@@ -114,7 +114,7 @@ test("incomplete named drafts persist and field-specific errors prevent prematur
     .fill("A partially written purpose.");
   await page.getByRole("button", { name: "Save draft", exact: true }).click();
   await page
-    .getByRole("button", { name: "Edit & submit draft", exact: true })
+    .getByRole("button", { name: "Edit draft", exact: true })
     .click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
@@ -156,7 +156,7 @@ test("revision drafts retain requested changes and edits without prematurely res
     .getByLabel("Expected output")
     .fill("Reviewed outcome classification (CSV)");
   await page
-    .getByRole("button", { name: "Save revision draft", exact: true })
+    .getByRole("button", { name: "Save draft", exact: true })
     .click();
   const saved = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("zero-trust-mvp-v1")!).pipelines.find(
@@ -211,25 +211,26 @@ test("simulation controls unblock reviews, execution and output while keeping pu
     page.getByRole("heading", { name: "Simulation controls", exact: true }),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Simulate Ethical approval", exact: true })
+    .getByRole("button", { name: "Approve stage", exact: true })
     .click();
   await expect(
     page.getByRole("button", {
-      name: "Simulate Technical approval",
+      name: "Approve stage",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText(/Waiting for Technical review/)).toBeVisible();
+  await page
+    .getByRole("button", { name: "Approve remaining", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", {
+      name: "Publish pipeline",
       exact: true,
     }),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Simulate remaining reviews", exact: true })
-    .click();
-  await expect(
-    page.getByRole("button", {
-      name: "Simulate author publication",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Return to prototype", exact: true })
+    .getByRole("button", { name: "Done", exact: true })
     .click();
   await expect(
     page.getByRole("heading", { name: "Ready to publish", exact: true }),
@@ -263,12 +264,12 @@ test("simulation controls unblock reviews, execution and output while keeping pu
     })
     .click();
   await page
-    .getByRole("button", { name: "Start demo run", exact: true })
+    .getByRole("button", { name: "Start run", exact: true })
     .click();
   await simulate(page);
   await page.locator("summary").filter({ hasText: "Execution events" }).click();
   await page
-    .getByRole("button", { name: "Complete waiting runs", exact: true })
+    .getByRole("button", { name: "Complete runs", exact: true })
     .click();
   await page
     .locator("summary")
@@ -281,10 +282,10 @@ test("simulation controls unblock reviews, execution and output while keeping pu
     .getByRole("option", { name: /Adverse event classifier · output/ })
     .click();
   await page
-    .getByRole("button", { name: "Simulate output acceptance", exact: true })
+    .getByRole("button", { name: "Accept output", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Return to prototype", exact: true })
+    .getByRole("button", { name: "Done", exact: true })
     .click();
   const run = page
     .getByRole("table", { name: "Runs", exact: true })
@@ -319,7 +320,7 @@ test("artifact decisions start neutral, expose a readable limitation and record 
     .getByRole("button", { name: "View output", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Continue as Privacy reviewer", exact: true })
+    .getByRole("button", { name: "Switch role", exact: true })
     .click();
   await expect(
     page.getByRole("radio", { name: "Acceptable", exact: true }),
@@ -373,7 +374,7 @@ test("import discloses a sample but persists only metadata and column names", as
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Use synthetic example", exact: true })
+    .getByRole("button", { name: "Use sample", exact: true })
     .click();
   await expect(page.locator(".upload-zone")).toHaveCount(0);
   await expect(

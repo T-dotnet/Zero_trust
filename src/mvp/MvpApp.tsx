@@ -253,7 +253,7 @@ export default function MvpApp() {
                   color="error"
                   onClick={() => setDialog("reset")}
                 >
-                  Reset saved workspace
+                  Reset workspace
                 </Button>
               )}
             </div>

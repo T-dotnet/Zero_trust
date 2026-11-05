@@ -27,7 +27,7 @@ test("invalid replacement file clears the previous valid import", async ({
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use synthetic example" }).click();
+  await page.getByRole("button", { name: "Use sample" }).click();
   const submit = page
     .getByRole("dialog")
     .getByRole("button", { name: "Import dataset", exact: true });
@@ -102,7 +102,7 @@ test("new versions never reuse a reserved version number", async ({ page }) => {
         exact: true,
       })
       .click();
-    await page.getByRole("button", { name: "Submit new version" }).click();
+    await page.getByRole("button", { name: "New version" }).click();
     await page.getByRole("button", { name: "Continue", exact: true }).click();
     await page.getByRole("button", { name: "Continue", exact: true }).click();
     await page
@@ -143,12 +143,12 @@ test("damaged saved data is preserved until explicit recovery and reset", async 
   await page.getByRole("button", { name: "Download recovery copy" }).click();
   const download = await downloading;
   expect(await readFile((await download.path())!, "utf8")).toBe(damaged);
-  await page.getByRole("button", { name: "Reset saved workspace" }).click();
+  await page.getByRole("button", { name: "Reset workspace" }).click();
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
   expect(
     await page.evaluate(() => localStorage.getItem("zero-trust-mvp-v1")),
   ).toBe(damaged);
-  await page.getByRole("button", { name: "Reset saved workspace" }).click();
+  await page.getByRole("button", { name: "Reset workspace" }).click();
   await page.getByRole("button", { name: "Reset demo", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Pipelines", exact: true }),
@@ -199,7 +199,7 @@ test("drafts retain requirements and attachments across editing and reload", asy
     })
     .click();
   await page
-    .getByRole("button", { name: "Edit & submit draft", exact: true })
+    .getByRole("button", { name: "Edit draft", exact: true })
     .click();
   await expect(page.getByLabel("Branch or tag")).toHaveValue("release/audit");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -220,11 +220,11 @@ test("reviewers cannot approve out of order and rejection needs a reason", async
     .click();
   await role(page, "Security reviewer");
   await expect(
-    page.getByRole("button", { name: "Approve ethical review" }),
+    page.getByRole("button", { name: "Approve review" }),
   ).toBeHidden();
   await role(page, "Ethical reviewer");
   await page
-    .getByRole("button", { name: "Reject submission", exact: true })
+    .getByRole("button", { name: "Reject", exact: true })
     .click();
   await expect(
     page.getByText("Add a comment explaining what needs to change."),
@@ -233,7 +233,7 @@ test("reviewers cannot approve out of order and rejection needs a reason", async
     .getByLabel("Review comments", { exact: true })
     .fill("Clarify consent scope.");
   await page
-    .getByRole("button", { name: "Reject submission", exact: true })
+    .getByRole("button", { name: "Reject", exact: true })
     .click();
   await expect(
     page.getByText("Clarify consent scope.", { exact: true }).first(),
@@ -327,7 +327,7 @@ test("validated CSV download has a standard header, sample records, and provenan
     .getByRole("button", { name: "De-identified clinical notes", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Continue as Privacy reviewer", exact: true })
+    .getByRole("button", { name: "Switch role", exact: true })
     .click();
   await page.getByRole("radio", { name: "Acceptable", exact: true }).check();
   await page.getByRole("button", { name: "Accept output" }).click();
@@ -378,7 +378,7 @@ test("incompatible dataset formats and non-researcher creation are blocked", asy
     })
     .click();
   await expect(
-    page.getByRole("button", { name: "Start demo run" }),
+    page.getByRole("button", { name: "Start run" }),
   ).toBeDisabled();
   await expect(
     page.getByRole("alert").filter({ hasText: "does not match" }),
@@ -393,7 +393,7 @@ test("incompatible dataset formats and non-researcher creation are blocked", asy
     })
     .click();
   await expect(
-    page.getByRole("button", { name: "Start demo run" }),
+    page.getByRole("button", { name: "Start run" }),
   ).toBeEnabled();
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
 });
@@ -456,7 +456,7 @@ test("running jobs survive reload and produce exactly one output", async ({
       exact: true,
     })
     .click();
-  await page.getByRole("button", { name: "Start demo run" }).click();
+  await page.getByRole("button", { name: "Start run" }).click();
   await expect(
     page.getByRole("table", { name: "Runs", exact: true }),
   ).toContainText("Running");
@@ -498,7 +498,7 @@ test("storage warnings recover after a later successful save", async ({
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use synthetic example" }).click();
+  await page.getByRole("button", { name: "Use sample" }).click();
   await page
     .getByRole("dialog")
     .getByRole("button", { name: "Import dataset", exact: true })

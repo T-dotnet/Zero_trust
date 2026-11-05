@@ -155,10 +155,10 @@ test("the complete solo walkthrough works with the mobile menu, larger controls 
   ).toBeVisible();
   await simulation(page);
   await page
-    .getByRole("button", { name: "Simulate remaining reviews", exact: true })
+    .getByRole("button", { name: "Approve remaining", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Return to prototype", exact: true })
+    .getByRole("button", { name: "Done", exact: true })
     .click();
   await expect(
     page.getByText("4 of 4 reviews completed", { exact: true }),
@@ -189,7 +189,7 @@ test("the complete solo walkthrough works with the mobile menu, larger controls 
     ).toBe(true);
   }
   await page
-    .getByRole("button", { name: "Start demo run", exact: true })
+    .getByRole("button", { name: "Start run", exact: true })
     .click();
   const run = page
     .getByRole("table", { name: "Runs", exact: true })
@@ -200,7 +200,7 @@ test("the complete solo walkthrough works with the mobile menu, larger controls 
   ).toBeVisible({ timeout: 15_000 });
   await run.getByRole("button", { name: "View output", exact: true }).click();
   await page
-    .getByRole("button", { name: "Continue as Privacy reviewer", exact: true })
+    .getByRole("button", { name: "Switch role", exact: true })
     .click();
   await expect(
     page.getByRole("button", { name: "Choose a decision", exact: true }),
@@ -355,7 +355,7 @@ test("cards and controls adapt to narrower windows and larger reading text", asy
   for (const checkbox of await page.getByRole("checkbox").all())
     await checkbox.check();
   await page
-    .getByRole("button", { name: "Approve technical review", exact: true })
+    .getByRole("button", { name: "Approve review", exact: true })
     .click();
   const notification = page.locator(".MuiSnackbar-root");
   await expect(notification).toBeVisible();

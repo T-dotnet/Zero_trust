@@ -276,8 +276,8 @@ export function PipelineForm({
         <DialogContent ref={content}>
           <p className="muted">
             {pipeline && pipeline.status !== "Draft"
-              ? "Save your working revision at any time. Resubmission restarts all four approval stages."
-              : "Start with a name. Save a draft at any time; complete the required fields before submission."}
+              ? "Save a draft as you work. Resubmitting restarts all four reviews."
+              : "Add a name to start. Save a draft at any step."}
           </p>
           {feedback && (
             <div className="revision-context" role="note">
@@ -378,7 +378,7 @@ export function PipelineForm({
           )}
           {step === 1 && (
             <div className="form-stack">
-              <h3>Define the processing contract</h3>
+              <h3>Inputs & outputs</h3>
               {field("input", "Input specification", {
                 required: true,
                 helperText:
@@ -531,9 +531,7 @@ export function PipelineForm({
             disabled={evidenceBusy || saving}
             onClick={() => submit(true)}
           >
-            {pipeline && pipeline.status !== "Draft"
-              ? "Save revision draft"
-              : "Save draft"}
+            Save draft
           </Button>
           <Button
             onClick={step === 0 ? requestClose : () => changeStep(step - 1)}
@@ -563,9 +561,7 @@ export function PipelineForm({
                 submit(true);
               }}
             >
-              {pipeline && pipeline.status !== "Draft"
-                ? "Save revision draft"
-                : "Save draft"}
+              Save draft
             </Button>
           }
         >
@@ -765,9 +761,10 @@ export function ImportDialog({
             <div className="sample-divider">
               <span>or</span>
               <Button onClick={sample} size="small">
-                Use synthetic example
+                Use sample
               </Button>
             </div>
+            <p className="micro-copy">Loads a synthetic CSV for this walkthrough.</p>
           </>
         )}
         {reading && <p role="status">Reading and validating CSV…</p>}
@@ -940,7 +937,7 @@ export function RunDialog({
               if (pipeline && dataset) onStart(pipeline, dataset);
             }}
           >
-            Start demo run
+            Start run
           </Button>
         }
       >
@@ -994,7 +991,7 @@ export function ArtifactDialog({
       </Button>
     ) : role !== "Privacy reviewer" ? (
       <Button variant="contained" onClick={() => setRole("Privacy reviewer")}>
-        Continue as Privacy reviewer
+        Switch role
       </Button>
     ) : (
       <Button
@@ -1101,11 +1098,10 @@ export function ArtifactDialog({
             {role !== "Privacy reviewer" ? (
               <>
                 <p>
-                  A privacy reviewer validates outputs before download. This
-                  output is awaiting their decision.
+                  A Privacy reviewer must validate this output before download.
                 </p>
                 <p className="micro-copy">
-                  Use the demo role action below to continue the review.
+                  Switch to Privacy reviewer using the role action below.
                 </p>
               </>
             ) : (

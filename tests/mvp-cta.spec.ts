@@ -149,7 +149,7 @@ test("output review gives each role a clear primary and keeps recovery actions f
     .filter({ hasText: "RUN-1042" })
     .getByRole("button", { name: "View output", exact: true })
     .click();
-  let bar = await primaryFirst(page, "Continue as Privacy reviewer");
+  let bar = await primaryFirst(page, "Switch role");
   await bar.primary.click();
   bar = await primaryFirst(page, "Choose a decision");
   await expect(bar.primary).toBeDisabled();
@@ -168,9 +168,9 @@ test("output review gives each role a clear primary and keeps recovery actions f
     .filter({ hasText: "RUN-1041" })
     .getByRole("button", { name: "Details", exact: true })
     .click();
-  bar = await primaryFirst(page, "Retry demo with example mapping");
+  bar = await primaryFirst(page, "Retry run");
   await page
-    .getByRole("button", { name: "Need help with this run?", exact: true })
+    .getByRole("button", { name: "Get help", exact: true })
     .click();
   await page
     .getByRole("textbox", { name: "Describe the issue", exact: true })
@@ -179,10 +179,10 @@ test("output review gives each role a clear primary and keeps recovery actions f
   for (const action of await support.getByRole("button").all())
     await fullWidth(action);
   await expect(support.getByRole("button").first()).toHaveAccessibleName(
-    "Create support request",
+    "Create request",
   );
   const create = (await support
-    .getByRole("button", { name: "Create support request", exact: true })
+    .getByRole("button", { name: "Create request", exact: true })
     .boundingBox())!;
   const cancel = (await support
     .getByRole("button", { name: "Cancel", exact: true })
@@ -237,7 +237,7 @@ test("help and confirmation dialogs retain primary priority with larger text", a
     .getByRole("textbox", { name: "Review comments", exact: true })
     .fill("The synthetic evidence needs correction.");
   await page
-    .getByRole("button", { name: "Reject submission", exact: true })
+    .getByRole("button", { name: "Reject", exact: true })
     .click();
   bar = await primaryFirst(page, "Confirm rejection");
   await bar.actions

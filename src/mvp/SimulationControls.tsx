@@ -89,10 +89,10 @@ export function SimulationControls({
               </p>
               <div className="simulation-actions">
                 <Button variant="outlined" onClick={() => approve(false)}>
-                  Simulate {STAGES[pipeline.stage]} approval
+                  Approve stage
                 </Button>
                 <Button onClick={() => approve(true)}>
-                  Simulate remaining reviews
+                  Approve remaining
                 </Button>
               </div>
             </>
@@ -115,7 +115,7 @@ export function SimulationControls({
                   );
                 }}
               >
-                Simulate author publication
+                Publish pipeline
               </Button>
             </>
           ) : (
@@ -142,7 +142,7 @@ export function SimulationControls({
               );
             }}
           >
-            Complete waiting runs
+            Complete runs
           </Button>
         </details>
         <details className="disclosure">
@@ -188,7 +188,7 @@ export function SimulationControls({
               );
             }}
           >
-            Simulate output acceptance
+            Accept output
           </Button>
         </details>
         {message && (
@@ -200,7 +200,7 @@ export function SimulationControls({
       <DialogActionBar
         primary={
           <Button variant="contained" onClick={onClose}>
-            Return to prototype
+            Done
           </Button>
         }
       />

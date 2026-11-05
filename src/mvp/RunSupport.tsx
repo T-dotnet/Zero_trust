@@ -54,7 +54,7 @@ export function RunSupport({
           </>
         ) : (
           <Button size="small" onClick={() => setRole("Technical reviewer")}>
-            Switch to technical support role
+            Switch to support
           </Button>
         )}
         <p className="micro-copy">
@@ -63,7 +63,7 @@ export function RunSupport({
       </section>
     );
   return (
-    <section className="support-block">
+    <section className={`support-block ${open ? "" : "is-collapsed"}`}>
       {open ? (
         <>
           <h3>Request support</h3>
@@ -85,7 +85,7 @@ export function RunSupport({
                 setMessage("");
               }}
             >
-              Create support request
+              Create request
             </Button>
             <Button onClick={() => setOpen(false)}>Cancel</Button>
           </div>
@@ -95,7 +95,7 @@ export function RunSupport({
         </>
       ) : (
         <Button variant="text" onClick={() => setOpen(true)}>
-          Need help with this run?
+          Get help
         </Button>
       )}
     </section>

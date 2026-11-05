@@ -102,9 +102,9 @@ export function ReviewView({
   const switchRole = (nextRole: Role) => (
     <div className="demo-handoff">
       <span className="eyebrow">Demo controls</span>
-      <p>Continue the walkthrough as the next participant.</p>
+      <p>Continue as <strong>{nextRole}</strong> for the next task.</p>
       <Button variant="outlined" size="small" onClick={() => setRole(nextRole)}>
-        Continue as {nextRole}
+        Switch role
       </Button>
     </div>
   );
@@ -218,13 +218,13 @@ export function ReviewView({
                   disabled={checked !== 3}
                   onClick={() => decide("approve")}
                 >
-                  Approve {stage.toLowerCase()} review
+                  Approve review
                 </Button>
                 <Button variant="outlined" onClick={() => decide("changes")}>
                   Request changes
                 </Button>
                 <Button color="error" onClick={() => decide("reject")}>
-                  Reject submission
+                  Reject
                 </Button>
               </div>
               <p className="decision-note">
@@ -308,7 +308,7 @@ export function ReviewView({
                     Configure run
                   </Button>
                   <Button variant="outlined" onClick={onNewVersion}>
-                    Submit new version
+                    New version
                   </Button>
                 </div>
               ) : (
@@ -340,7 +340,7 @@ export function ReviewView({
               {role === "Researcher" ? (
                 <Button variant="contained" onClick={onRevise}>
                   {p.status === "Draft"
-                    ? "Edit & submit draft"
+                    ? "Edit draft"
                     : "Revise & resubmit"}
                 </Button>
               ) : (

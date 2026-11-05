@@ -15,7 +15,7 @@ async function save(page: Page) {
 async function edit(page: Page, name: string) {
   await page.getByRole("button", { name, exact: true }).click();
   await page
-    .getByRole("button", { name: "Edit & submit draft", exact: true })
+    .getByRole("button", { name: "Edit draft", exact: true })
     .click();
 }
 async function failSaves(page: Page) {
@@ -67,7 +67,7 @@ test("stale edits to the same pipeline are kept in the form rather than overwrit
   await second.goto("/");
   await edit(second, "Shared draft");
   await page
-    .getByRole("button", { name: "Edit & submit draft", exact: true })
+    .getByRole("button", { name: "Edit draft", exact: true })
     .click();
   await page.getByLabel("Research purpose").fill("First tab saved purpose");
   await second
@@ -113,7 +113,7 @@ test("failed saves preserve draft history and retry the complete local state", a
     ),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Edit & submit draft", exact: true })
+    .getByRole("button", { name: "Edit draft", exact: true })
     .click();
   await page.getByLabel("Research purpose").fill("Kept across failed saves");
   await page.evaluate(() => sessionStorage.removeItem("fail-saves"));
@@ -244,11 +244,11 @@ test("support requests record the active reviewer in history and export", async 
     .getByRole("button", { name: "Details", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Need help with this run?", exact: true })
+    .getByRole("button", { name: "Get help", exact: true })
     .click();
   await page.getByLabel("Describe the issue").fill("Review input mapping");
   await page
-    .getByRole("button", { name: "Create support request", exact: true })
+    .getByRole("button", { name: "Create request", exact: true })
     .click();
   await page
     .getByRole("dialog")

@@ -627,7 +627,11 @@
   }
   .dialog-action-bar .MuiButton-root {
     min-width: 0;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: normal;
+    line-height: 1.4;
+    padding-block: 12px;
   }
   .dialog-action-bar > .simulation-link {
     text-align: center;

@@ -23,13 +23,13 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
     page.getByRole("heading", { name: "Submitted for review", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Approve ethical review" }),
+    page.getByRole("button", { name: "Approve review" }),
   ).toBeHidden();
   for (const stage of ["Ethical", "Technical", "Privacy", "Security"]) {
     await role(page, `${stage} reviewer`);
     await expect(
       page.getByRole("button", {
-        name: `Approve ${stage.toLowerCase()} review`,
+        name: 'Approve review',
         exact: true,
       }),
     ).toBeDisabled();
@@ -43,7 +43,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
       .fill(`${stage} evidence reviewed.`);
     await page
       .getByRole("button", {
-        name: `Approve ${stage.toLowerCase()} review`,
+        name: 'Approve review',
         exact: true,
       })
       .click();
@@ -69,7 +69,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
     })
     .click();
   await page
-    .getByRole("button", { name: "Start demo run", exact: true })
+    .getByRole("button", { name: "Start run", exact: true })
     .click();
   const row = page.getByRole("row").filter({
     has: page.getByText("Longitudinal outcome classifier", { exact: true }),
@@ -85,7 +85,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
     page.getByRole("button", { name: "Download sample CSV" }),
   ).toBeDisabled();
   await page
-    .getByRole("button", { name: "Continue as Privacy reviewer", exact: true })
+    .getByRole("button", { name: "Switch role", exact: true })
     .click();
   await page
     .getByLabel("Validation comments")
@@ -178,7 +178,7 @@ test("mobile navigation, dataset import, search, and reset work without page ove
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use synthetic example" }).click();
+  await page.getByRole("button", { name: "Use sample" }).click();
   await page.getByLabel("Dataset name").fill("MVP imported cohort");
   await page
     .getByRole("dialog")
@@ -208,7 +208,7 @@ test("new versions retain the approved version and expose attached evidence to r
       exact: true,
     })
     .click();
-  await page.getByRole("button", { name: "Submit new version" }).click();
+  await page.getByRole("button", { name: "New version" }).click();
   await page
     .getByLabel("Research purpose")
     .fill("Updated de-identification with explicit validation evidence.");
@@ -271,13 +271,13 @@ test("failed run support can be resolved and logs exported before retry and canc
     .filter({ hasText: "RUN-1041" })
     .getByRole("button", { name: "Details", exact: true })
     .click();
-  await page.getByRole("button", { name: "Need help with this run?" }).click();
+  await page.getByRole("button", { name: "Get help" }).click();
   await page
     .getByLabel("Describe the issue")
     .fill("Please check the input mapping.");
-  await page.getByRole("button", { name: "Create support request" }).click();
+  await page.getByRole("button", { name: "Create request" }).click();
   await page
-    .getByRole("button", { name: "Switch to technical support role" })
+    .getByRole("button", { name: "Switch to support" })
     .click();
   await page
     .getByLabel("Resolution notes")
@@ -297,11 +297,11 @@ test("failed run support can be resolved and logs exported before retry and canc
     .getByRole("button", { name: "Details", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Retry demo with example mapping" })
+    .getByRole("button", { name: "Retry run" })
     .click();
   await page.getByRole("button", { name: "Cancel run", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "Restart demo run" }),
+    page.getByRole("button", { name: "Restart run" }),
   ).toBeVisible();
 });
 
@@ -318,7 +318,7 @@ test("unacceptable outputs require a reason and remain blocked from download; de
     .getByRole("button", { name: "De-identified clinical notes", exact: true })
     .click();
   await page
-    .getByRole("button", { name: "Continue as Privacy reviewer", exact: true })
+    .getByRole("button", { name: "Switch role", exact: true })
     .click();
   await page
     .getByRole("radio", { name: "Not acceptable", exact: true })

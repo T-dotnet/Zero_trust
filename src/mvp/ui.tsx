@@ -256,7 +256,7 @@ export function ReviewGuide({ onExplore }: { onExplore: () => void }) {
   return (
     <details className="review-guide disclosure">
       <summary>
-        How pipeline approval works · four reviews and author publication
+        How approval works
       </summary>
       <StagePath illustrative />
       <Button
@@ -264,7 +264,7 @@ export function ReviewGuide({ onExplore }: { onExplore: () => void }) {
         className="text-link"
         endIcon={<ChevronRight size={16} />}
       >
-        Explore the review process
+        View stages
       </Button>
     </details>
   );

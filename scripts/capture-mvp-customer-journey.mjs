@@ -35,7 +35,7 @@ try {
  await expect(page.getByRole('heading',{name:'Pipelines',exact:true})).toBeVisible();
  await capture('00-pipeline-catalog.png','Initial pipeline catalog','S03','Researcher');
  await nav('Datasets');await page.getByRole('button',{name:'Import dataset',exact:true}).click();
- await page.getByRole('button',{name:'Use synthetic example',exact:true}).click();
+ await page.getByRole('button',{name:'Use sample',exact:true}).click();
  await page.getByRole('textbox',{name:/^Dataset name/}).fill('Customer journey · Synthetic cohort');
  await page.getByText('Preview columns and sample rows',{exact:false}).click();
  await expect(page.getByRole('table',{name:'Dataset sample preview'})).toBeVisible();
@@ -57,7 +57,7 @@ try {
  const stages=['Ethical','Technical','Privacy','Security'];
  for(const [index,stage] of stages.entries()){
   await role(`${stage} reviewer`);
-  const approve=page.getByRole('button',{name:`Approve ${stage.toLowerCase()} review`,exact:true});
+  const approve=page.getByRole('button',{name:'Approve review',exact:true});
   await expect(approve).toBeDisabled();
   for(const check of await page.getByRole('checkbox').all())await check.check();
   await page.getByLabel('Review comments',{exact:true}).fill(`${stage} demonstration evidence reviewed. Synthetic scenario only.`);
@@ -75,9 +75,9 @@ try {
  await page.getByLabel('Source dataset',{exact:true}).click();
  await page.getByRole('option',{name:'Customer journey · Synthetic cohort (CSV)',exact:true}).click();
  await page.getByText('Inspect dataset columns',{exact:true}).click();
- await expect(page.getByRole('button',{name:'Start demo run',exact:true})).toBeEnabled();
+ await expect(page.getByRole('button',{name:'Start run',exact:true})).toBeEnabled();
  await capture('10-configure-run.png','Pair published method with the imported source','S23','Researcher');
- await page.getByRole('button',{name:'Start demo run',exact:true}).click();
+ await page.getByRole('button',{name:'Start run',exact:true}).click();
  const row=page.getByRole('row').filter({has:page.getByText('Customer journey outcome classifier',{exact:true})});
  await expect(row.getByText('Completed',{exact:true})).toBeVisible({timeout:15000});
  await row.getByRole('button',{name:'Details',exact:true}).click();
@@ -85,7 +85,7 @@ try {
  await capture('11-completed-run.png','Completed run links to output awaiting separate validation','S26','Researcher');
  await page.getByRole('button',{name:'Inspect output',exact:true}).click();
  await expect(page.getByRole('button',{name:'Download sample CSV',exact:true})).toBeDisabled();
- await page.getByRole('button',{name:'Continue as Privacy reviewer',exact:true}).click();
+ await page.getByRole('button',{name:'Switch role',exact:true}).click();
  await page.getByRole('radio',{name:'Acceptable',exact:true}).check();
  await page.getByLabel('Validation comments',{exact:true}).fill('Synthetic sample assessed against the declared output; acceptable for this demonstration.');
  await capture('12-output-validation.png','Privacy reviewer makes the separate output decision','S34','Privacy reviewer');
