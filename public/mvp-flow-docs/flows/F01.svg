@@ -236,7 +236,7 @@
 <text text-anchor="start" x="497.5" y="-438.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Simulation controls</text>
 <text text-anchor="start" x="497.5" y="-398.9" font-family="Arial" font-size="12.00" fill="#626a7e">Demo submission select · current stage/status</text>
 <text text-anchor="start" x="497.5" y="-361.9" font-family="Arial" font-size="12.00" fill="#626a7e">Simulate current review / remaining reviews</text>
-<text text-anchor="start" x="497.5" y="-324.9" font-family="Arial" font-size="12.00" fill="#626a7e">Simulate author publication (separate)</text>
+<text text-anchor="start" x="497.5" y="-324.9" font-family="Arial" font-size="12.00" fill="#626a7e">Publish pipeline (separate)</text>
 <text text-anchor="start" x="497.5" y="-287.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="484.5,-272 484.5,-501 754.5,-501 754.5,-272 484.5,-272"/>
 </a>

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "title": "Zero Trust MVP · Screen & flow atlas",
-  "reviewedAt": "2026-11-04",
-  "sourceCommit": "460b5b36846e7e3ece576c62d7efd9f131e770ab",
+  "reviewedAt": "2026-11-05",
+  "sourceCommit": "983c8bce846a4c70b331649acdd4804098f5ec2e",
   "scope": "Current mvp checkpoint only. All included MVP capabilities are always on. The archived /?view=full workspace is outside this atlas.",
   "boundaries": [
     "Role switching demonstrates five interfaces; it is not authentication or backend authorization.",
@@ -61,7 +61,9 @@
     "Workspace saves are serialized across tabs. Unreadable data is preserved for download and explicit recovery; unsupported atomic storage uses session-only changes.",
     "The visual palette is always on: mint #2BE1B0 primary fills with dark labels, dark secondary and tertiary labels, deeper green selection and focus, slate #8C91A4 accents, amber #FEAB3D warnings and coral #F8506D destructive accents. No theme or feature toggle is required.",
     "Review progress uses green completed markers, amber current-step markers, dashed slate pending markers and coral markers for stages needing changes. A legend, marker sizes, checkmarks and text labels make the states clear beyond color.",
-    "Progress states are always on: completed steps use green and checkmarks; active form, review and execution steps use amber; pending steps use slate and dashed markers; failed or changes-required states use coral. Run progress retains its percentage and explicit status. There is no feature or settings toggle."
+    "Progress states are always on: completed steps use green and checkmarks; active form, review and execution steps use amber; pending steps use slate and dashed markers; failed or changes-required states use coral. Run progress retains its percentage and explicit status. There is no feature or settings toggle.",
+    "Pipeline and approval lists show visible approved-review counts (for example, 1/4), alongside the stage markers and status. Pending stage circles have dashed slate outlines. Blocked stages spell out Changes requested or Rejected; later steps in failed or cancelled runs say Not run, while running executions retain Pending. These refinements are always on.",
+    "CTA labels stay concise (for example, Retry run, Approve review and Switch role). Adjacent copy names the reviewer role, synthetic data and example retry mapping. Desktop footers wrap whole actions; mobile task actions remain full width, primary first, with no mid-word label breaks. Review details stack below the task below 1100px. These rules are always on."
   ],
   "screens": [
     {
@@ -321,7 +323,7 @@
         "All / Needs action / Approved / In review",
         "Search · Category filter",
         "Pipeline name · version · status · next action",
-        "How pipeline approval works disclosure · Explore the review process",
+        "How approval works disclosure · View stages",
         "Progress legend · completed / current step / pending / needs changes"
       ],
       "stories": [
@@ -468,7 +470,7 @@
         },
         {
           "id": "T213",
-          "label": "Explore the review process",
+          "label": "View stages",
           "to": "S12",
           "guard": "Expand How pipeline approval works",
           "outcome": "Open Approvals queue.",
@@ -559,7 +561,7 @@
       ],
       "layout": [
         "Drop zone · Choose file",
-        "Use synthetic example",
+        "Use sample",
         "Dataset name * · Description",
         "Inline validation / reading state"
       ],
@@ -590,7 +592,7 @@
         },
         {
           "id": "T038",
-          "label": "Use synthetic example",
+          "label": "Use sample",
           "to": "S06",
           "guard": "",
           "outcome": "Prefills a 120-record synthetic cohort.",
@@ -807,7 +809,7 @@
         },
         {
           "id": "T051",
-          "label": "Save revision draft",
+          "label": "Save draft",
           "to": "S19",
           "guard": "Revision of Changes requested; Rejected returns S20.",
           "outcome": "Keep reviewed version/status and save revision fields separately.",
@@ -1055,7 +1057,7 @@
         "Draft status · Complete your draft",
         "Submission details · Source and version disclosure",
         "Evidence attachments · Activity timeline",
-        "Edit & submit draft"
+        "Edit draft"
       ],
       "stories": [
         {
@@ -1071,7 +1073,7 @@
       "actions": [
         {
           "id": "T066",
-          "label": "Edit & submit draft",
+          "label": "Edit draft",
           "to": "S08",
           "guard": "Researcher",
           "outcome": "Edit mode keeps existing draft identity and version.",
@@ -1080,7 +1082,7 @@
         },
         {
           "id": "T067",
-          "label": "Continue as Researcher",
+          "label": "Switch role",
           "to": "self",
           "guard": "Other role",
           "outcome": "Switch role only.",
@@ -1255,7 +1257,7 @@
         "Submitted for review / Awaiting assigned reviewer",
         "Status · next owner · what happens next · version",
         "Submission details · evidence · history",
-        "Continue as assigned reviewer (demo)"
+        "Switch role · assigned reviewer (demo)"
       ],
       "stories": [
         {
@@ -1272,7 +1274,7 @@
       "actions": [
         {
           "id": "T080",
-          "label": "Continue as Ethical reviewer",
+          "label": "Switch role",
           "to": "S14",
           "guard": "Current stage is Ethical",
           "outcome": "Role switch only; stage still needs decision.",
@@ -1281,7 +1283,7 @@
         },
         {
           "id": "T081",
-          "label": "Continue as Technical reviewer",
+          "label": "Switch role",
           "to": "S15",
           "guard": "Current stage is Technical",
           "outcome": "Role switch only; stage still needs decision.",
@@ -1290,7 +1292,7 @@
         },
         {
           "id": "T082",
-          "label": "Continue as Privacy reviewer",
+          "label": "Switch role",
           "to": "S16",
           "guard": "Current stage is Privacy",
           "outcome": "Role switch only; stage still needs decision.",
@@ -1299,7 +1301,7 @@
         },
         {
           "id": "T083",
-          "label": "Continue as Security reviewer",
+          "label": "Switch role",
           "to": "S17",
           "guard": "Current stage is Security",
           "outcome": "Role switch only; stage still needs decision.",
@@ -1393,7 +1395,7 @@
         },
         {
           "id": "T088",
-          "label": "Reject submission",
+          "label": "Reject",
           "to": "S18",
           "guard": "Nonblank review comment",
           "outcome": "Open confirmation; no decision until confirmed.",
@@ -1487,7 +1489,7 @@
         },
         {
           "id": "T093",
-          "label": "Reject submission",
+          "label": "Reject",
           "to": "S18",
           "guard": "Nonblank review comment",
           "outcome": "Open confirmation; no decision until confirmed.",
@@ -1581,7 +1583,7 @@
         },
         {
           "id": "T098",
-          "label": "Reject submission",
+          "label": "Reject",
           "to": "S18",
           "guard": "Nonblank review comment",
           "outcome": "Open confirmation; no decision until confirmed.",
@@ -1675,7 +1677,7 @@
         },
         {
           "id": "T103",
-          "label": "Reject submission",
+          "label": "Reject",
           "to": "S18",
           "guard": "Nonblank review comment",
           "outcome": "Open confirmation; no decision until confirmed.",
@@ -1801,7 +1803,7 @@
         },
         {
           "id": "T109",
-          "label": "Continue as Researcher",
+          "label": "Switch role",
           "to": "self",
           "guard": "Other role",
           "outcome": "Switch role, no state change.",
@@ -1879,7 +1881,7 @@
         },
         {
           "id": "T113",
-          "label": "Continue as Researcher",
+          "label": "Switch role",
           "to": "self",
           "guard": "Other role",
           "outcome": "Switch role, no state change.",
@@ -1930,7 +1932,7 @@
       "layout": [
         "Ready to publish · 4 of 4 reviews",
         "Review completion receipt · source / version",
-        "Publish pipeline / Continue as Researcher",
+        "Publish pipeline / Switch role",
         "Retained evidence and approval timeline"
       ],
       "stories": [
@@ -1956,7 +1958,7 @@
         },
         {
           "id": "T117",
-          "label": "Continue as Researcher",
+          "label": "Switch role",
           "to": "self",
           "guard": "Reviewer",
           "outcome": "",
@@ -2008,7 +2010,7 @@
       "layout": [
         "Approved · Ready for research",
         "Method purpose · source / version · input / output",
-        "Configure run · Submit new version",
+        "Configure run · New version",
         "Evidence and retained decision timeline"
       ],
       "stories": [
@@ -2035,7 +2037,7 @@
         },
         {
           "id": "T121",
-          "label": "Submit new version",
+          "label": "New version",
           "to": "S08",
           "guard": "Researcher",
           "outcome": "Prefill approved source in new-version mode; save/submit creates separate record.",
@@ -2044,7 +2046,7 @@
         },
         {
           "id": "T122",
-          "label": "Continue as Researcher",
+          "label": "Switch role",
           "to": "self",
           "guard": "Reviewer",
           "outcome": "",
@@ -2114,7 +2116,7 @@
       "actions": [
         {
           "id": "T125",
-          "label": "Start demo run",
+          "label": "Start run",
           "to": "S24",
           "guard": "Approved pipeline + dataset + supported format",
           "outcome": "Create Running record; no execution service is called.",
@@ -2299,7 +2301,7 @@
       "actions": [
         {
           "id": "T138",
-          "label": "Timer completes / Complete waiting runs",
+          "label": "Timer completes / Complete runs",
           "to": "S26",
           "guard": "Still Running",
           "outcome": "Create synthetic artifact Pending review.",
@@ -2427,7 +2429,7 @@
         "Failed · method / dataset / version",
         "Data error · synthetic example mapping notice",
         "Execution steps disclosure · support entry",
-        "Retry demo with example mapping · Export log"
+        "Retry run · Export log"
       ],
       "stories": [
         {
@@ -2444,7 +2446,7 @@
       "actions": [
         {
           "id": "T147",
-          "label": "Retry demo with example mapping",
+          "label": "Retry run",
           "to": "S25",
           "guard": "Researcher",
           "outcome": "Reset same run progress/error; synthetic retry succeeds.",
@@ -2453,7 +2455,7 @@
         },
         {
           "id": "T148",
-          "label": "Need help with this run?",
+          "label": "Get help",
           "to": "S29",
           "guard": "No support request yet",
           "outcome": "Expand inline support form.",
@@ -2504,7 +2506,7 @@
       "layout": [
         "Cancelled · method / dataset / version",
         "Execution steps disclosure",
-        "Restart demo run · Export log",
+        "Restart run · Export log",
         "Existing support receipt if present"
       ],
       "stories": [
@@ -2521,7 +2523,7 @@
       "actions": [
         {
           "id": "T152",
-          "label": "Restart demo run",
+          "label": "Restart run",
           "to": "S25",
           "guard": "Researcher",
           "outcome": "",
@@ -2572,7 +2574,7 @@
       "layout": [
         "Request support",
         "Describe the issue *",
-        "Create support request · Cancel",
+        "Create request · Cancel",
         "Run details remain visible around panel"
       ],
       "stories": [
@@ -2591,7 +2593,7 @@
       "actions": [
         {
           "id": "T156",
-          "label": "Create support request",
+          "label": "Create request",
           "to": "S30",
           "guard": "Nonblank issue description",
           "outcome": "Record support request and activity.",
@@ -2626,7 +2628,7 @@
       ],
       "layout": [
         "Support ID · Submitted · issue message",
-        "Switch to technical support role (if other role)",
+        "Switch to support (if other role)",
         "Resolution notes * (Technical reviewer)",
         "Mark resolved · local demo notice"
       ],
@@ -2645,7 +2647,7 @@
       "actions": [
         {
           "id": "T158",
-          "label": "Switch to technical support role",
+          "label": "Switch to support",
           "to": "self",
           "guard": "Not Technical reviewer",
           "outcome": "Set Technical reviewer and expose resolution fields.",
@@ -2860,7 +2862,7 @@
           "text": "As a researcher, I want to see output before validation while understanding why download is blocked.",
           "acceptance": [
             "Sample download is disabled while Pending review.",
-            "Continue as Privacy reviewer changes role within the same open artifact.",
+            "Switch role changes role within the same open artifact.",
             "Preview is synthetic and contract-specific, not the imported source rows."
           ]
         }
@@ -2869,7 +2871,7 @@
       "actions": [
         {
           "id": "T171",
-          "label": "Continue as Privacy reviewer",
+          "label": "Switch role",
           "to": "S34",
           "guard": "",
           "outcome": "Role switch only; no acceptance implied.",
@@ -3188,9 +3190,9 @@
       "layout": [
         "Demo submission select · current stage/status",
         "Simulate current review / remaining reviews",
-        "Simulate author publication (separate)",
-        "Execution events disclosure · Complete waiting runs",
-        "Output validation disclosure · Demo output · Simulate output acceptance"
+        "Publish pipeline (separate)",
+        "Execution events disclosure · Complete runs",
+        "Output validation disclosure · Demo output · Accept output"
       ],
       "stories": [
         {
@@ -3199,9 +3201,9 @@
           "acceptance": [
             "Review shortcuts create attributed, explicitly simulated review events.",
             "Remaining reviews stop at Ready to publish; publication remains a distinct action.",
-            "Complete waiting runs only finishes currently Running runs.",
+            "Complete runs only finishes currently Running runs.",
             "Output acceptance only applies to Pending review and records a simulated Privacy decision.",
-            "Return to prototype closes simulator; artifact/run dialogs closed on entry do not reopen."
+            "Done closes simulator; artifact/run dialogs closed on entry do not reopen."
           ]
         }
       ],
@@ -3212,7 +3214,7 @@
       "actions": [
         {
           "id": "T190",
-          "label": "Simulate current stage approval",
+          "label": "Approve stage",
           "to": "self",
           "guard": "Selected submission In review",
           "outcome": "Advance one stage; update controls and history.",
@@ -3221,7 +3223,7 @@
         },
         {
           "id": "T191",
-          "label": "Simulate remaining reviews",
+          "label": "Approve remaining",
           "to": "self",
           "guard": "In review",
           "outcome": "Complete remaining stages, stop at Ready to publish.",
@@ -3230,7 +3232,7 @@
         },
         {
           "id": "T192",
-          "label": "Simulate author publication",
+          "label": "Publish pipeline",
           "to": "self",
           "guard": "Ready to publish",
           "outcome": "Separate publish event; status Approved.",
@@ -3239,7 +3241,7 @@
         },
         {
           "id": "T193",
-          "label": "Complete waiting runs",
+          "label": "Complete runs",
           "to": "self",
           "guard": "At least one Running run",
           "outcome": "Dispatch enough timer ticks to create Pending review outputs.",
@@ -3248,7 +3250,7 @@
         },
         {
           "id": "T194",
-          "label": "Simulate output acceptance",
+          "label": "Accept output",
           "to": "self",
           "guard": "Selected artifact Pending review",
           "outcome": "Status Validated; does not re-open artifact.",
@@ -3266,7 +3268,7 @@
         },
         {
           "id": "T196",
-          "label": "Return to prototype",
+          "label": "Done",
           "to": "origin",
           "guard": "",
           "outcome": "",
@@ -3443,7 +3445,7 @@
       "layout": [
         "Save your changes?",
         "Unsaved edits explanation",
-        "Save draft / Save revision draft",
+        "Save draft",
         "Keep editing",
         "Discard changes"
       ],
@@ -3466,7 +3468,7 @@
       "actions": [
         {
           "id": "T218",
-          "label": "Save draft / Save revision draft",
+          "label": "Save draft",
           "to": "S11",
           "guard": "Named draft and evidence reading complete",
           "outcome": "Save working fields; feedback/rejected revisions retain S19/S20 instead of changing their reviewed status.",
@@ -3510,7 +3512,7 @@
         "Your saved workspace needs recovery",
         "Explanation of unreadable data or a concurrent-save conflict",
         "Download recovery copy",
-        "Reset saved workspace OR Load saved workspace"
+        "Reset workspace OR Load saved workspace"
       ],
       "stories": [
         {
@@ -3542,7 +3544,7 @@
         },
         {
           "id": "T222",
-          "label": "Reset saved workspace",
+          "label": "Reset workspace",
           "to": "S40",
           "guard": "Unreadable saved data",
           "outcome": "Ask for explicit reset; preserve a recovery backup before replacement.",
@@ -3736,7 +3738,7 @@
         [
           "S11",
           "S08",
-          "Edit & submit draft"
+          "Edit draft"
         ],
         [
           "S10",
@@ -3790,7 +3792,7 @@
         [
           "S13",
           "S14",
-          "Continue as Ethical reviewer"
+          "Switch role"
         ],
         [
           "S14",
@@ -3818,7 +3820,7 @@
           "Switch to Researcher → Publish"
         ]
       ],
-      "entry": "Submitted pipeline; role selector or Continue as actions supply each handoff.",
+      "entry": "Submitted pipeline; role selector or Switch role actions supply each handoff.",
       "done": "Pipeline Approved after a separate Researcher publish event. Edge labels that combine approval + role switch represent two actions; after approval the UI first shows S13 waiting for the next reviewer."
     },
     {
@@ -3869,7 +3871,7 @@
         [
           "S08",
           "S19",
-          "Save revision draft · retains status"
+          "Save draft · retains status"
         ],
         [
           "S08",
@@ -3888,7 +3890,7 @@
         ]
       ],
       "entry": "Any assigned stage can request changes/reject; Ethical is shown as the example.",
-      "done": "Revised version starts all four reviews again. For a rejected record, Save revision draft returns to S20, not S19."
+      "done": "Revised version starts all four reviews again. For a rejected record, Save draft returns to S20, not S19."
     },
     {
       "id": "F06",
@@ -3906,7 +3908,7 @@
         [
           "S22",
           "S08",
-          "Submit new version"
+          "New version"
         ],
         [
           "S08",
@@ -3970,7 +3972,7 @@
         [
           "S23",
           "S24",
-          "Start demo run"
+          "Start run"
         ],
         [
           "S24",
@@ -3990,7 +3992,7 @@
         [
           "S33",
           "S34",
-          "Continue as Privacy reviewer"
+          "Switch role"
         ]
       ],
       "entry": "Researcher; Approved method and registered format-compatible dataset.",
@@ -4081,7 +4083,7 @@
         [
           "S33",
           "S34",
-          "Continue as Privacy reviewer"
+          "Switch role"
         ],
         [
           "S32",
@@ -4249,7 +4251,7 @@
         [
           "S13",
           "S14",
-          "Continue as Ethical reviewer"
+          "Switch role"
         ],
         [
           "S14",
@@ -4336,7 +4338,7 @@
         [
           "S43",
           "S40",
-          "Reset saved workspace"
+          "Reset workspace"
         ],
         [
           "S40",

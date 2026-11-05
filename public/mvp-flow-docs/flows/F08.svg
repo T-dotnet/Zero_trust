@@ -140,7 +140,7 @@
 <text text-anchor="start" x="890" y="-541.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">New request</text>
 <text text-anchor="start" x="890" y="-503.9" font-family="Arial" font-size="12.00" fill="#626a7e">Request support</text>
 <text text-anchor="start" x="890" y="-466.9" font-family="Arial" font-size="12.00" fill="#626a7e">Describe the issue *</text>
-<text text-anchor="start" x="890" y="-429.9" font-family="Arial" font-size="12.00" fill="#626a7e">Create support request · Cancel</text>
+<text text-anchor="start" x="890" y="-429.9" font-family="Arial" font-size="12.00" fill="#626a7e">Create request · Cancel</text>
 <text text-anchor="start" x="890" y="-392.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="877,-377 877,-620 1139,-620 1139,-377 877,-377"/>
 </a>
@@ -156,7 +156,7 @@
 <text text-anchor="start" x="1379" y="-557.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Run support</text>
 <text text-anchor="start" x="1379" y="-541.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Submitted / technical resolution</text>
 <text text-anchor="start" x="1379" y="-503.9" font-family="Arial" font-size="12.00" fill="#626a7e">Support ID · Submitted · issue message</text>
-<text text-anchor="start" x="1379" y="-466.9" font-family="Arial" font-size="12.00" fill="#626a7e">Switch to technical support role (if other role)</text>
+<text text-anchor="start" x="1379" y="-466.9" font-family="Arial" font-size="12.00" fill="#626a7e">Switch to support (if other role)</text>
 <text text-anchor="start" x="1379" y="-429.9" font-family="Arial" font-size="12.00" fill="#626a7e">Resolution notes * (Technical reviewer)</text>
 <text text-anchor="start" x="1379" y="-392.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="1366,-377 1366,-620 1636,-620 1636,-377 1366,-377"/>
@@ -208,7 +208,7 @@
 <text text-anchor="start" x="2807.5" y="-450.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Cancelled</text>
 <text text-anchor="start" x="2802" y="-412.9" font-family="Arial" font-size="12.00" fill="#626a7e">Cancelled · method / dataset / version</text>
 <text text-anchor="start" x="2802" y="-375.9" font-family="Arial" font-size="12.00" fill="#626a7e">Execution steps disclosure</text>
-<text text-anchor="start" x="2802" y="-338.9" font-family="Arial" font-size="12.00" fill="#626a7e">Restart demo run · Export log</text>
+<text text-anchor="start" x="2802" y="-338.9" font-family="Arial" font-size="12.00" fill="#626a7e">Restart run · Export log</text>
 <text text-anchor="start" x="2802" y="-301.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="2789,-286 2789,-529 3051,-529 3051,-286 2789,-286"/>
 </a>

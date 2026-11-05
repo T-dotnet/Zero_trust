@@ -108,12 +108,12 @@
 <!-- S11&#45;&gt;S08 -->
 <g id="edge9" class="edge">
 <title>S11&#45;&gt;S08</title>
-<g id="a_edge9"><a xlink:title="Edit &amp; submit draft">
+<g id="a_edge9"><a xlink:title="Edit draft">
 <path fill="none" stroke="#8c91a4" stroke-width="1.3" d="M1822.98,-469.72C1740.34,-504.33 1654,-540.5 1654,-540.5 1654,-540.5 1177,-723.5 1177,-723.5 1177,-723.5 915,-723.5 915,-723.5 915,-723.5 815.14,-667.61 721.8,-615.37"/>
 <polygon fill="#8c91a4" stroke="#8c91a4" stroke-width="1.3" points="722.92,-612.99 715.09,-611.62 720.35,-617.57 722.92,-612.99"/>
 </a>
 </g>
-<text text-anchor="middle" x="1283" y="-710.9" font-family="Arial" font-size="12.00" fill="#495268">Edit &amp; submit draft</text>
+<text text-anchor="middle" x="1283" y="-710.9" font-family="Arial" font-size="12.00" fill="#495268">Edit draft</text>
 </g>
 <!-- S42&#45;&gt;S03 -->
 <g id="edge14" class="edge">
@@ -256,7 +256,7 @@
 <text text-anchor="start" x="928" y="-639.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Save your changes?</text>
 <text text-anchor="start" x="928" y="-599.9" font-family="Arial" font-size="12.00" fill="#626a7e">Save your changes?</text>
 <text text-anchor="start" x="928" y="-562.9" font-family="Arial" font-size="12.00" fill="#626a7e">Unsaved edits explanation</text>
-<text text-anchor="start" x="928" y="-525.9" font-family="Arial" font-size="12.00" fill="#626a7e">Save draft / Save revision draft</text>
+<text text-anchor="start" x="928" y="-525.9" font-family="Arial" font-size="12.00" fill="#626a7e">Save draft</text>
 <text text-anchor="start" x="928" y="-488.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="915,-473 915,-702 1177,-702 1177,-473 915,-473"/>
 </a>

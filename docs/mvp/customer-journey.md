@@ -14,7 +14,7 @@ From a research method and synthetic source data to a reviewed, accepted sample 
 
 This is a source-backed journey of the implemented MVP, illustrated with fresh UI screenshots. Customer questions, pains and gains are hypotheses inferred from the workflow, not findings from interviews or measured customer outcomes.
 
-Screenshots captured 2026-11-04 from source [`460b5b3`](https://github.com/T-dotnet/Zero_trust/tree/460b5b36846e7e3ece576c62d7efd9f131e770ab); the last app change is [`460b5b3`](https://github.com/T-dotnet/Zero_trust/tree/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp). 16 unedited browser screenshots; the primary journey uses normal review/publication controls, not approval shortcuts.
+Screenshots captured 2026-11-05 from source [`983c8bc`](https://github.com/T-dotnet/Zero_trust/tree/983c8bce846a4c70b331649acdd4804098f5ec2e); the last app change is [`983c8bc`](https://github.com/T-dotnet/Zero_trust/tree/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp). 16 unedited browser screenshots; the primary journey uses normal review/publication controls, not approval shortcuts.
 
 ## Journey at a glance
 
@@ -29,7 +29,7 @@ The top row reads left to right, then the bottom row reads right to left. The re
 | [J01 · Prepare the source data](#j01) | Researcher | Start with an identifiable, inspectable source. | The synthetic cohort appears in Datasets after import. |
 | [J02 · Describe and submit the method](#j02) | Researcher | Give reviewers enough purpose, source and contract context. | The receipt says Submitted for review and identifies the Ethical reviewer as next owner. |
 | [J03 · Complete organizational review](#j03) | Review team | Resolve all required organizational decisions. | After Security approval the status is Ready to publish; the method is still not published. |
-| [J04 · Publish the reviewed version](#j04) | Researcher | Decide when the reviewed method becomes available to run. | Pipeline details say Ready for research and offer Configure run and Submit new version. |
+| [J04 · Publish the reviewed version](#j04) | Researcher | Decide when the reviewed method becomes available to run. | Pipeline details say Ready for research and offer Configure run and New version. |
 | [J05 · Run the approved method](#j05) | Researcher + demo system | Pair the published version with a compatible source and follow execution. | Run status is Completed and Inspect output opens an artifact awaiting privacy validation. |
 | [J06 · Validate the generated output](#j06) | Privacy reviewer | Assess this particular output before it becomes downloadable. | Acceptance changes the artifact to Validated; a rejection keeps download blocked. |
 | [J07 · Retrieve the accepted sample](#j07) | Researcher | Obtain the accepted demonstration result. | The Download sample CSV action is enabled and the browser emits a CSV download. |
@@ -181,7 +181,7 @@ The published pipeline is ready for research. The supporting screen shows the pr
 | Customer action | Return to Researcher and choose Publish pipeline after all four reviews are complete. |
 | Team / system action | Publication records its own event and changes the pipeline to Approved. |
 | Handoff | Review team → Researcher; publication is a separate author decision. |
-| Success signal | Pipeline details say Ready for research and offer Configure run and Submit new version. |
+| Success signal | Pipeline details say Ready for research and offer Configure run and New version. |
 | Potential pain (hypothesis) | Review completion could be mistaken for release, making availability unclear. |
 | Intended gain (hypothesis) | Explicit author publication separates assessment from making a version runnable. |
 
@@ -250,7 +250,7 @@ The output review shows synthetic rows, provenance, a deliberately selected Acce
 
 | Journey element | Description |
 | --- | --- |
-| Customer action | Inspect the synthetic output preview and provenance. In the demo, use Continue as Privacy reviewer to perform the output handoff. |
+| Customer action | Inspect the synthetic output preview and provenance. In the demo, use Switch role to perform the output handoff. |
 | Team / system action | The Privacy reviewer deliberately chooses Acceptable or Not acceptable and submits the decision. Rejection requires an explanation. |
 | Handoff | Researcher → Privacy reviewer → Researcher after acceptance. This is separate from the pipeline Privacy review. |
 | Success signal | Acceptance changes the artifact to Validated; a rejection keeps download blocked. |
@@ -313,7 +313,7 @@ The activity history is filtered to the captured customer-journey scenario and s
 
 | Journey element | Description |
 | --- | --- |
-| Customer action | Open Activity log, search/filter the relevant work, export its history or reopen an entity. To improve the method, open the published pipeline and choose Submit new version. |
+| Customer action | Open Activity log, search/filter the relevant work, export its history or reopen an entity. To improve the method, open the published pipeline and choose New version. |
 | Team / system action | History shows recorded actors, versions, review decisions, publication and execution/output events. A new version starts all four reviews again while the earlier approved version stays runnable. |
 | Handoff | Any participant can inspect history. A new-version journey returns ownership to the researcher and then the review team. |
 | Success signal | Filtered history exports as JSON; related entities reopen their current state. Iteration is available from the approved version. |

@@ -111,7 +111,7 @@
 <text text-anchor="start" x="559" y="-874.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Simulation controls</text>
 <text text-anchor="start" x="559" y="-834.9" font-family="Arial" font-size="12.00" fill="#626a7e">Demo submission select · current stage/status</text>
 <text text-anchor="start" x="559" y="-797.9" font-family="Arial" font-size="12.00" fill="#626a7e">Simulate current review / remaining reviews</text>
-<text text-anchor="start" x="559" y="-760.9" font-family="Arial" font-size="12.00" fill="#626a7e">Simulate author publication (separate)</text>
+<text text-anchor="start" x="559" y="-760.9" font-family="Arial" font-size="12.00" fill="#626a7e">Publish pipeline (separate)</text>
 <text text-anchor="start" x="559" y="-723.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="546,-708 546,-937 816,-937 816,-708 546,-708"/>
 </a>
@@ -145,7 +145,7 @@
 <text text-anchor="start" x="1133.5" y="-1294.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Ready to publish</text>
 <text text-anchor="start" x="1133.5" y="-1256.9" font-family="Arial" font-size="12.00" fill="#626a7e">Ready to publish · 4 of 4 reviews</text>
 <text text-anchor="start" x="1133.5" y="-1219.9" font-family="Arial" font-size="12.00" fill="#626a7e">Review completion receipt · source / version</text>
-<text text-anchor="start" x="1133.5" y="-1182.9" font-family="Arial" font-size="12.00" fill="#626a7e">Publish pipeline / Continue as Researcher</text>
+<text text-anchor="start" x="1133.5" y="-1182.9" font-family="Arial" font-size="12.00" fill="#626a7e">Publish pipeline / Switch role</text>
 <text text-anchor="start" x="1133.5" y="-1145.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="1120.5,-1130 1120.5,-1373 1382.5,-1373 1382.5,-1130 1120.5,-1130"/>
 </a>
@@ -162,7 +162,7 @@
 <text text-anchor="start" x="1144" y="-1008.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Approved</text>
 <text text-anchor="start" x="1122.5" y="-970.9" font-family="Arial" font-size="12.00" fill="#626a7e">Approved · Ready for research</text>
 <text text-anchor="start" x="1122.5" y="-933.9" font-family="Arial" font-size="12.00" fill="#626a7e">Method purpose · source / version · input / output</text>
-<text text-anchor="start" x="1122.5" y="-896.9" font-family="Arial" font-size="12.00" fill="#626a7e">Configure run · Submit new version</text>
+<text text-anchor="start" x="1122.5" y="-896.9" font-family="Arial" font-size="12.00" fill="#626a7e">Configure run · New version</text>
 <text text-anchor="start" x="1122.5" y="-859.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="1109,-844 1109,-1087 1394,-1087 1394,-844 1109,-844"/>
 </a>

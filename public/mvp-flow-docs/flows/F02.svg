@@ -101,7 +101,7 @@
 <text text-anchor="start" x="455" y="-452.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">Import dataset</text>
 <text text-anchor="start" x="455" y="-436.7" font-family="Arial" font-weight="bold" font-size="16.00" fill="#18212f">choose source</text>
 <text text-anchor="start" x="455" y="-398.9" font-family="Arial" font-size="12.00" fill="#626a7e">Drop zone · Choose file</text>
-<text text-anchor="start" x="455" y="-361.9" font-family="Arial" font-size="12.00" fill="#626a7e">Use synthetic example</text>
+<text text-anchor="start" x="455" y="-361.9" font-family="Arial" font-size="12.00" fill="#626a7e">Use sample</text>
 <text text-anchor="start" x="455" y="-324.9" font-family="Arial" font-size="12.00" fill="#626a7e">Dataset name * · Description</text>
 <text text-anchor="start" x="455" y="-287.9" font-family="Arial" font-size="12.00" fill="#18212f">Open screen + user story →</text>
 <polygon fill="none" stroke="#e0e4ec" points="442,-272 442,-515 704,-515 704,-272 442,-272"/>

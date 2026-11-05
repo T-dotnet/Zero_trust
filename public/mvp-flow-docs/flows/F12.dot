@@ -12,7 +12,7 @@ S08 -> S09 [label="Continue to Requirements", tooltip="Continue to Requirements"
 S09 -> S09 [label="Attach / remove text evidence", tooltip="Attach / remove text evidence"];
 S09 -> S10 [label="Continue to summary", tooltip="Continue to summary"];
 S10 -> S13 [label="Submit; evidence retained locally", tooltip="Submit; evidence retained locally"];
-S13 -> S14 [label="Continue as Ethical reviewer", tooltip="Continue as Ethical reviewer"];
+S13 -> S14 [label="Switch role", tooltip="Switch role"];
 S14 -> S41 [label="Expand evidence → click attachment", tooltip="Expand evidence → click attachment"];
 S41 -> S14 [label="Close preview", tooltip="Close preview"];
 }

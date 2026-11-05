@@ -1,6 +1,6 @@
 # Zero Trust MVP · Screen & flow atlas
 
-Reviewed 2026-11-04 against MVP source [`460b5b3`](https://github.com/T-dotnet/Zero_trust/tree/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp).
+Reviewed 2026-11-05 against MVP source [`983c8bc`](https://github.com/T-dotnet/Zero_trust/tree/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp).
 
 [Open the clickable wireframes](https://zero-trust-git-mvp-t-dotnets-projects.vercel.app/mvp-flows.html) · [Download / open local HTML](../../public/mvp-flows.html) · [Canonical flow model](user-flows.json)
 
@@ -43,6 +43,8 @@ Personas, pains and gains are inferred from the implemented workflow; they are n
 - The visual palette is always on: mint #2BE1B0 primary fills with dark labels, dark secondary and tertiary labels, deeper green selection and focus, slate #8C91A4 accents, amber #FEAB3D warnings and coral #F8506D destructive accents. No theme or feature toggle is required.
 - Review progress uses green completed markers, amber current-step markers, dashed slate pending markers and coral markers for stages needing changes. A legend, marker sizes, checkmarks and text labels make the states clear beyond color.
 - Progress states are always on: completed steps use green and checkmarks; active form, review and execution steps use amber; pending steps use slate and dashed markers; failed or changes-required states use coral. Run progress retains its percentage and explicit status. There is no feature or settings toggle.
+- Pipeline and approval lists show visible approved-review counts (for example, 1/4), alongside the stage markers and status. Pending stage circles have dashed slate outlines. Blocked stages spell out Changes requested or Rejected; later steps in failed or cancelled runs say Not run, while running executions retain Pending. These refinements are always on.
+- CTA labels stay concise (for example, Retry run, Approve review and Switch role). Adjacent copy names the reviewer role, synthetic data and example retry mapping. Desktop footers wrap whole actions; mobile task actions remain full width, primary first, with no mid-word label breaks. Review details stack below the task below 1100px. These rules are always on.
 
 ## Prototype boundaries
 
@@ -146,7 +148,7 @@ Work through the three-step wizard, including incomplete drafts.
 | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Save named draft | [S11 · Pipeline details · Draft](#s11) |
 | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) | Save named draft | [S11 · Pipeline details · Draft](#s11) |
 | [S10 · Pipeline wizard · 3. Review & submit](#s10) | Save draft | [S11 · Pipeline details · Draft](#s11) |
-| [S11 · Pipeline details · Draft](#s11) | Edit & submit draft | [S08 · Pipeline wizard · 1. Source & purpose](#s08) |
+| [S11 · Pipeline details · Draft](#s11) | Edit draft | [S08 · Pipeline wizard · 1. Source & purpose](#s08) |
 | [S10 · Pipeline wizard · 3. Review & submit](#s10) | Submit → Ethical | [S13 · Pipeline review · Waiting / submission receipt](#s13) |
 | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Close edited form | [S42 · Save your changes?](#s42) |
 | [S42 · Save your changes?](#s42) | Keep editing | [S08 · Pipeline wizard · 1. Source & purpose](#s08) |
@@ -159,7 +161,7 @@ Work through the three-step wizard, including incomplete drafts.
 
 Complete each required organizational stage before publishing.
 
-**Entry:** Submitted pipeline; role selector or Continue as actions supply each handoff.
+**Entry:** Submitted pipeline; role selector or Switch role actions supply each handoff.
 
 **Completion:** Pipeline Approved after a separate Researcher publish event. Edge labels that combine approval + role switch represent two actions; after approval the UI first shows S13 waiting for the next reviewer.
 
@@ -170,7 +172,7 @@ Complete each required organizational stage before publishing.
 | From | Click / event | Next |
 | --- | --- | --- |
 | [S12 · Approvals queue](#s12) | Open submission | [S13 · Pipeline review · Waiting / submission receipt](#s13) |
-| [S13 · Pipeline review · Waiting / submission receipt](#s13) | Continue as Ethical reviewer | [S14 · Pipeline review · Ethical](#s14) |
+| [S13 · Pipeline review · Waiting / submission receipt](#s13) | Switch role | [S14 · Pipeline review · Ethical](#s14) |
 | [S14 · Pipeline review · Ethical](#s14) | Approve → switch to Technical | [S15 · Pipeline review · Technical](#s15) |
 | [S15 · Pipeline review · Technical](#s15) | Approve → switch to Privacy | [S16 · Pipeline review · Privacy](#s16) |
 | [S16 · Pipeline review · Privacy](#s16) | Approve → switch to Security | [S17 · Pipeline review · Security](#s17) |
@@ -185,7 +187,7 @@ Recover a paused review without losing its evidence or history.
 
 **Entry:** Any assigned stage can request changes/reject; Ethical is shown as the example.
 
-**Completion:** Revised version starts all four reviews again. For a rejected record, Save revision draft returns to S20, not S19.
+**Completion:** Revised version starts all four reviews again. For a rejected record, Save draft returns to S20, not S19.
 
 ![Feedback, rejection & revision — connected screen wireframes](../../public/mvp-flow-docs/flows/F05.svg)
 
@@ -199,7 +201,7 @@ Recover a paused review without losing its evidence or history.
 | [S18 · Confirm pipeline rejection](#s18) | Confirm rejection | [S20 · Pipeline details · Rejected submission](#s20) |
 | [S19 · Pipeline details · Requested changes](#s19) | Researcher · Revise | [S08 · Pipeline wizard · 1. Source & purpose](#s08) |
 | [S20 · Pipeline details · Rejected submission](#s20) | Researcher · Revise | [S08 · Pipeline wizard · 1. Source & purpose](#s08) |
-| [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Save revision draft · retains status | [S19 · Pipeline details · Requested changes](#s19) |
+| [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Save draft · retains status | [S19 · Pipeline details · Requested changes](#s19) |
 | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Continue | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) |
 | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) | Continue | [S10 · Pipeline wizard · 3. Review & submit](#s10) |
 | [S10 · Pipeline wizard · 3. Review & submit](#s10) | Resubmit → patch + Ethical | [S13 · Pipeline review · Waiting / submission receipt](#s13) |
@@ -220,7 +222,7 @@ Keep a published source available while reviewing an update.
 
 | From | Click / event | Next |
 | --- | --- | --- |
-| [S22 · Pipeline details · Approved](#s22) | Submit new version | [S08 · Pipeline wizard · 1. Source & purpose](#s08) |
+| [S22 · Pipeline details · Approved](#s22) | New version | [S08 · Pipeline wizard · 1. Source & purpose](#s08) |
 | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Prefilled source · Continue | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) |
 | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) | Review updated contracts | [S10 · Pipeline wizard · 3. Review & submit](#s10) |
 | [S10 · Pipeline wizard · 3. Review & submit](#s10) | Save separate new-version draft | [S11 · Pipeline details · Draft](#s11) |
@@ -246,11 +248,11 @@ Configure a compatible run and inspect the synthetic result.
 | [S22 · Pipeline details · Approved](#s22) | Configure run · method preselected | [S23 · Configure run](#s23) |
 | [S07 · Dataset details](#s07) | Run pipeline · dataset preselected | [S23 · Configure run](#s23) |
 | [S23 · Configure run](#s23) | Missing / incompatible → fix selection | [S23 · Configure run](#s23) |
-| [S23 · Configure run](#s23) | Start demo run | [S24 · Runs & results · Runs](#s24) |
+| [S23 · Configure run](#s23) | Start run | [S24 · Runs & results · Runs](#s24) |
 | [S24 · Runs & results · Runs](#s24) | Open Running record | [S25 · Run details · Running](#s25) |
 | [S25 · Run details · Running](#s25) | Timer completes (~6 s) | [S26 · Run details · Completed](#s26) |
 | [S26 · Run details · Completed](#s26) | Inspect output · other role | [S33 · Artifact review · Awaiting Privacy reviewer](#s33) |
-| [S33 · Artifact review · Awaiting Privacy reviewer](#s33) | Continue as Privacy reviewer | [S34 · Artifact review · Privacy decision](#s34) |
+| [S33 · Artifact review · Awaiting Privacy reviewer](#s33) | Switch role | [S34 · Artifact review · Privacy decision](#s34) |
 
 <a id="f08"></a>
 
@@ -295,7 +297,7 @@ Make a deliberate Privacy decision before sample download.
 | From | Click / event | Next |
 | --- | --- | --- |
 | [S32 · Runs & results · Results](#s32) | Open pending output · other role | [S33 · Artifact review · Awaiting Privacy reviewer](#s33) |
-| [S33 · Artifact review · Awaiting Privacy reviewer](#s33) | Continue as Privacy reviewer | [S34 · Artifact review · Privacy decision](#s34) |
+| [S33 · Artifact review · Awaiting Privacy reviewer](#s33) | Switch role | [S34 · Artifact review · Privacy decision](#s34) |
 | [S32 · Runs & results · Results](#s32) | Open pending output · Privacy role | [S34 · Artifact review · Privacy decision](#s34) |
 | [S34 · Artifact review · Privacy decision](#s34) | Acceptable → Accept output | [S35 · Artifact review · Accepted / download](#s35) |
 | [S34 · Artifact review · Privacy decision](#s34) | Not acceptable + reason → Reject | [S36 · Artifact review · Rejected](#s36) |
@@ -369,7 +371,7 @@ Carry local text evidence from a submission into each reviewer’s assessment.
 | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) | Attach / remove text evidence | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) |
 | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) | Continue to summary | [S10 · Pipeline wizard · 3. Review & submit](#s10) |
 | [S10 · Pipeline wizard · 3. Review & submit](#s10) | Submit; evidence retained locally | [S13 · Pipeline review · Waiting / submission receipt](#s13) |
-| [S13 · Pipeline review · Waiting / submission receipt](#s13) | Continue as Ethical reviewer | [S14 · Pipeline review · Ethical](#s14) |
+| [S13 · Pipeline review · Waiting / submission receipt](#s13) | Switch role | [S14 · Pipeline review · Ethical](#s14) |
 | [S14 · Pipeline review · Ethical](#s14) | Expand evidence → click attachment | [S41 · Evidence attachment · Text preview](#s41) |
 | [S41 · Evidence attachment · Text preview](#s41) | Close preview | [S14 · Pipeline review · Ethical](#s14) |
 
@@ -399,7 +401,7 @@ Keep form edits and saved work recoverable when closing, saving in multiple tabs
 | [S42 · Save your changes?](#s42) | Save draft | [S11 · Pipeline details · Draft](#s11) |
 | [S42 · Save your changes?](#s42) | Discard changes | [S03 · Pipeline catalog](#s03) |
 | [S01 · Workspace navigation & role controls](#s01) | Unreadable data or save conflict | [S43 · Your saved workspace needs recovery](#s43) |
-| [S43 · Your saved workspace needs recovery](#s43) | Reset saved workspace | [S40 · Reset demo workspace](#s40) |
+| [S43 · Your saved workspace needs recovery](#s43) | Reset workspace | [S40 · Reset demo workspace](#s40) |
 | [S40 · Reset demo workspace](#s40) | Cancel reset | [S43 · Your saved workspace needs recovery](#s43) |
 | [S40 · Reset demo workspace](#s40) | Back up and reset | [S03 · Pipeline catalog](#s03) |
 | [S43 · Your saved workspace needs recovery](#s43) | Back up local copy and load saved workspace | [S03 · Pipeline catalog](#s03) |
@@ -500,7 +502,7 @@ Behavior and limits:
 | T012 | Open original workspace (external) | — | Archived workspace (`/?view=full`) | Opens /?view=full in a new tab, outside MVP scope. |
 | T217 | Saved workspace needs recovery (error) | Unreadable saved data or another tab saved while this tab had unsaved work | [S43 · Your saved workspace needs recovery](#s43) | Pause edits and preserve the protected copy. |
 
-**Source:** [Shell.tsx:Shell](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Shell.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/MvpApp.tsx)
+**Source:** [Shell.tsx:Shell](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Shell.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/MvpApp.tsx)
 
 <a id="s02"></a>
 
@@ -536,7 +538,7 @@ Acceptance criteria:
 | T017 | Run approved pipeline (navigate) | Researcher | [S23 · Configure run](#s23) | Pipeline preselected. |
 | T018 | View approved pipeline (navigate) | Reviewer | [S22 · Pipeline details · Approved](#s22) | — |
 
-**Source:** [PipelineViews.tsx:Overview](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/PipelineViews.tsx)
+**Source:** [PipelineViews.tsx:Overview](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/PipelineViews.tsx)
 
 <a id="s03"></a>
 
@@ -552,7 +554,7 @@ Find a pipeline, see its next owner and choose the next action.
 2. All / Needs action / Approved / In review
 3. Search · Category filter
 4. Pipeline name · version · status · next action
-5. How pipeline approval works disclosure · Explore the review process
+5. How approval works disclosure · View stages
 6. Progress legend · completed / current step / pending / needs changes
 
 #### US-S03
@@ -586,9 +588,9 @@ Behavior and limits:
 | T030 | Open approved pipeline name (navigate) | Approved | [S22 · Pipeline details · Approved](#s22) | — |
 | T031 | Run pipeline (navigate) | Approved and Researcher | [S23 · Configure run](#s23) | — |
 | T032 | Search / filter / clear (in-place) | — | Same screen | Visible rows and count update; no match shows an empty state. |
-| T213 | Explore the review process (navigate) | Expand How pipeline approval works | [S12 · Approvals queue](#s12) | Open Approvals queue. |
+| T213 | View stages (navigate) | Expand How pipeline approval works | [S12 · Approvals queue](#s12) | Open Approvals queue. |
 
-**Source:** [PipelineViews.tsx:PipelineCatalog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/PipelineViews.tsx) · [model.ts:pipelineActionLabel](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts) · [ui.tsx:ReviewGuide](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ui.tsx)
+**Source:** [PipelineViews.tsx:PipelineCatalog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/PipelineViews.tsx) · [model.ts:pipelineActionLabel](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts) · [ui.tsx:ReviewGuide](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ui.tsx)
 
 <a id="s04"></a>
 
@@ -622,7 +624,7 @@ Acceptance criteria:
 | T035 | Run pipeline (navigate) | Researcher | [S23 · Configure run](#s23) | Dataset preselected. |
 | T036 | Search datasets (in-place) | — | Same screen | — |
 
-**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx)
 
 <a id="s05"></a>
 
@@ -635,7 +637,7 @@ Select a valid CSV or a synthetic example.
 **Wireframe content, top to bottom**
 
 1. Drop zone · Choose file
-2. Use synthetic example
+2. Use sample
 3. Dataset name * · Description
 4. Inline validation / reading state
 
@@ -657,11 +659,11 @@ Behavior and limits:
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
 | T037 | Choose file / Drop valid CSV (navigate) | Valid CSV, <= 5 MiB | [S06 · Import dataset · preview & confirm](#s06) | Read metadata, column names and up to 3 preview rows. |
-| T038 | Use synthetic example (navigate) | — | [S06 · Import dataset · preview & confirm](#s06) | Prefills a 120-record synthetic cohort. |
+| T038 | Use sample (navigate) | — | [S06 · Import dataset · preview & confirm](#s06) | Prefills a 120-record synthetic cohort. |
 | T039 | Invalid CSV / unreadable file (error) | — | Same screen | Show validation error; Import remains disabled. |
 | T040 | Cancel / Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [csv.ts:parseDatasetCsv](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/csv.ts)
+**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [csv.ts:parseDatasetCsv](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/csv.ts)
 
 <a id="s06"></a>
 
@@ -696,7 +698,7 @@ Acceptance criteria:
 | T044 | Preview columns and sample rows (disclosure) | — | Same screen | — |
 | T045 | Cancel / Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:ImportDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx)
 
 <a id="s07"></a>
 
@@ -728,7 +730,7 @@ Acceptance criteria:
 | T047 | Dataset columns (disclosure) | — | Same screen | — |
 | T048 | Close (return) | — | Originating page / parent state | — |
 
-**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:Datasets](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx)
 
 <a id="s08"></a>
 
@@ -766,13 +768,13 @@ Behavior and limits:
 | --- | --- | --- | --- | --- |
 | T049 | Continue (navigate) | Valid name, purpose, HTTP(S) URL and branch | [S09 · Pipeline wizard · 2. Requirements & evidence](#s09) | — |
 | T050 | Save draft (navigate) | Named new or existing Draft | [S11 · Pipeline details · Draft](#s11) | Save local draft and close wizard. |
-| T051 | Save revision draft (navigate) | Revision of Changes requested; Rejected returns S20. | [S19 · Pipeline details · Requested changes](#s19) | Keep reviewed version/status and save revision fields separately. |
+| T051 | Save draft (navigate) | Revision of Changes requested; Rejected returns S20. | [S19 · Pipeline details · Requested changes](#s19) | Keep reviewed version/status and save revision fields separately. |
 | T052 | Use example / Source settings (in-place) | — | Same screen | Prefill synthetic example (new only) or expand branch/category. |
 | T053 | Validation error (error) | — | Same screen | Show error and focus invalid field. |
 | T054 | Cancel / Close (return) | No unsaved form changes | Originating page / parent state | Close the unchanged form without a confirmation. |
 | T214 | Close edited form / Escape / backdrop (navigate) | Unsaved fields or evidence | [S42 · Save your changes?](#s42) | Offer Save draft, Keep editing and Discard changes. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx)
 
 <a id="s09"></a>
 
@@ -813,7 +815,7 @@ Behavior and limits:
 | T059 | Cancel / Close (return) | No unsaved form changes | Originating page / parent state | Close the unchanged form without a confirmation. |
 | T215 | Close edited form / Escape / backdrop (navigate) | Unsaved fields or evidence | [S42 · Save your changes?](#s42) | Offer Save draft, Keep editing and Discard changes. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [Evidence.tsx:AttachmentPicker](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Evidence.tsx)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [Evidence.tsx:AttachmentPicker](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Evidence.tsx)
 
 <a id="s10"></a>
 
@@ -854,7 +856,7 @@ Behavior and limits:
 | T065 | Close (return) | No unsaved form changes | Originating page / parent state | Close the unchanged form without a confirmation. |
 | T216 | Close edited form / Escape / backdrop (navigate) | Unsaved fields or evidence | [S42 · Save your changes?](#s42) | Offer Save draft, Keep editing and Discard changes. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s11"></a>
 
@@ -869,7 +871,7 @@ Resume a saved, possibly incomplete submission.
 1. Draft status · Complete your draft
 2. Submission details · Source and version disclosure
 3. Evidence attachments · Activity timeline
-4. Edit & submit draft
+4. Edit draft
 
 #### US-S11
 
@@ -882,13 +884,13 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T066 | Edit & submit draft (navigate) | Researcher | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Edit mode keeps existing draft identity and version. |
-| T067 | Continue as Researcher (role) | Other role | Same screen | Switch role only. |
+| T066 | Edit draft (navigate) | Researcher | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Edit mode keeps existing draft identity and version. |
+| T067 | Switch role (role) | Other role | Same screen | Switch role only. |
 | T068 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T069 | Source / evidence / history disclosures (disclosure) | — | Same screen | — |
 | T202 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx)
 
 <a id="s12"></a>
 
@@ -929,7 +931,7 @@ Acceptance criteria:
 | T078 | Open ready-to-publish submission (navigate) | Ready to publish | [S21 · Pipeline details · Ready to publish](#s21) | — |
 | T079 | My tasks / All submissions / Search / Clear (in-place) | — | Same screen | — |
 
-**Source:** [PipelineViews.tsx:Approvals](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/PipelineViews.tsx)
+**Source:** [PipelineViews.tsx:Approvals](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/PipelineViews.tsx)
 
 <a id="s13"></a>
 
@@ -945,7 +947,7 @@ Know the current stage, next owner and how the demo can continue.
 2. Submitted for review / Awaiting assigned reviewer
 3. Status · next owner · what happens next · version
 4. Submission details · evidence · history
-5. Continue as assigned reviewer (demo)
+5. Switch role · assigned reviewer (demo)
 
 #### US-S13
 
@@ -959,15 +961,15 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T080 | Continue as Ethical reviewer (role) | Current stage is Ethical | [S14 · Pipeline review · Ethical](#s14) | Role switch only; stage still needs decision. |
-| T081 | Continue as Technical reviewer (role) | Current stage is Technical | [S15 · Pipeline review · Technical](#s15) | Role switch only; stage still needs decision. |
-| T082 | Continue as Privacy reviewer (role) | Current stage is Privacy | [S16 · Pipeline review · Privacy](#s16) | Role switch only; stage still needs decision. |
-| T083 | Continue as Security reviewer (role) | Current stage is Security | [S17 · Pipeline review · Security](#s17) | Role switch only; stage still needs decision. |
+| T080 | Switch role (role) | Current stage is Ethical | [S14 · Pipeline review · Ethical](#s14) | Role switch only; stage still needs decision. |
+| T081 | Switch role (role) | Current stage is Technical | [S15 · Pipeline review · Technical](#s15) | Role switch only; stage still needs decision. |
+| T082 | Switch role (role) | Current stage is Privacy | [S16 · Pipeline review · Privacy](#s16) | Role switch only; stage still needs decision. |
+| T083 | Switch role (role) | Current stage is Security | [S17 · Pipeline review · Security](#s17) | Role switch only; stage still needs decision. |
 | T084 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T085 | View all stages / details / evidence / history (disclosure) | — | Same screen | — |
 | T203 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx)
 
 <a id="s14"></a>
 
@@ -1006,12 +1008,12 @@ Behavior and limits:
 | --- | --- | --- | --- | --- |
 | T086 | Approve Ethical (navigate) | All 3 criteria checked | [S13 · Pipeline review · Waiting / submission receipt](#s13) | Advance to next review stage; Security enters Ready to publish. |
 | T087 | Request changes (navigate) | Nonblank review comment | [S19 · Pipeline details · Requested changes](#s19) | Pause review and return ownership to Researcher. |
-| T088 | Reject submission (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
+| T088 | Reject (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
 | T089 | Check criteria / comments / disclosures (in-place) | — | Same screen | Update local review form; missing reason shows inline error. |
 | T090 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T204 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s15"></a>
 
@@ -1050,12 +1052,12 @@ Behavior and limits:
 | --- | --- | --- | --- | --- |
 | T091 | Approve Technical (navigate) | All 3 criteria checked | [S13 · Pipeline review · Waiting / submission receipt](#s13) | Advance to next review stage; Security enters Ready to publish. |
 | T092 | Request changes (navigate) | Nonblank review comment | [S19 · Pipeline details · Requested changes](#s19) | Pause review and return ownership to Researcher. |
-| T093 | Reject submission (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
+| T093 | Reject (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
 | T094 | Check criteria / comments / disclosures (in-place) | — | Same screen | Update local review form; missing reason shows inline error. |
 | T095 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T205 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s16"></a>
 
@@ -1094,12 +1096,12 @@ Behavior and limits:
 | --- | --- | --- | --- | --- |
 | T096 | Approve Privacy (navigate) | All 3 criteria checked | [S13 · Pipeline review · Waiting / submission receipt](#s13) | Advance to next review stage; Security enters Ready to publish. |
 | T097 | Request changes (navigate) | Nonblank review comment | [S19 · Pipeline details · Requested changes](#s19) | Pause review and return ownership to Researcher. |
-| T098 | Reject submission (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
+| T098 | Reject (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
 | T099 | Check criteria / comments / disclosures (in-place) | — | Same screen | Update local review form; missing reason shows inline error. |
 | T100 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T206 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s17"></a>
 
@@ -1138,12 +1140,12 @@ Behavior and limits:
 | --- | --- | --- | --- | --- |
 | T101 | Approve Security (navigate) | All 3 criteria checked | [S21 · Pipeline details · Ready to publish](#s21) | Advance to next review stage; Security enters Ready to publish. |
 | T102 | Request changes (navigate) | Nonblank review comment | [S19 · Pipeline details · Requested changes](#s19) | Pause review and return ownership to Researcher. |
-| T103 | Reject submission (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
+| T103 | Reject (navigate) | Nonblank review comment | [S18 · Confirm pipeline rejection](#s18) | Open confirmation; no decision until confirmed. |
 | T104 | Check criteria / comments / disclosures (in-place) | — | Same screen | Update local review form; missing reason shows inline error. |
 | T105 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T207 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:CHECKS](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [model.ts:workspaceReducer](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s18"></a>
 
@@ -1173,7 +1175,7 @@ Acceptance criteria:
 | T106 | Confirm rejection (navigate) | Assigned reviewer and comment | [S20 · Pipeline details · Rejected submission](#s20) | Record rejection; author can revise. |
 | T107 | Keep reviewing / dismiss (return) | — | Originating page / parent state | Return to the originating stage S14–S17. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx)
 
 <a id="s19"></a>
 
@@ -1203,12 +1205,12 @@ Acceptance criteria:
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
 | T108 | Revise & resubmit (navigate) | Researcher | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Prefill revision draft if saved, otherwise reviewed fields. |
-| T109 | Continue as Researcher (role) | Other role | Same screen | Switch role, no state change. |
+| T109 | Switch role (role) | Other role | Same screen | Switch role, no state change. |
 | T110 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T111 | Source / evidence / timeline (disclosure) | — | Same screen | — |
 | T208 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s20"></a>
 
@@ -1238,12 +1240,12 @@ Acceptance criteria:
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
 | T112 | Revise & resubmit (navigate) | Researcher | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Prefill revision draft if saved, otherwise reviewed fields. |
-| T113 | Continue as Researcher (role) | Other role | Same screen | Switch role, no state change. |
+| T113 | Switch role (role) | Other role | Same screen | Switch role, no state change. |
 | T114 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T115 | Source / evidence / timeline (disclosure) | — | Same screen | — |
 | T209 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [model.ts:SAVE_DRAFT / REVISE](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s21"></a>
 
@@ -1257,7 +1259,7 @@ Publish only after all four approvals.
 
 1. Ready to publish · 4 of 4 reviews
 2. Review completion receipt · source / version
-3. Publish pipeline / Continue as Researcher
+3. Publish pipeline / Switch role
 4. Retained evidence and approval timeline
 
 #### US-S21
@@ -1272,12 +1274,12 @@ Acceptance criteria:
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
 | T116 | Publish pipeline (navigate) | Researcher and all four stages approved | [S22 · Pipeline details · Approved](#s22) | Status Approved; method becomes selectable for runs. |
-| T117 | Continue as Researcher (role) | Reviewer | Same screen | — |
+| T117 | Switch role (role) | Reviewer | Same screen | — |
 | T118 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T119 | View stages / source / history (disclosure) | — | Same screen | — |
 | T210 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [model.ts:PUBLISH](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [model.ts:PUBLISH](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s22"></a>
 
@@ -1291,7 +1293,7 @@ Use a published method or start an independently reviewed version.
 
 1. Approved · Ready for research
 2. Method purpose · source / version · input / output
-3. Configure run · Submit new version
+3. Configure run · New version
 4. Evidence and retained decision timeline
 
 #### US-S22
@@ -1307,13 +1309,13 @@ Acceptance criteria:
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
 | T120 | Configure run (navigate) | Researcher | [S23 · Configure run](#s23) | Preselect this pipeline. |
-| T121 | Submit new version (navigate) | Researcher | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Prefill approved source in new-version mode; save/submit creates separate record. |
-| T122 | Continue as Researcher (role) | Reviewer | Same screen | — |
+| T121 | New version (navigate) | Researcher | [S08 · Pipeline wizard · 1. Source & purpose](#s08) | Prefill approved source in new-version mode; save/submit creates separate record. |
+| T122 | Switch role (role) | Reviewer | Same screen | — |
 | T123 | Back to approvals (navigate) | — | [S12 · Approvals queue](#s12) | — |
 | T124 | Source / evidence / timeline (disclosure) | — | Same screen | — |
 | T211 | Open attached evidence (navigate) | At least one attached file; expand evidence section if needed | [S41 · Evidence attachment · Text preview](#s41) | Open text preview over the same pipeline. |
 
-**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx) · [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [model.ts:nextAvailableVersion](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx) · [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [model.ts:nextAvailableVersion](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s23"></a>
 
@@ -1343,11 +1345,11 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T125 | Start demo run (navigate) | Approved pipeline + dataset + supported format | [S24 · Runs & results · Runs](#s24) | Create Running record; no execution service is called. |
+| T125 | Start run (navigate) | Approved pipeline + dataset + supported format | [S24 · Runs & results · Runs](#s24) | Create Running record; no execution service is called. |
 | T126 | Select method / dataset / inspect columns (in-place) | — | Same screen | Update compatibility; mismatch warns and disables Start. |
 | T127 | Cancel / Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:RunDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [model.ts:supportsDataset](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [Dialogs.tsx:RunDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [model.ts:supportsDataset](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s24"></a>
 
@@ -1391,7 +1393,7 @@ Behavior and limits:
 | T136 | Search runs (in-place) | — | Same screen | — |
 | T137 | Timer progresses running records (system) | — | Same screen | Every 650ms add 12 progress points; completion creates Pending review output. |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx)
 
 <a id="s25"></a>
 
@@ -1420,13 +1422,13 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T138 | Timer completes / Complete waiting runs (system) | Still Running | [S26 · Run details · Completed](#s26) | Create synthetic artifact Pending review. |
+| T138 | Timer completes / Complete runs (system) | Still Running | [S26 · Run details · Completed](#s26) | Create synthetic artifact Pending review. |
 | T139 | Cancel run (navigate) | Researcher | [S28 · Run details · Cancelled](#s28) | Immediately Cancelled; no confirmation dialog. |
 | T140 | Export log (download) | — | Same screen | Download this run log without navigation. |
 | T141 | Close (return) | — | Originating page / parent state | — |
 | T142 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Close Run details before opening simulator. |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/useWorkspace.ts) · [model.ts:executionStepStatus / TICK](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/useWorkspace.ts) · [model.ts:executionStepStatus / TICK](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s26"></a>
 
@@ -1459,7 +1461,7 @@ Acceptance criteria:
 | T145 | Close (return) | — | Originating page / parent state | — |
 | T146 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx)
 
 <a id="s27"></a>
 
@@ -1474,7 +1476,7 @@ Understand the seeded failure and choose recovery.
 1. Failed · method / dataset / version
 2. Data error · synthetic example mapping notice
 3. Execution steps disclosure · support entry
-4. Retry demo with example mapping · Export log
+4. Retry run · Export log
 
 #### US-S27
 
@@ -1488,13 +1490,13 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T147 | Retry demo with example mapping (navigate) | Researcher | [S25 · Run details · Running](#s25) | Reset same run progress/error; synthetic retry succeeds. |
-| T148 | Need help with this run? (navigate) | No support request yet | [S29 · Run support · New request](#s29) | Expand inline support form. |
+| T147 | Retry run (navigate) | Researcher | [S25 · Run details · Running](#s25) | Reset same run progress/error; synthetic retry succeeds. |
+| T148 | Get help (navigate) | No support request yet | [S29 · Run support · New request](#s29) | Expand inline support form. |
 | T149 | Export log (download) | — | Same screen | — |
 | T150 | Close (return) | — | Originating page / parent state | — |
 | T151 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx) · [model.ts:seedWorkspace / RETRY](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx) · [model.ts:seedWorkspace / RETRY](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s28"></a>
 
@@ -1508,7 +1510,7 @@ Restart a stopped run if needed.
 
 1. Cancelled · method / dataset / version
 2. Execution steps disclosure
-3. Restart demo run · Export log
+3. Restart run · Export log
 4. Existing support receipt if present
 
 #### US-S28
@@ -1522,12 +1524,12 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T152 | Restart demo run (navigate) | Researcher | [S25 · Run details · Running](#s25) | — |
+| T152 | Restart run (navigate) | Researcher | [S25 · Run details · Running](#s25) | — |
 | T153 | Export log (download) | — | Same screen | — |
 | T154 | Close (return) | — | Originating page / parent state | — |
 | T155 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx) · [model.ts:CANCEL_RUN / RETRY](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx) · [model.ts:CANCEL_RUN / RETRY](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s29"></a>
 
@@ -1541,7 +1543,7 @@ Record the issue with its run.
 
 1. Request support
 2. Describe the issue *
-3. Create support request · Cancel
+3. Create request · Cancel
 4. Run details remain visible around panel
 
 #### US-S29
@@ -1559,10 +1561,10 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T156 | Create support request (navigate) | Nonblank issue description | [S30 · Run support · Submitted / technical resolution](#s30) | Record support request and activity. |
+| T156 | Create request (navigate) | Nonblank issue description | [S30 · Run support · Submitted / technical resolution](#s30) | Record support request and activity. |
 | T157 | Cancel (navigate) | — | [S27 · Run details · Failed](#s27) | Collapse inline form; retain failed run details. |
 
-**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/RunSupport.tsx) · [model.ts:REPORT_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/RunSupport.tsx) · [model.ts:REPORT_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s30"></a>
 
@@ -1575,7 +1577,7 @@ Hand off and record a resolution.
 **Wireframe content, top to bottom**
 
 1. Support ID · Submitted · issue message
-2. Switch to technical support role (if other role)
+2. Switch to support (if other role)
 3. Resolution notes * (Technical reviewer)
 4. Mark resolved · local demo notice
 
@@ -1593,12 +1595,12 @@ Acceptance criteria:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T158 | Switch to technical support role (role) | Not Technical reviewer | Same screen | Set Technical reviewer and expose resolution fields. |
+| T158 | Switch to support (role) | Not Technical reviewer | Same screen | Set Technical reviewer and expose resolution fields. |
 | T159 | Mark resolved (navigate) | Technical reviewer + nonblank resolution | [S31 · Run support · Resolved](#s31) | Record resolution and activity. |
 | T160 | Retry run via Run details (navigate) | Switch back to Researcher, Failed/Cancelled | [S25 · Run details · Running](#s25) | Support stays attached while execution restarts. |
 | T161 | Close Run details (return) | — | Originating page / parent state | — |
 
-**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/RunSupport.tsx) · [model.ts:RESOLVE_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/RunSupport.tsx) · [model.ts:RESOLVE_ISSUE](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s31"></a>
 
@@ -1630,7 +1632,7 @@ Acceptance criteria:
 | T162 | Retry / Restart parent run (navigate) | Researcher and Failed/Cancelled | [S25 · Run details · Running](#s25) | Same parent run restarts; receipt remains. |
 | T163 | Close Run details (return) | — | Originating page / parent state | — |
 
-**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/RunSupport.tsx)
+**Source:** [RunSupport.tsx:RunSupport](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/RunSupport.tsx)
 
 <a id="s32"></a>
 
@@ -1667,7 +1669,7 @@ Acceptance criteria:
 | T169 | New run (navigate) | Researcher | [S23 · Configure run](#s23) | — |
 | T170 | Search results (in-place) | — | Same screen | — |
 
-**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx)
+**Source:** [DataAndRuns.tsx:RunsAndResults](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx)
 
 <a id="s33"></a>
 
@@ -1691,16 +1693,16 @@ As a researcher, I want to see output before validation while understanding why 
 Acceptance criteria:
 
 - Sample download is disabled while Pending review.
-- Continue as Privacy reviewer changes role within the same open artifact.
+- Switch role changes role within the same open artifact.
 - Preview is synthetic and contract-specific, not the imported source rows.
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T171 | Continue as Privacy reviewer (role) | — | [S34 · Artifact review · Privacy decision](#s34) | Role switch only; no acceptance implied. |
+| T171 | Switch role (role) | — | [S34 · Artifact review · Privacy decision](#s34) | Role switch only; no acceptance implied. |
 | T172 | Close (return) | — | Originating page / parent state | — |
 | T173 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Close artifact and preselect it in simulator; closing simulator does not reopen it. |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [artifactPreview.ts:artifactPreview](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/artifactPreview.ts)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [artifactPreview.ts:artifactPreview](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/artifactPreview.ts)
 
 <a id="s34"></a>
 
@@ -1735,7 +1737,7 @@ Acceptance criteria:
 | T177 | Close (return) | — | Originating page / parent state | — |
 | T178 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Artifact closes; not automatically reopened after simulation. |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [model.ts:REVIEW_ARTIFACT](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [model.ts:REVIEW_ARTIFACT](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s35"></a>
 
@@ -1767,7 +1769,7 @@ Acceptance criteria:
 | T180 | Close (return) | — | Originating page / parent state | — |
 | T181 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | — |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [DataAndRuns.tsx:downloadArtifact](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/DataAndRuns.tsx)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [DataAndRuns.tsx:downloadArtifact](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/DataAndRuns.tsx)
 
 <a id="s36"></a>
 
@@ -1799,7 +1801,7 @@ Acceptance criteria:
 | T182 | Close (return) | — | Originating page / parent state | — |
 | T183 | Simulation controls (navigate) | — | [S38 · Simulation controls](#s38) | Cannot accept an already rejected artifact; only Pending review artifacts can be simulated. |
 
-**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:ArtifactDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx)
 
 <a id="s37"></a>
 
@@ -1840,7 +1842,7 @@ Behavior and limits:
 | T188 | Open run event (navigate) | Resolve by current status to S25–S28. | [S25 · Run details · Running](#s25) | Navigate to Runs and open detail. |
 | T189 | Open artifact event (navigate) | Resolve role/status to S33–S36. | [S33 · Artifact review · Awaiting Privacy reviewer](#s33) | Artifact opens over Activity log. |
 
-**Source:** [ActivityView.tsx:ActivityView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ActivityView.tsx) · [MvpApp.tsx:openEvent](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/MvpApp.tsx)
+**Source:** [ActivityView.tsx:ActivityView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ActivityView.tsx) · [MvpApp.tsx:openEvent](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/MvpApp.tsx)
 
 <a id="s38"></a>
 
@@ -1854,9 +1856,9 @@ Unblock outside-person and timer events in a solo walkthrough.
 
 1. Demo submission select · current stage/status
 2. Simulate current review / remaining reviews
-3. Simulate author publication (separate)
-4. Execution events disclosure · Complete waiting runs
-5. Output validation disclosure · Demo output · Simulate output acceptance
+3. Publish pipeline (separate)
+4. Execution events disclosure · Complete runs
+5. Output validation disclosure · Demo output · Accept output
 
 #### US-S38
 
@@ -1866,9 +1868,9 @@ Acceptance criteria:
 
 - Review shortcuts create attributed, explicitly simulated review events.
 - Remaining reviews stop at Ready to publish; publication remains a distinct action.
-- Complete waiting runs only finishes currently Running runs.
+- Complete runs only finishes currently Running runs.
 - Output acceptance only applies to Pending review and records a simulated Privacy decision.
-- Return to prototype closes simulator; artifact/run dialogs closed on entry do not reopen.
+- Done closes simulator; artifact/run dialogs closed on entry do not reopen.
 
 Behavior and limits:
 
@@ -1877,15 +1879,15 @@ Behavior and limits:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T190 | Simulate current stage approval (simulation) | Selected submission In review | Same screen | Advance one stage; update controls and history. |
-| T191 | Simulate remaining reviews (simulation) | In review | Same screen | Complete remaining stages, stop at Ready to publish. |
-| T192 | Simulate author publication (simulation) | Ready to publish | Same screen | Separate publish event; status Approved. |
-| T193 | Complete waiting runs (simulation) | At least one Running run | Same screen | Dispatch enough timer ticks to create Pending review outputs. |
-| T194 | Simulate output acceptance (simulation) | Selected artifact Pending review | Same screen | Status Validated; does not re-open artifact. |
+| T190 | Approve stage (simulation) | Selected submission In review | Same screen | Advance one stage; update controls and history. |
+| T191 | Approve remaining (simulation) | In review | Same screen | Complete remaining stages, stop at Ready to publish. |
+| T192 | Publish pipeline (simulation) | Ready to publish | Same screen | Separate publish event; status Approved. |
+| T193 | Complete runs (simulation) | At least one Running run | Same screen | Dispatch enough timer ticks to create Pending review outputs. |
+| T194 | Accept output (simulation) | Selected artifact Pending review | Same screen | Status Validated; does not re-open artifact. |
 | T195 | Choose submission/output · expand event groups (disclosure) | — | Same screen | — |
-| T196 | Return to prototype (return) | — | Originating page / parent state | — |
+| T196 | Done (return) | — | Originating page / parent state | — |
 
-**Source:** [SimulationControls.tsx:SimulationControls](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/SimulationControls.tsx) · [MvpApp.tsx:openSimulation](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/MvpApp.tsx)
+**Source:** [SimulationControls.tsx:SimulationControls](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/SimulationControls.tsx) · [MvpApp.tsx:openSimulation](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/MvpApp.tsx)
 
 <a id="s39"></a>
 
@@ -1917,7 +1919,7 @@ Acceptance criteria:
 | T198 | Import data (navigate) | — | [S05 · Import dataset · choose source](#s05) | Set Researcher; open import. |
 | T199 | Close (return) | — | Originating page / parent state | — |
 
-**Source:** [Dialogs.tsx:HelpDialog](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/MvpApp.tsx)
+**Source:** [Dialogs.tsx:HelpDialog](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx) · [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/MvpApp.tsx)
 
 <a id="s40"></a>
 
@@ -1948,7 +1950,7 @@ Acceptance criteria:
 | T200 | Reset demo (navigate) | — | [S03 · Pipeline catalog](#s03) | Restore seeded workspace; close all selected context; role Researcher. |
 | T201 | Cancel / dismiss (return) | — | Originating page / parent state | — |
 
-**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/MvpApp.tsx) · [model.ts:RESET](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/model.ts)
+**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/MvpApp.tsx) · [model.ts:RESET](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/model.ts)
 
 <a id="s41"></a>
 
@@ -1984,7 +1986,7 @@ Behavior and limits:
 | --- | --- | --- | --- | --- |
 | T212 | Close preview (return) | — | Originating page / parent state | Return to the originating pipeline detail/review state. |
 
-**Source:** [Evidence.tsx:EvidenceAttachments](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Evidence.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/ReviewView.tsx)
+**Source:** [Evidence.tsx:EvidenceAttachments](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Evidence.tsx) · [ReviewView.tsx:ReviewView](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/ReviewView.tsx)
 
 <a id="s42"></a>
 
@@ -1998,7 +2000,7 @@ Protect unsaved pipeline fields and evidence when closing the wizard.
 
 1. Save your changes?
 2. Unsaved edits explanation
-3. Save draft / Save revision draft
+3. Save draft
 4. Keep editing
 5. Discard changes
 
@@ -2020,11 +2022,11 @@ Behavior and limits:
 
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
-| T218 | Save draft / Save revision draft (navigate) | Named draft and evidence reading complete | [S11 · Pipeline details · Draft](#s11) | Save working fields; feedback/rejected revisions retain S19/S20 instead of changing their reviewed status. |
+| T218 | Save draft (navigate) | Named draft and evidence reading complete | [S11 · Pipeline details · Draft](#s11) | Save working fields; feedback/rejected revisions retain S19/S20 instead of changing their reviewed status. |
 | T219 | Keep editing (return) | — | Originating page / parent state | Return to the same wizard step with every field and attachment retained. |
 | T220 | Discard changes (return) | — | [S03 · Pipeline catalog](#s03) | Close the wizard and return to the page that opened it; catalog shown as representative. |
 
-**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/Dialogs.tsx)
+**Source:** [Dialogs.tsx:PipelineForm](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/Dialogs.tsx)
 
 <a id="s43"></a>
 
@@ -2039,7 +2041,7 @@ Preserve unreadable saved data or an unsaved local copy before choosing how to r
 1. Your saved workspace needs recovery
 2. Explanation of unreadable data or a concurrent-save conflict
 3. Download recovery copy
-4. Reset saved workspace OR Load saved workspace
+4. Reset workspace OR Load saved workspace
 
 #### US-S43
 
@@ -2062,10 +2064,10 @@ Behavior and limits:
 | ID | Click / event | Required condition | Next screen / state | Result |
 | --- | --- | --- | --- | --- |
 | T221 | Download recovery copy (download) | — | Same screen | Download protected original bytes or the unsaved local workspace. |
-| T222 | Reset saved workspace (navigate) | Unreadable saved data | [S40 · Reset demo workspace](#s40) | Ask for explicit reset; preserve a recovery backup before replacement. |
+| T222 | Reset workspace (navigate) | Unreadable saved data | [S40 · Reset demo workspace](#s40) | Ask for explicit reset; preserve a recovery backup before replacement. |
 | T223 | Load saved workspace (return) | Concurrent-save conflict and readable saved copy | Originating page / parent state | Back up local copy, load latest saved workspace and retain the current area. |
 
-**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/MvpApp.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/useWorkspace.ts) · [workspaceLedger.ts:workspaceLedger](https://github.com/T-dotnet/Zero_trust/blob/460b5b36846e7e3ece576c62d7efd9f131e770ab/src/mvp/workspaceLedger.ts)
+**Source:** [MvpApp.tsx:MvpApp](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/MvpApp.tsx) · [useWorkspace.ts:useWorkspace](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/useWorkspace.ts) · [workspaceLedger.ts:workspaceLedger](https://github.com/T-dotnet/Zero_trust/blob/983c8bce846a4c70b331649acdd4804098f5ec2e/src/mvp/workspaceLedger.ts)
 
 ## Coverage checklist
 

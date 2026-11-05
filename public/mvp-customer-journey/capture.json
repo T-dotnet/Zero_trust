@@ -1,7 +1,7 @@
 {
-  "capturedAt": "2026-11-04T05:40:23.335Z",
-  "sourceCommit": "460b5b36846e7e3ece576c62d7efd9f131e770ab",
-  "appSourceCommit": "460b5b36846e7e3ece576c62d7efd9f131e770ab",
+  "capturedAt": "2026-11-05T07:53:58.115Z",
+  "sourceCommit": "983c8bce846a4c70b331649acdd4804098f5ec2e",
+  "appSourceCommit": "983c8bce846a4c70b331649acdd4804098f5ec2e",
   "target": "http://localhost:4173",
   "method": "Local Playwright Chromium. Browser runtime tools are not exposed in this session; the established local Playwright fallback is used.",
   "scenario": "Fresh local workspace; synthetic example dataset and new Customer journey outcome classifier v1.0.0. All four reviews are performed through normal UI controls; simulation shortcuts are not used.",

@@ -16,7 +16,7 @@ S18 -> S14 [label="Keep reviewing", tooltip="Keep reviewing"];
 S18 -> S20 [label="Confirm rejection", tooltip="Confirm rejection"];
 S19 -> S08 [label="Researcher · Revise", tooltip="Researcher · Revise"];
 S20 -> S08 [label="Researcher · Revise", tooltip="Researcher · Revise"];
-S08 -> S19 [label="Save revision draft · retains status", tooltip="Save revision draft · retains status"];
+S08 -> S19 [label="Save draft · retains status", tooltip="Save draft · retains status"];
 S08 -> S09 [label="Continue", tooltip="Continue"];
 S09 -> S10 [label="Continue", tooltip="Continue"];
 S10 -> S13 [label="Resubmit → patch + Ethical", tooltip="Resubmit → patch + Ethical"];
