@@ -1,4 +1,4 @@
-import { Check, ChevronRight, Search, ShieldCheck } from "lucide-react";
+import { Check, ChevronRight, Search, ShieldCheck, X } from "lucide-react";
 import { Button, InputAdornment, TextField, Tooltip } from "@mui/material";
 import type { ReactNode } from "react";
 import {
@@ -85,6 +85,7 @@ export function PipelineProgress({ pipeline }: { pipeline: Pipeline }) {
   const needsChanges = pipeline.status === "Rejected" || pipeline.status === "Changes requested";
   return (
     <div className="pipeline-progress">
+      <span className="review-progress-summary">
       <span
         className="progress-blocks"
         role="img"
@@ -108,6 +109,8 @@ export function PipelineProgress({ pipeline }: { pipeline: Pipeline }) {
             />
           </Tooltip>
         ))}
+      </span>
+      <span className="progress-count" aria-hidden="true">{pipeline.stage}/4</span>
       </span>
       <Status
         kind={
@@ -144,14 +147,16 @@ export function StagePath({
           (i < pipeline.stage || (i === 4 && pipeline.status === "Approved"));
         const current =
           pipeline && i === pipeline.stage && pipeline.status !== "Approved";
+        const blocked = current &&
+          (pipeline?.status === "Rejected" || pipeline?.status === "Changes requested");
         return (
           <li
             key={label}
-            className={`${complete ? "complete" : ""} ${current ? "current" : ""} ${current && (pipeline?.status === "Rejected" || pipeline?.status === "Changes requested") ? "blocked" : ""} ${pipeline?.status === "Draft" ? "not-started" : ""}`}
+            className={`${complete ? "complete" : ""} ${current ? "current" : ""} ${blocked ? "blocked" : ""} ${pipeline?.status === "Draft" ? "not-started" : ""}`}
             aria-current={current && pipeline?.status !== "Draft" && pipeline?.status !== "Rejected" && pipeline?.status !== "Changes requested" ? "step" : undefined}
           >
-            <span className="stage-number">
-              {complete ? <Check size={15} /> : String(i + 1).padStart(2, "0")}
+            <span className="stage-number" aria-hidden="true">
+              {complete ? <Check size={15} /> : blocked ? <X size={15} /> : String(i + 1).padStart(2, "0")}
             </span>
             <span>
               <strong>{label}</strong>
@@ -164,12 +169,14 @@ export function StagePath({
                     : current
                       ? pipeline.status === "Draft"
                         ? "Not submitted"
+                        : blocked
+                          ? pipeline.status
                         : pipeline.status !== "In review"
                           ? i === 4
                             ? "Ready to publish"
                             : "Author action"
                           : "Current review"
-                      : "Upcoming"}
+                      : "Pending"}
                 </small>
               )}
             </span>

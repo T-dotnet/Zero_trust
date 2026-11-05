@@ -1783,6 +1783,22 @@
 }
 
 /* Review progress has separate hues and marker shapes for each state. */
+.review-progress-summary {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+}
+.progress-count {
+  color: var(--zt-body);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.stage-path li:not(.complete):not(.current) .stage-number,
+.stage-path li.current.not-started .stage-number {
+  border: 1px dashed var(--zt-slate);
+}
 .form-stepper .MuiStepIcon-root {
   color: var(--zt-slate);
 }
@@ -1925,4 +1941,5 @@
 }
 @media (max-width: 900px) {
   .review-progress-legend { font-size: 0.875rem; gap: 8px 16px; }
+  .progress-count { font-size: 0.875rem; }
 }

@@ -591,7 +591,7 @@ export function RunsAndResults({
                           {status === "Complete" ? <Check size={15} /> : String(i + 1).padStart(2, "0")}
                         </span>
                         <strong>{label}</strong>
-                        <small>{status}</small>
+                        <small>{status === "Pending" && run.status !== "Running" ? "Not run" : status}</small>
                       </div>
                     );
                   })}
