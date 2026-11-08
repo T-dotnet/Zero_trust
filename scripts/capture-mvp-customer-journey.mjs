@@ -31,7 +31,7 @@ try {
   manifest.screenshots.push({file:`screenshots/${file}`,title,screen,actor,viewport:page.viewportSize(),width:data.readUInt32BE(16),height:data.readUInt32BE(20)});
   console.log(`Captured ${file}: ${title}`);
  }
- await page.goto(target);await expect(page).toHaveTitle('Zero Trust — Research Workspace');
+ await page.goto(target);await expect(page).toHaveTitle('Pipelines · Zero Trust');
  await expect(page.getByRole('heading',{name:'Pipelines',exact:true})).toBeVisible();
  await capture('00-pipeline-catalog.png','Initial pipeline catalog','S03','Researcher');
  await nav('Datasets');await page.getByRole('button',{name:'Import dataset',exact:true}).click();
@@ -75,9 +75,9 @@ try {
  await page.getByLabel('Source dataset',{exact:true}).click();
  await page.getByRole('option',{name:'Customer journey · Synthetic cohort (CSV)',exact:true}).click();
  await page.getByText('Inspect dataset columns',{exact:true}).click();
- await expect(page.getByRole('button',{name:'Start run',exact:true})).toBeEnabled();
+ await expect(page.getByRole('button',{name:'Start demo run',exact:true})).toBeEnabled();
  await capture('10-configure-run.png','Pair published method with the imported source','S23','Researcher');
- await page.getByRole('button',{name:'Start run',exact:true}).click();
+ await page.getByRole('button',{name:'Start demo run',exact:true}).click();
  const row=page.getByRole('row').filter({has:page.getByText('Customer journey outcome classifier',{exact:true})});
  await expect(row.getByText('Completed',{exact:true})).toBeVisible({timeout:15000});
  await row.getByRole('button',{name:'Details',exact:true}).click();

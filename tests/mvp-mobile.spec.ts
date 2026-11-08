@@ -189,7 +189,7 @@ test("the complete solo walkthrough works with the mobile menu, larger controls 
     ).toBe(true);
   }
   await page
-    .getByRole("button", { name: "Start run", exact: true })
+    .getByRole("button", { name: "Start demo run", exact: true })
     .click();
   const run = page
     .getByRole("table", { name: "Runs", exact: true })
@@ -346,7 +346,7 @@ test("cards and controls adapt to narrower windows and larger reading text", asy
     }
   }
   await nav(page, "Overview");
-  const metrics = page.locator(".overview-metrics > div");
+  const metrics = page.locator(".overview-metrics > button");
   expect((await metrics.nth(2).boundingBox())!.y).toBeGreaterThan(
     (await metrics.nth(0).boundingBox())!.y,
   );
@@ -354,6 +354,7 @@ test("cards and controls adapt to narrower windows and larger reading text", asy
   await page.getByRole("button", { name: "Review", exact: true }).click();
   for (const checkbox of await page.getByRole("checkbox").all())
     await checkbox.check();
+  await page.getByLabel("Review comments", { exact: true }).fill("Demo exception: evidence must be supplied before pilot use.");
   await page
     .getByRole("button", { name: "Approve review", exact: true })
     .click();

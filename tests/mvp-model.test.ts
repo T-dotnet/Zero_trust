@@ -460,3 +460,99 @@ test("synthetic previews follow declared outputs and disclose unsupported schema
   );
   assert.ok(artifactPreview(artifact).headers.includes("processed_text"));
 });
+
+test("declared column checks block incompatible input and reject unsupported retry references", async () => {
+  const { assessDataset, requiredInputColumns } = await import(
+    "../src/mvp/model"
+  );
+  const state = seedWorkspace();
+  const pipeline = state.pipelines[0];
+  assert.deepEqual(assessDataset(pipeline, state.datasets[1]).missing, [
+    "clinical_note",
+  ]);
+  assert.equal(
+    assessDataset(pipeline, state.datasets[0]).columnsVerified,
+    true,
+  );
+  assert.deepEqual(
+    requiredInputColumns({
+      ...pipeline,
+      requiredColumns: undefined,
+      input: "CSV with required record_id and clinical_note fields.",
+    }),
+    ["record_id", "clinical_note"],
+  );
+  assert.deepEqual(
+    requiredInputColumns({
+      ...pipeline,
+      requiredColumns: undefined,
+      input: "The required input is CSV.",
+    }),
+    [],
+  );
+  const previous = state.runs.find((run) => run.status === "Failed")!;
+  const candidate = {
+    ...previous,
+    id: "RUN-REPAIR",
+    status: "Running" as const,
+    progress: 0,
+    artifactId: undefined,
+    retryOf: previous.id,
+  };
+  assert.equal(
+    workspaceReducer(state, { type: "START_RUN", run: candidate }),
+    state,
+    "missing fields cannot be bypassed through the reducer",
+  );
+  const next = workspaceReducer(state, {
+    type: "START_RUN",
+    run: {
+      ...candidate,
+      datasetId: state.datasets[0].id,
+      datasetName: state.datasets[0].name,
+    },
+  });
+  assert.equal(
+    next.runs.find((run) => run.id === previous.id),
+    previous,
+    "repair keeps the failed attempt unchanged",
+  );
+  assert.equal(next.runs[0].retryOf, previous.id);
+  assert.ok(isWorkspace(next));
+  assert.equal(
+    workspaceReducer(state, {
+      type: "START_RUN",
+      run: {
+        ...candidate,
+        datasetId: state.datasets[0].id,
+        retryOf: "missing",
+      },
+    }),
+    state,
+  );
+});
+
+test("missing evidence cannot be approved without an explicit rationale", () => {
+  const state = seedWorkspace();
+  const approval = {
+    type: "REVIEW" as const,
+    id: "pipe-2",
+    role: "Technical reviewer" as const,
+    decision: "approve" as const,
+    note: "",
+  };
+  assert.equal(workspaceReducer(state, approval), state);
+  const next = workspaceReducer(state, {
+    ...approval,
+    note: "Demo exception only; runtime evidence still needs to be supplied.",
+  });
+  assert.equal(next.pipelines.find((p) => p.id === "pipe-2")?.stage, 2);
+});
+
+test("synthetic preview and export rows cannot outnumber the declared output", () => {
+  const output = seedWorkspace().artifacts[0];
+  for (const rows of [0, 1, 3, 4, 120]) {
+    const preview = artifactPreview({ ...output, rows });
+    assert.equal(preview.rows.length, Math.min(rows, 4));
+  }
+});

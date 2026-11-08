@@ -2,7 +2,21 @@ import { test, expect, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
 const key = "zero-trust-mvp-v1";
+async function catalog(page: Page) {
+  await expect(page.locator("h1")).toBeVisible();
+  const menu = page.getByRole("button", {
+    name: "Open navigation",
+    exact: true,
+  });
+  if (await menu.isVisible()) await menu.click();
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: "Pipelines", exact: true })
+    .click();
+}
+
 async function draft(page: Page, name: string) {
+  await catalog(page);
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
   await page.getByRole("textbox", { name: /Pipeline name/ }).fill(name);
 }
@@ -13,10 +27,9 @@ async function save(page: Page) {
   ).toBeVisible();
 }
 async function edit(page: Page, name: string) {
+  await catalog(page);
   await page.getByRole("button", { name, exact: true }).click();
-  await page
-    .getByRole("button", { name: "Edit draft", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Edit draft", exact: true }).click();
 }
 async function failSaves(page: Page) {
   await page.addInitScript(() => {
@@ -46,6 +59,7 @@ test("simultaneous saves in two tabs preserve both drafts and synchronize their 
   await Promise.all([save(page), save(second)]);
   for (const tab of [page, second]) {
     await tab.reload();
+    await catalog(tab);
     await expect(
       tab.getByRole("button", { name: "Tab A research", exact: true }),
     ).toBeVisible();
@@ -66,9 +80,7 @@ test("stale edits to the same pipeline are kept in the form rather than overwrit
   const second = await context.newPage();
   await second.goto("/");
   await edit(second, "Shared draft");
-  await page
-    .getByRole("button", { name: "Edit draft", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Edit draft", exact: true }).click();
   await page.getByLabel("Research purpose").fill("First tab saved purpose");
   await second
     .getByLabel("Research purpose")
@@ -112,9 +124,7 @@ test("failed saves preserve draft history and retry the complete local state", a
       "Browser storage unavailable. Changes last for this session.",
     ),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Edit draft", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Edit draft", exact: true }).click();
   await page.getByLabel("Research purpose").fill("Kept across failed saves");
   await page.evaluate(() => sessionStorage.removeItem("fail-saves"));
   await save(page);
@@ -243,9 +253,7 @@ test("support requests record the active reviewer in history and export", async 
     .filter({ hasText: "RUN-1041" })
     .getByRole("button", { name: "Details", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Get help", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Get help", exact: true }).click();
   await page.getByLabel("Describe the issue").fill("Review input mapping");
   await page
     .getByRole("button", { name: "Create request", exact: true })
@@ -316,6 +324,7 @@ test("a stale localStorage renderer cache cannot erase another tab's saved draft
   await draft(page, "Cached renderer draft");
   await save(page);
   await page.reload();
+  await catalog(page);
   await expect(
     page.getByRole("button", { name: "Latest renderer draft", exact: true }),
   ).toBeVisible();

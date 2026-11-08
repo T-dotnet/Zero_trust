@@ -11,7 +11,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await expect(page).toHaveTitle("Zero Trust — Research Workspace");
+  await expect(page).toHaveTitle("Pipelines · Zero Trust");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
   await page.getByRole("button", { name: "Use example" }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -61,7 +61,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
   await page
     .getByRole("button", { name: "Configure run", exact: true })
     .click();
-  await page.getByLabel("Source dataset", { exact: true }).click();
+  await page.getByRole("combobox", { name: "Source dataset", exact: true }).click();
   await page
     .getByRole("option", {
       name: "Clinical notes · November cohort (CSV)",
@@ -69,7 +69,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
     })
     .click();
   await page
-    .getByRole("button", { name: "Start run", exact: true })
+    .getByRole("button", { name: "Start demo run", exact: true })
     .click();
   const row = page.getByRole("row").filter({
     has: page.getByText("Longitudinal outcome classifier", { exact: true }),
@@ -296,13 +296,15 @@ test("failed run support can be resolved and logs exported before retry and canc
     .filter({ hasText: "RUN-1041" })
     .getByRole("button", { name: "Details", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Retry run" })
-    .click();
+  await page.getByRole("button", { name: "Configure retry", exact: true }).click();
+  await page.getByRole("combobox", { name: "Source dataset", exact: true }).click();
+  await page.getByRole("option", { name: "Clinical notes · November cohort (CSV)", exact: true }).click();
+  await page.getByRole("button", { name: "Start demo run", exact: true }).click();
+  const attempt = page.getByRole("row").filter({ hasText: "Running" });
+  await attempt.getByRole("button", { name: "Details", exact: true }).click();
   await page.getByRole("button", { name: "Cancel run", exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: "Restart run" }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Configure retry", exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog")).toContainText("RUN-1041");
 });
 
 test("unacceptable outputs require a reason and remain blocked from download; decisions export in activity history", async ({

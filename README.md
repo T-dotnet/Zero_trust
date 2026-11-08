@@ -2,7 +2,7 @@
 
 An interactive research workspace for datasets, governed pipelines, mandatory multistage approval, simulated execution, and reviewed outputs. Built with React, TypeScript, MUI, and Lucide.
 
-The current UI uses the supplied mint, slate, amber and coral palette: mint primary actions with dark labels, dark secondary/tertiary labels, deeper green selection and focus states, self-hosted Inter, light surfaces and restrained borders. This styling is always on. Phone/tablet layouts retain larger text and touch controls.
+The UI uses ReadyAI colour sparingly: mint for the main page or task action, compact semantic status labels, and neutral navigation, panels and progress graphics. Status labels use green for approved/ready/completed, amber for waiting/in review/changes requested, coral for errors/rejections, and grey for neutral states. Repeated row actions are outlined. Labels, counts, checkmarks and marker shapes explain status without relying on colour. Self-hosted Inter, light surfaces, restrained borders and larger phone/tablet controls remain in place.
 
 ## Run locally
 
@@ -16,8 +16,8 @@ Open **http://localhost:3000**. The MVP is the default view; `/?view=full` prese
 ## Try the workflow
 
 1. Import a small CSV or choose the synthetic example.
-2. Create a pipeline, define its inputs/outputs, and attach optional evidence.
-3. Continue as each reviewer to complete **Ethical → Technical → Privacy → Security** reviews. The review workspace keeps evidence checks next to the decision. Try requesting changes or rejecting with a reason.
+2. Create a pipeline, define its inputs/outputs and required CSV columns, and attach supporting evidence.
+3. Continue as each reviewer to complete **Ethical → Technical → Privacy → Security** reviews. Each criterion links to its source for the current version. Missing evidence requires a recorded rationale for a demo exception; requesting changes or rejecting also requires a reason.
 4. Switch back to Researcher and publish the approved submission.
 5. Start a demo run, inspect its output, and switch to Privacy reviewer to validate it before downloading the sample CSV.
 
@@ -29,7 +29,13 @@ Reviewer queues default to **My tasks**. Authors see a submission receipt and ne
 
 Phone and portrait-tablet layouts use **16px body/input text, 14px secondary labels, and 44px touch targets**. Lists and output samples become labelled cards, keeping their actions visible without sideways scrolling.
 
-**Prototype boundary:** role switching and processing are local simulations. There is no production authentication, backend execution, PHI detection, or external support integration. Use synthetic data. Dataset file contents are not uploaded; metadata and column names, attached text evidence, and workflow decisions are saved in browser storage. Import sample rows are discarded when the dialog closes. Run setup checks format compatibility only; it does not verify field mappings.
+**Prototype boundary:** role switching and processing are local simulations. There is no production authentication, backend execution, PHI detection, or external support integration. Use synthetic data. Dataset file contents are not uploaded; metadata and column names, attached text evidence, and workflow decisions are saved in browser storage. Import sample rows are discarded after import or explicit dismissal. Run setup checks format and declared column names; it does not verify types, values or field mappings. When required columns are unspecified, an explicit demo-only acknowledgment is required. Missing declared columns block both the UI and local run reducer.
+
+Record URLs retain the selected pipeline, dataset, run or output, acting demo role and list filters through refresh and Back/Forward. Links reference the browser's existing workspace; they do not transfer records to another browser or grant real permissions. Unknown records have an explicit recovery screen. Navigation updates the page title and focuses the new heading.
+
+The overview separates **My tasks** from **Waiting on others**; totals open the relevant queues. Phone catalogues keep metrics and the progress legend behind a summary, and put status/category controls on a compact row without reducing touch targets. Activity dates are validated before filtering or export. Synthetic output samples never exceed the declared output count.
+
+For a failed or cancelled run, **Configure retry** opens input selection and checks again. Starting creates a distinct attempt with a link to the previous run, preserving its error, log and history.
 
 ## Saving and recovery
 
@@ -39,11 +45,15 @@ Unreadable saved data is never replaced automatically. The recovery screen pause
 
 Closing an edited pipeline form offers **Save draft**, **Keep editing**, and **Discard changes**. The browser also warns before leaving a page with an unsaved form or unsaved workspace changes.
 
+Reviewer notes and unfinished output assessments are kept in per-tab session drafts, scoped to the record, revision/stage and acting role. Navigation or refresh restores the notes; review evidence checkboxes reset and no decision is submitted automatically. Import Escape, backdrop and Cancel actions require explicit discard when a file or details have been entered. If draft storage is unavailable, notes remain in memory and the browser warns before leaving. Reset clears the current tab's assessment drafts along with the demo workspace.
+
 The original `/?view=full` workspace reads shared workflow records for reference; its dataset, pipeline, run and output interactions are local to the tab. The checked-in Firestore rules deny all client mutations of those collections, even for administrators. A trusted backend must implement authenticated ownership, stage-specific reviewer permissions, mandatory approval transitions and artifact validation before shared workflow writes can be enabled. The demo role selector is not an authorization source. Profile roles cannot be added, removed or changed by browser clients.
 
 These rule changes are local source changes until deployed. Rule validation uses the Firebase grammar and structural write-denial checks; it does not replace emulator or deployed-environment authorization tests.
 
 ## Preview
+
+The images below show the previous checkpoint; the current source uses the restrained colour treatment described above.
 
 ![MVP pipeline catalog](docs/mvp/screenshots/pipelines.png)
 

@@ -829,7 +829,7 @@
 
 @media (max-width: 599px) {
   .mvp-app main {
-    padding: 24px max(16px, env(safe-area-inset-right, 0px)) 0
+    padding: 16px max(16px, env(safe-area-inset-right, 0px)) 0
       max(16px, env(safe-area-inset-left, 0px));
   }
   .demo-mode {
@@ -838,11 +838,22 @@
   .page-heading h1 {
     font-size: 2rem;
   }
+  .page-heading {
+    margin-bottom: 20px;
+  }
+  .criterion-source {
+    min-height: 44px;
+    font-size: 0.875rem;
+    max-width: calc(100% - 34px);
+  }
+  .table-panel .filter-bar {
+    padding-block: 12px;
+  }
   .filter-bar {
     grid-template-columns: minmax(0, 1fr);
   }
   .filter-bar.catalog-mobile-controls {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 0.65fr);
     gap: 12px 8px;
   }
   .catalog-mobile-controls > .MuiFormControl-root {
@@ -861,7 +872,7 @@
     grid-column: 1 / -1;
     justify-self: stretch;
     font-size: 0.875rem;
-    background: var(--zt-primary-soft);
+    background: var(--zt-surface);
   }
   .table-panel .MuiTabs-root [role="tablist"] {
     display: grid;
@@ -886,6 +897,15 @@
   .overview-metrics > div {
     padding: 0;
     border: 0;
+  }
+  .overview-metrics > .metric-link {
+    padding: 0;
+    border: 0;
+    white-space: normal;
+    min-height: 64px;
+  }
+  .overview-metrics > .metric-link span {
+    white-space: normal;
   }
   .overview-metrics > div:nth-child(even) {
     padding-left: 16px;

@@ -1,4 +1,83 @@
 /* Task hierarchy and progressive disclosure for the MVP walkthrough. */
+.metric-link {
+  appearance: none;
+  background: transparent;
+  color: var(--zt-ink);
+  border: 0;
+  border-right: 1px solid var(--zt-line);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0 28px;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+.metric-link:first-child {
+  padding-left: 6px;
+}
+.metric-link:last-child {
+  border-right: 0;
+}
+.metric-link:hover span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.metric-link:focus-visible {
+  outline: 2px solid var(--zt-focus);
+  outline-offset: 5px;
+}
+.queue-updated {
+  display: block;
+  margin-top: 6px;
+  color: var(--zt-muted);
+  font-size: 12px;
+}
+.active-list-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+.page-heading h1:focus {
+  outline: none;
+}
+.catalog-summary {
+  margin-bottom: 14px;
+  border-block: 1px solid var(--zt-line);
+}
+.catalog-summary > summary {
+  padding: 12px 0;
+  color: var(--zt-body);
+  font-size: 14px;
+  cursor: pointer;
+}
+.catalog-summary .metrics-row {
+  margin-block: 12px 20px;
+}
+.criterion-source {
+  margin: 0 0 10px 34px;
+  padding: 3px 0;
+  background: none;
+  border: 0;
+  color: var(--zt-body);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.evidence-source-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.review-criteria + .MuiAlert-root {
+  margin-bottom: 18px;
+}
 .disclosure {
   min-width: 0;
   margin: 12px 0;
@@ -30,8 +109,8 @@
   justify-content: space-between;
   gap: 20px;
   padding: 16px 20px;
-  background: var(--zt-primary-soft);
-  border: 1px solid var(--zt-primary-border);
+  background: var(--zt-surface);
+  border: 1px solid var(--zt-line);
   border-radius: 7px;
 }
 .compact-review-status strong {
@@ -170,8 +249,7 @@
   padding: 7px 0;
   cursor: pointer;
   color: var(--zt-ink);
-  font:
-    11px var(--zt-font);
+  font: 11px var(--zt-font);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-align: left;
@@ -191,17 +269,17 @@
 }
 .simulation-feedback,
 .draft-saved-note {
-  background: var(--zt-success-soft);
+  background: var(--zt-surface);
   border-radius: 5px;
   padding: 12px 14px;
-  color: var(--zt-success);
+  color: var(--zt-body);
   font-size: 13px;
 }
 .revision-context {
   border-left: 3px solid var(--zt-warning-accent);
   padding: 12px 16px;
   margin: 16px 0;
-  background: var(--zt-warning-soft);
+  background: var(--zt-surface);
   font-size: 13px;
 }
 .revision-context p {
@@ -216,7 +294,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: var(--zt-primary-soft);
+  background: var(--zt-surface);
   padding: 14px 16px;
   border-radius: 5px;
   font-size: 13px;
@@ -399,12 +477,17 @@
 }
 
 .compact-review-status.review-current {
-  background: var(--zt-warning-soft);
-  border-color: var(--zt-warning-accent);
+  background: var(--zt-surface);
+  border-color: var(--zt-line);
+  border-left: 3px solid var(--zt-ink);
 }
 .compact-review-status.review-blocked {
-  background: var(--zt-error-soft);
-  border-color: var(--zt-error-border);
+  background: var(--zt-surface);
+  border-color: var(--zt-line);
+  border-left: 3px solid var(--zt-error-accent);
+}
+.compact-review-status.review-blocked[data-status="Changes requested"] {
+  border-left-color: var(--zt-warning-accent);
 }
 .compact-review-status.review-pending {
   background: var(--zt-surface);

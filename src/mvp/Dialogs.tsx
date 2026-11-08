@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
+  Checkbox,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -26,7 +27,8 @@ import {
   formatTime,
   nextAvailableVersion,
   pipelineRevision,
-  supportsDataset,
+  assessDataset,
+  requiredInputColumns,
   uid,
   type Attachment,
   type PipelineFields,
@@ -43,6 +45,8 @@ import { AttachmentPicker } from "./Evidence";
 import { parseDatasetCsv } from "./csv";
 import { WorkspaceDialog } from "./WorkspaceDialog";
 import { DialogActionBar } from "./DialogActionBar";
+import { DiscardWorkDialog } from "./DiscardWorkDialog";
+import { useSessionDraft, useUnsavedWarning } from "./useSessionDraft";
 
 const PIPELINE_STEPS = ["Source & purpose", "Requirements", "Review & submit"];
 
@@ -103,6 +107,9 @@ export function PipelineForm({
     category: working?.category || "Data processing",
     input: working?.input ?? "Structured clinical data (CSV)",
     output: working?.output ?? "Processed dataset (CSV)",
+    requiredColumns: working
+      ? requiredInputColumns(working as Pipeline).join(", ")
+      : "",
   });
   const initialValues = useRef(JSON.stringify({ form, attachments }));
   const dirty = initialValues.current !== JSON.stringify({ form, attachments });
@@ -203,15 +210,26 @@ export function PipelineForm({
     if (saving || evidenceBusy || !(draft ? validName() : valid())) return;
     if (!draft && !validRequirements()) return;
     setSaving(true);
+    const values = {
+      ...form,
+      requiredColumns: [
+        ...new Set(
+          form.requiredColumns
+            .split(/[,\n]/)
+            .map((column) => column.trim())
+            .filter(Boolean),
+        ),
+      ],
+    };
     const accepted = pipeline
       ? await onRevise(
-          { ...form, attachments },
+          { ...values, attachments },
           draft,
           originalRevision.current,
         )
       : await onCreate(
           {
-            ...form,
+            ...values,
             name: form.name.trim(),
             description: form.description.trim(),
             repo: form.repo.trim(),
@@ -319,6 +337,7 @@ export function PipelineForm({
                         category: "ML model",
                         input: "Structured clinical data (CSV)",
                         output: "Outcome classification (CSV)",
+                        requiredColumns: "record_id, clinical_note",
                       });
                       setFieldErrors({});
                       setError("");
@@ -390,6 +409,11 @@ export function PipelineForm({
                 helperText:
                   fieldErrors.output ||
                   "Describe the output format and fields reviewers should expect.",
+              })}
+              {field("requiredColumns", "Required columns", {
+                helperText:
+                  "For CSV inputs, list exact column names separated by commas. These names are checked before a demo run; types and mappings need separate review.",
+                placeholder: "record_id, clinical_note",
               })}
               <div>
                 <h3>Review evidence · {attachments.length} attached files</h3>
@@ -464,6 +488,13 @@ export function PipelineForm({
                 <div>
                   <dt>Input</dt>
                   <dd>{form.input}</dd>
+                </div>
+                <div>
+                  <dt>Required columns</dt>
+                  <dd>
+                    {form.requiredColumns ||
+                      "Not specified — format-only demo acknowledgment required"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Output</dt>
@@ -601,6 +632,10 @@ export function ImportDialog({
   const [reading, setReading] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   const readSequence = useRef(0);
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
+  const dirty = Boolean(name.trim() || description.trim() || file || reading);
+  useUnsavedWarning(dirty);
+  const requestClose = () => (dirty ? setConfirmDiscard(true) : onClose());
   const sample = () => {
     readSequence.current += 1;
     setReading(false);
@@ -659,170 +694,183 @@ export function ImportDialog({
     }
   };
   return (
-    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Import dataset</DialogTitle>
-      <DialogContent>
-        <p className="muted">
-          Register a source dataset for the demonstration. Use synthetic data
-          only.
-        </p>
-        <input
-          ref={input}
-          type="file"
-          accept=".csv,text/csv"
-          hidden
-          onChange={(event) => {
-            void readFile(event.target.files?.[0]);
-            event.target.value = "";
-          }}
-        />
-        {file ? (
-          <>
-            <div className="selected-file">
-              <FileText size={24} />
-              <div>
-                <strong>{file.name}</strong>
-                <span>
-                  {file.rows.toLocaleString()} records / {file.size}
-                </span>
+    <>
+      <WorkspaceDialog open onClose={requestClose} fullWidth maxWidth="sm">
+        <DialogTitle>Import dataset</DialogTitle>
+        <DialogContent>
+          <p className="muted">
+            Register a source dataset for the demonstration. Use synthetic data
+            only.
+          </p>
+          <input
+            ref={input}
+            type="file"
+            accept=".csv,text/csv"
+            hidden
+            onChange={(event) => {
+              void readFile(event.target.files?.[0]);
+              event.target.value = "";
+            }}
+          />
+          {file ? (
+            <>
+              <div className="selected-file">
+                <FileText size={24} />
+                <div>
+                  <strong>{file.name}</strong>
+                  <span>
+                    {file.rows.toLocaleString()} records / {file.size}
+                  </span>
+                </div>
+                <div className="file-actions">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => input.current?.click()}
+                  >
+                    Replace
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      readSequence.current += 1;
+                      setFile(null);
+                      setReading(false);
+                      setError("");
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </div>
               </div>
-              <div className="file-actions">
+              <details className="disclosure import-preview">
+                <summary>
+                  Preview columns and sample rows · {file.columns.length}{" "}
+                  columns
+                </summary>
+                <TableContainer>
+                  <Table size="small" aria-label="Dataset sample preview">
+                    <TableHead>
+                      <TableRow>
+                        {file.columns.map((column) => (
+                          <TableCell key={column}>{column}</TableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {file.preview.map((row, index) => (
+                        <TableRow key={index}>
+                          {row.map((value, column) => (
+                            <TableCell key={column}>{value}</TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <p className="micro-copy">
+                  Only metadata and column names are saved. These preview rows
+                  are discarded when you close this dialog.
+                </p>
+              </details>
+            </>
+          ) : (
+            <>
+              <div
+                className="upload-zone"
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  void readFile(event.dataTransfer.files[0]);
+                }}
+              >
+                <Upload size={28} strokeWidth={1.4} />
+                <strong>Drop a CSV file here</strong>
+                <span>CSV, up to 5 MB. File contents are not uploaded.</span>
                 <Button
                   variant="outlined"
                   size="small"
                   onClick={() => input.current?.click()}
                 >
-                  Replace
-                </Button>
-                <Button
-                  size="small"
-                  onClick={() => {
-                    readSequence.current += 1;
-                    setFile(null);
-                    setReading(false);
-                    setError("");
-                  }}
-                >
-                  Remove
+                  Choose file
                 </Button>
               </div>
-            </div>
-            <details className="disclosure import-preview">
-              <summary>
-                Preview columns and sample rows · {file.columns.length} columns
-              </summary>
-              <TableContainer>
-                <Table size="small" aria-label="Dataset sample preview">
-                  <TableHead>
-                    <TableRow>
-                      {file.columns.map((column) => (
-                        <TableCell key={column}>{column}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {file.preview.map((row, index) => (
-                      <TableRow key={index}>
-                        {row.map((value, column) => (
-                          <TableCell key={column}>{value}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <div className="sample-divider">
+                <span>or</span>
+                <Button onClick={sample} size="small">
+                  Use sample
+                </Button>
+              </div>
               <p className="micro-copy">
-                Only metadata and column names are saved. These preview rows are
-                discarded when you close this dialog.
+                Loads a synthetic CSV for this walkthrough.
               </p>
-            </details>
-          </>
-        ) : (
-          <>
-            <div
-              className="upload-zone"
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => {
-                event.preventDefault();
-                void readFile(event.dataTransfer.files[0]);
+            </>
+          )}
+          {reading && <p role="status">Reading and validating CSV…</p>}
+          <div className="form-stack">
+            <TextField
+              label="Dataset name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Description"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              multiline
+              minRows={2}
+              fullWidth
+            />
+            <p className="micro-copy">
+              Restricted research use. Outputs require privacy validation before
+              download.
+            </p>
+          </div>
+          {error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
+        </DialogContent>
+        <DialogActionBar
+          primary={
+            <Button
+              variant="contained"
+              disabled={!file || !name.trim() || reading || Boolean(error)}
+              onClick={() => {
+                if (file && !reading && !error)
+                  onImport({
+                    id: uid("data"),
+                    name: name.trim(),
+                    description:
+                      description.trim() ||
+                      "Imported dataset for research processing.",
+                    rows: file.rows,
+                    size: file.size,
+                    columns: file.columns,
+                    format: "CSV",
+                    date: now(),
+                  });
               }}
             >
-              <Upload size={28} strokeWidth={1.4} />
-              <strong>Drop a CSV file here</strong>
-              <span>CSV, up to 5 MB. File contents are not uploaded.</span>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={() => input.current?.click()}
-              >
-                Choose file
-              </Button>
-            </div>
-            <div className="sample-divider">
-              <span>or</span>
-              <Button onClick={sample} size="small">
-                Use sample
-              </Button>
-            </div>
-            <p className="micro-copy">Loads a synthetic CSV for this walkthrough.</p>
-          </>
-        )}
-        {reading && <p role="status">Reading and validating CSV…</p>}
-        <div className="form-stack">
-          <TextField
-            label="Dataset name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            multiline
-            minRows={2}
-            fullWidth
-          />
-          <p className="micro-copy">
-            Restricted research use. Outputs require privacy validation before
-            download.
-          </p>
-        </div>
-        {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            {error}
-          </Alert>
-        )}
-      </DialogContent>
-      <DialogActionBar
-        primary={
-          <Button
-            variant="contained"
-            disabled={!file || !name.trim() || reading || Boolean(error)}
-            onClick={() => {
-              if (file && !reading && !error)
-                onImport({
-                  id: uid("data"),
-                  name: name.trim(),
-                  description:
-                    description.trim() ||
-                    "Imported dataset for research processing.",
-                  rows: file.rows,
-                  size: file.size,
-                  columns: file.columns,
-                  format: "CSV",
-                  date: now(),
-                });
-            }}
-          >
-            Import dataset
-          </Button>
-        }
-      >
-        <Button onClick={onClose}>Cancel</Button>
-      </DialogActionBar>
-    </WorkspaceDialog>
+              Import dataset
+            </Button>
+          }
+        >
+          <Button onClick={requestClose}>Cancel</Button>
+        </DialogActionBar>
+      </WorkspaceDialog>
+      <DiscardWorkDialog
+        open={confirmDiscard}
+        onKeep={() => setConfirmDiscard(false)}
+        onDiscard={() => {
+          readSequence.current += 1;
+          onClose();
+        }}
+      />
+    </>
   );
 }
 
@@ -830,14 +878,16 @@ export function RunDialog({
   state,
   initialPipelineId,
   initialDatasetId,
+  retryRun,
   onClose,
   onStart,
 }: {
   state: Workspace;
   initialPipelineId?: string;
   initialDatasetId?: string;
+  retryRun?: import("./model").Run;
   onClose: () => void;
-  onStart: (pipeline: Pipeline, dataset: Dataset) => void;
+  onStart: (pipeline: Pipeline, dataset: Dataset) => Promise<boolean>;
 }) {
   const [pipelineId, setPipelineId] = useState(initialPipelineId || "");
   const [datasetId, setDatasetId] = useState(initialDatasetId || "");
@@ -845,20 +895,36 @@ export function RunDialog({
     (p) => p.id === pipelineId && p.status === "Approved",
   );
   const dataset = state.datasets.find((d) => d.id === datasetId);
-  const compatible = Boolean(
-    pipeline && dataset && supportsDataset(pipeline, dataset),
+  const assessment =
+    pipeline && dataset ? assessDataset(pipeline, dataset) : null;
+  const [acknowledged, setAcknowledged] = useState(false);
+  const compatible = Boolean(assessment?.canRun);
+  const needsAcknowledgment = Boolean(
+    dataset?.format === "CSV" && !assessment?.required.length,
   );
+  const [starting, setStarting] = useState(false);
+  const [startError, setStartError] = useState("");
   return (
     <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Configure run</DialogTitle>
       <DialogContent>
         <p className="muted">Choose an approved method and source dataset.</p>
+        {retryRun && (
+          <Alert severity="info">
+            New attempt after {retryRun.id}.{" "}
+            {retryRun.error || "The previous run was cancelled."} Choose a
+            compatible dataset below; the earlier run and its log will be kept.
+          </Alert>
+        )}
         <div className="form-stack">
           <TextField
             select
             label="Approved pipeline"
             value={pipelineId}
-            onChange={(e) => setPipelineId(e.target.value)}
+            onChange={(e) => {
+              setPipelineId(e.target.value);
+              setAcknowledged(false);
+            }}
             fullWidth
           >
             <MenuItem value="">Select pipeline</MenuItem>
@@ -874,7 +940,10 @@ export function RunDialog({
             select
             label="Source dataset"
             value={datasetId}
-            onChange={(e) => setDatasetId(e.target.value)}
+            onChange={(e) => {
+              setDatasetId(e.target.value);
+              setAcknowledged(false);
+            }}
             fullWidth
           >
             <MenuItem value="">Select dataset</MenuItem>
@@ -896,7 +965,7 @@ export function RunDialog({
               </div>
             </dl>
           )}
-          {pipeline && dataset && !compatible && (
+          {pipeline && dataset && !assessment?.formatMatches && (
             <Alert severity="warning">
               This dataset format does not match the pipeline input. Choose a
               compatible dataset.
@@ -907,7 +976,27 @@ export function RunDialog({
               <strong>
                 {dataset.rows.toLocaleString()} records · {dataset.format}
               </strong>
-              {compatible && <Status kind="success">Format matches</Status>}
+              {assessment?.formatMatches && (
+                <Status kind="success">{dataset.format} format matches</Status>
+              )}
+              {assessment?.columnsVerified && (
+                <Status kind="success">Required columns present</Status>
+              )}
+              {assessment && assessment.required.length > 0 && (
+                <p className="micro-copy">
+                  Required: {assessment.required.join(", ")}
+                </p>
+              )}
+              {assessment && assessment.missing.length > 0 && (
+                <Alert severity="warning">
+                  Missing required columns: {assessment.missing.join(", ")}.
+                  Choose a compatible dataset or import a corrected file. No run
+                  will start with missing fields.
+                </Alert>
+              )}
+              {needsAcknowledgment && (
+                <Status kind="warning">Required fields not specified</Status>
+              )}
               <details className="disclosure">
                 <summary>Inspect dataset columns</summary>
                 <p>
@@ -915,29 +1004,52 @@ export function RunDialog({
                     "Column metadata is not available for this dataset."}
                 </p>
                 <p className="micro-copy">
-                  The prototype checks file format only. Inspect required fields
-                  against the input specification; schema mapping is not
-                  verified.
+                  {assessment?.required.length
+                    ? `Required: ${assessment.required.join(", ")}. `
+                    : "No required columns are declared. "}
+                  Column names and file format are checked where declared.
+                  Column types, values and mappings are not verified.
                 </p>
               </details>
             </div>
+          )}
+          {needsAcknowledgment && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={acknowledged}
+                  onChange={(event) => setAcknowledged(event.target.checked)}
+                />
+              }
+              label="Continue with a demo only; required fields are not verified."
+            />
           )}
           <Alert severity="info">
             Demo mode simulates execution and produces synthetic sample output.
             No code or research data is sent to a backend.
           </Alert>
+          {startError && <Alert severity="error">{startError}</Alert>}
         </div>
       </DialogContent>
       <DialogActionBar
         primary={
           <Button
             variant="contained"
-            disabled={!compatible}
-            onClick={() => {
-              if (pipeline && dataset) onStart(pipeline, dataset);
+            disabled={
+              starting || !compatible || (needsAcknowledgment && !acknowledged)
+            }
+            onClick={async () => {
+              if (!pipeline || !dataset) return;
+              setStarting(true);
+              if (!(await onStart(pipeline, dataset))) {
+                setStartError(
+                  "This run could not start. Check the latest pipeline, required columns and dataset, then try again.",
+                );
+                setStarting(false);
+              }
             }}
           >
-            Start run
+            Start demo run
           </Button>
         }
       >
@@ -960,12 +1072,27 @@ export function ArtifactDialog({
   role: Role;
   setRole: (role: Role) => void;
   onClose: () => void;
-  onReview: (accept: boolean, comment: string) => void;
+  onReview: (accept: boolean, comment: string) => Promise<boolean>;
   notify: (message: string) => void;
   onSimulation: () => void;
 }) {
-  const [outcome, setOutcome] = useState("");
-  const [comment, setComment] = useState("");
+  const [draft, setDraft, clearDraft, draftStored] = useSessionDraft(
+    `output:${a.id}:${a.version}:${a.status}:${role}`,
+    { comment: "", outcome: "" },
+    (value): value is { comment: string; outcome: string } =>
+      typeof value === "object" &&
+      value !== null &&
+      "comment" in value &&
+      typeof value.comment === "string" &&
+      "outcome" in value &&
+      ["", "acceptable", "unacceptable"].includes(String(value.outcome)),
+  );
+  const { outcome, comment } = draft;
+  const setComment = (comment: string) =>
+    setDraft((previous) => ({ ...previous, comment }));
+  const setOutcome = (outcome: string) =>
+    setDraft((previous) => ({ ...previous, outcome }));
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const preview = artifactPreview(a);
   const downloadAction = (
@@ -997,14 +1124,24 @@ export function ArtifactDialog({
       <Button
         variant="contained"
         color={outcome === "unacceptable" ? "error" : "primary"}
-        disabled={!outcome}
-        onClick={() => {
+        disabled={!outcome || saving}
+        onClick={async () => {
           if (!outcome) return;
           if (outcome === "unacceptable" && !comment.trim()) {
             setError("Explain why this output is not acceptable.");
             return;
           }
-          onReview(outcome === "acceptable", comment.trim());
+          setSaving(true);
+          try {
+            if (await onReview(outcome === "acceptable", comment.trim()))
+              clearDraft();
+            else
+              setError(
+                "The decision was not saved. Your assessment is kept; check the latest output before trying again.",
+              );
+          } finally {
+            setSaving(false);
+          }
         }}
       >
         {!outcome
@@ -1142,6 +1279,13 @@ export function ArtifactDialog({
                 {error && (
                   <p className="field-error" role="alert">
                     {error}
+                  </p>
+                )}
+                {(comment || outcome) && (
+                  <p className="draft-saved-note" role="status">
+                    {draftStored
+                      ? "Assessment saved in this tab. Submit a decision explicitly when ready."
+                      : "Assessment kept in memory. Keep this tab open or copy your notes before leaving."}
                   </p>
                 )}
               </>

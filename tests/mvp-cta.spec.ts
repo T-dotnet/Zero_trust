@@ -168,7 +168,7 @@ test("output review gives each role a clear primary and keeps recovery actions f
     .filter({ hasText: "RUN-1041" })
     .getByRole("button", { name: "Details", exact: true })
     .click();
-  bar = await primaryFirst(page, "Retry run");
+  bar = await primaryFirst(page, "Configure retry");
   await page
     .getByRole("button", { name: "Get help", exact: true })
     .click();

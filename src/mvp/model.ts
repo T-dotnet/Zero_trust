@@ -40,6 +40,7 @@ export type PipelineFields = Pick<
   | "input"
   | "output"
   | "attachments"
+  | "requiredColumns"
 >;
 export interface Pipeline {
   id: string;
@@ -57,6 +58,7 @@ export interface Pipeline {
   updated: string;
   history: Event[];
   attachments?: Attachment[];
+  requiredColumns?: string[];
   basedOn?: string;
   revisionDraft?: PipelineFields;
 }
@@ -84,6 +86,7 @@ export interface Run {
   artifactId?: string;
   failedStep?: number;
   output?: string;
+  retryOf?: string;
   support?: {
     id: string;
     message: string;
@@ -218,6 +221,71 @@ export function supportsDataset(pipeline: Pipeline, dataset: Dataset) {
     pipeline.input.toUpperCase().match(/[A-Z0-9]+/g) || [];
   return formats.includes(dataset.format.toUpperCase());
 }
+
+export function requiredInputColumns(pipeline: Pipeline): string[] {
+  if (pipeline.requiredColumns)
+    return [
+      ...new Set(pipeline.requiredColumns.map((s) => s.trim()).filter(Boolean)),
+    ];
+  // Older workspaces may describe an explicit comma/“and” list in their contract.
+  // Unstructured prose is left unverified rather than guessed from a pipeline name.
+  const match = pipeline.input.match(
+    /\b(?:required\s+(?:(?:fields|columns)\s*:?\s*)?|CSV\s+with\s+(?:required\s+)?)([a-z][\w]*(?:\s*(?:,|and)\s*[a-z][\w]*)*)/i,
+  );
+  const explicitList =
+    match &&
+    (/[_,]|\band\b/.test(match[1]) ||
+      /required\s+(?:columns|fields)\s*:/i.test(pipeline.input));
+  return explicitList
+    ? [...new Set(match![1].split(/\s*(?:,|\band\b)\s*/i).filter(Boolean))]
+    : [];
+}
+
+export function reviewEvidenceSources(pipeline: Pipeline, stage: Stage) {
+  const readable = pipeline.attachments?.filter((a) => a.content?.trim()) || [];
+  const attachments = {
+    target: "attachments",
+    label: "Attached evidence",
+    available: readable.length > 0,
+    detail: readable.length
+      ? readable.map((a) => a.name).join(", ")
+      : "No readable supporting evidence has been supplied for this criterion.",
+  };
+  const purpose = {
+    target: "purpose",
+    label: "Declared purpose",
+    available: Boolean(pipeline.description.trim()),
+    detail: pipeline.description,
+  };
+  const contract = {
+    target: "contract",
+    label: "Input/output contract",
+    available: Boolean(pipeline.input.trim() && pipeline.output.trim()),
+    detail: `Input: ${pipeline.input}\nRequired columns: ${requiredInputColumns(pipeline).join(", ") || "Not specified"}\nOutput: ${pipeline.output}`,
+  };
+  return stage === "Ethical"
+    ? [purpose, attachments, attachments]
+    : stage === "Technical"
+      ? [attachments, contract, attachments]
+      : [attachments, attachments, attachments];
+}
+
+export function assessDataset(pipeline: Pipeline, dataset: Dataset) {
+  const formatMatches = supportsDataset(pipeline, dataset);
+  const required =
+    dataset.format.toUpperCase() === "CSV"
+      ? requiredInputColumns(pipeline)
+      : [];
+  const columns = new Set(dataset.columns || []);
+  const missing = required.filter((column) => !columns.has(column));
+  return {
+    formatMatches,
+    required,
+    missing,
+    columnsVerified: required.length > 0 && missing.length === 0,
+    canRun: formatMatches && missing.length === 0,
+  };
+}
 export function executionStepStatus(run: Run, index: number) {
   if (run.status === "Completed") return "Complete";
   const current =
@@ -347,6 +415,12 @@ export function seedWorkspace(): Workspace {
       repo: `https://github.com/research/${d[6]}`,
       branch: "main",
       input: i === 2 ? "Audio files (WAV)" : "Structured clinical data (CSV)",
+      requiredColumns:
+        i === 2
+          ? undefined
+          : i === 0
+            ? ["record_id", "clinical_note"]
+            : ["record_id"],
       output: i === 2 ? "Transcripts (TXT)" : "Processed dataset (CSV)",
       author: "Dr. Sarah Chen",
       updated: date,
@@ -562,7 +636,11 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
       !p ||
       p.status !== "In review" ||
       action.role !== `${STAGES[p.stage]} reviewer` ||
-      (action.decision !== "approve" && !action.note.trim())
+      ((action.decision !== "approve" ||
+        reviewEvidenceSources(p, STAGES[p.stage]).some(
+          (source) => !source.available,
+        )) &&
+        !action.note.trim())
     )
       return state;
     const event = makeEvent(
@@ -712,7 +790,14 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
     if (
       !pipeline ||
       !dataset ||
-      !supportsDataset(pipeline, dataset) ||
+      !assessDataset(pipeline, dataset).canRun ||
+      (action.run.retryOf !== undefined &&
+        !state.runs.some(
+          (r) =>
+            r.id === action.run.retryOf &&
+            r.pipelineId === pipeline.id &&
+            ["Failed", "Cancelled"].includes(r.status),
+        )) ||
       state.runs.some((r) => r.id === action.run.id)
     )
       return state;
@@ -725,7 +810,9 @@ export function workspaceReducer(state: Workspace, action: Action): Workspace {
         "Run started",
         "Dr. Sarah Chen",
         action.run.id,
-        action.run.pipelineName,
+        action.run.retryOf
+          ? `${action.run.pipelineName} · New attempt after ${action.run.retryOf}; previous run and log retained.`
+          : action.run.pipelineName,
       ),
     );
   }

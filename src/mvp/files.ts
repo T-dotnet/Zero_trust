@@ -25,6 +25,7 @@ export function downloadRunLog(run: Run) {
       `Started: ${run.date}`,
       `Status: ${run.status}`,
       `Progress: ${run.progress}%`,
+      run.retryOf ? `Previous attempt: ${run.retryOf}` : "",
       run.error ? `Error: ${run.error}` : "",
       run.artifactId ? `Output: ${run.artifactId}` : "",
       "This log describes a local simulation. No pipeline code executed on a backend.",

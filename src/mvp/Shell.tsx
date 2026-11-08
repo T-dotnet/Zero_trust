@@ -193,9 +193,9 @@ export function Shell({
                   sx={{
                     height: 31,
                     width: 31,
-                    background: colors.primarySoft,
-                    border: `1px solid ${colors.primaryBorder}`,
-                    color: colors.primaryDark,
+                    background: colors.surface,
+                    border: `1px solid ${colors.line}`,
+                    color: colors.body,
                     fontSize: 13,
                     fontWeight: 700,
                   }}

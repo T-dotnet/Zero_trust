@@ -39,6 +39,7 @@ import { RunSupport } from "./RunSupport";
 import { downloadRunLog, downloadText } from "./files";
 import { encodeCsv } from "./csv";
 import { artifactPreview } from "./artifactPreview";
+import { useRouteField } from "./navigation";
 
 export function Datasets({
   state,
@@ -46,17 +47,19 @@ export function Datasets({
   onRun,
   researcher,
   initialDatasetId,
+  onSelect,
 }: {
   state: Workspace;
   onImport: () => void;
   onRun: (d: Dataset) => void;
   researcher: boolean;
   initialDatasetId?: string;
+  onSelect: (id?: string) => void;
 }) {
-  const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<Dataset | null>(
-    () => state.datasets.find((d) => d.id === initialDatasetId) || null,
-  );
+  const [search, setSearch] = useRouteField("search");
+  const selected =
+    state.datasets.find((d) => d.id === initialDatasetId) || null;
+  const setSelected = (dataset: Dataset | null) => onSelect(dataset?.id);
   const rows = state.datasets.filter((d) =>
     `${d.name} ${d.description}`.toLowerCase().includes(search.toLowerCase()),
   );
@@ -237,6 +240,7 @@ interface RunsProps {
   researcher: boolean;
   initialTab?: string;
   initialRunId?: string;
+  onViewChange: (view: { tab: string; runId?: string }) => void;
   role: Role;
   setRole: (role: Role) => void;
   onCancel: (run: Run) => void;
@@ -252,25 +256,34 @@ export function RunsAndResults({
   researcher,
   initialTab = "runs",
   initialRunId,
+  onViewChange,
   role,
   setRole,
   onCancel,
   onReport,
   onResolve,
 }: RunsProps) {
-  const [tab, setTab] = useState(initialTab);
-  const [search, setSearch] = useState("");
-  const [selectedRun, setSelectedRun] = useState<string | null>(
-    initialRunId || null,
-  );
+  const tab = initialTab === "results" ? "results" : "runs";
+  const setTab = (tab: string) => onViewChange({ tab });
+  const [search, setSearch] = useRouteField("search");
+  const [status, setStatus] = useRouteField("status");
+  const selectedRun = initialRunId || null;
+  const setSelectedRun = (id: string | null) =>
+    onViewChange({ tab, runId: id || undefined });
   const run = state.runs.find((r) => r.id === selectedRun);
-  const runs = state.runs.filter((r) =>
-    `${r.id} ${r.pipelineName} ${r.datasetName}`
-      .toLowerCase()
-      .includes(search.toLowerCase()),
+  const runs = state.runs.filter(
+    (r) =>
+      `${r.id} ${r.pipelineName} ${r.datasetName}`
+        .toLowerCase()
+        .includes(search.toLowerCase()) &&
+      (status !== "running" || r.status === "Running"),
   );
-  const artifacts = state.artifacts.filter((a) =>
-    `${a.name} ${a.datasetName}`.toLowerCase().includes(search.toLowerCase()),
+  const artifacts = state.artifacts.filter(
+    (a) =>
+      `${a.name} ${a.datasetName}`
+        .toLowerCase()
+        .includes(search.toLowerCase()) &&
+      (status !== "pending" || a.status === "Pending review"),
   );
   return (
     <>
@@ -287,6 +300,18 @@ export function RunsAndResults({
           New run
         </Button>
       </PageHeader>
+      {status && (
+        <div className="active-list-filter">
+          <span>
+            {status === "pending"
+              ? "Outputs awaiting Privacy review"
+              : "Active runs"}
+          </span>
+          <Button size="small" onClick={() => setStatus("")}>
+            Show all
+          </Button>
+        </div>
+      )}
       <section className="table-panel">
         <Tabs
           value={tab}
@@ -396,7 +421,7 @@ export function RunsAndResults({
                       {r.artifactId && (
                         <Button
                           size="small"
-                          variant="contained"
+                          variant="outlined"
                           onClick={() => {
                             const output = state.artifacts.find(
                               (a) => a.id === r.artifactId,
@@ -413,9 +438,10 @@ export function RunsAndResults({
                       )}
                       {r.status === "Failed" && (
                         <Button
-                          variant="contained"
+                          variant="outlined"
                           size="small"
-                          onClick={() => setSelectedRun(r.id)}
+                          disabled={!researcher}
+                          onClick={() => onRetry(r)}
                         >
                           Fix input
                         </Button>
@@ -562,13 +588,25 @@ export function RunsAndResults({
               <p className="muted">
                 {run.datasetName} / {run.version}
               </p>
+              {run.retryOf && (
+                <p className="micro-copy">
+                  New attempt after{" "}
+                  <button
+                    className="entity-name"
+                    onClick={() => setSelectedRun(run.retryOf!)}
+                  >
+                    {run.retryOf}
+                  </button>
+                  . The original run and log are retained.
+                </p>
+              )}
               {run.error && (
                 <div className="error-message">
                   <strong>Data error</strong>
                   <p>{run.error}</p>
                   <p className="micro-copy">
-                    Retry uses a synthetic example mapping. Your source dataset
-                    is not changed.
+                    Configure a new attempt with a compatible dataset. Your
+                    original run, log and source dataset are kept.
                   </p>
                 </div>
               )}
@@ -586,12 +624,27 @@ export function RunsAndResults({
                   ].map((label, i) => {
                     const status = executionStepStatus(run, i);
                     return (
-                      <div key={label} className={`execution-step ${status.toLowerCase()}`} aria-current={status === "Running" ? "step" : undefined}>
-                        <span className={status === "Complete" ? "done" : ""} aria-hidden="true">
-                          {status === "Complete" ? <Check size={15} /> : String(i + 1).padStart(2, "0")}
+                      <div
+                        key={label}
+                        className={`execution-step ${status.toLowerCase()}`}
+                        aria-current={status === "Running" ? "step" : undefined}
+                      >
+                        <span
+                          className={status === "Complete" ? "done" : ""}
+                          aria-hidden="true"
+                        >
+                          {status === "Complete" ? (
+                            <Check size={15} />
+                          ) : (
+                            String(i + 1).padStart(2, "0")
+                          )}
                         </span>
                         <strong>{label}</strong>
-                        <small>{status === "Pending" && run.status !== "Running" ? "Not run" : status}</small>
+                        <small>
+                          {status === "Pending" && run.status !== "Running"
+                            ? "Not run"
+                            : status}
+                        </small>
                       </div>
                     );
                   })}
@@ -626,9 +679,7 @@ export function RunsAndResults({
                     onRetry(run);
                   }}
                 >
-                  {run.status === "Failed"
-                    ? "Retry run"
-                    : "Restart run"}
+                  Configure retry
                 </Button>
               )}
               {run?.artifactId && (

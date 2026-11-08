@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Button, MenuItem, TextField } from "@mui/material";
+import { Alert, Button, MenuItem, TextField } from "@mui/material";
 import { HistoryList, PageHeader, SearchField, EmptyState } from "./ui";
 import { now, type Event, type Workspace } from "./model";
 import { downloadText } from "./files";
+import { useRouteField } from "./navigation";
 
 const eventKind = (event: Event) =>
   /^Artifact/i.test(event.title)
@@ -22,11 +22,12 @@ export function ActivityView({
   state: Workspace;
   onOpen: (event: Event) => void;
 }) {
-  const [search, setSearch] = useState("");
-  const [kind, setKind] = useState("All");
-  const [entity, setEntity] = useState("All");
-  const [from, setFrom] = useState("");
-  const [until, setUntil] = useState("");
+  const [search, setSearch] = useRouteField("search");
+  const [kind, setKind] = useRouteField("event", "All");
+  const [entity, setEntity] = useRouteField("entity", "All");
+  const [from, setFrom] = useRouteField("from");
+  const [until, setUntil] = useRouteField("until");
+  const invalidRange = Boolean(from && until && from > until);
   const entities = new Map(
     state.events
       .filter((event) => event.entityId)
@@ -57,6 +58,7 @@ export function ActivityView({
       >
         <Button
           variant="outlined"
+          disabled={invalidRange}
           onClick={() =>
             downloadText(
               "zero-trust-activity.json",
@@ -80,7 +82,9 @@ export function ActivityView({
         <div className="section-title">
           <h2>Workspace history</h2>
           <span className="mono muted" role="status">
-            {events.length} of {state.events.length} events
+            {invalidRange
+              ? "Check the date range"
+              : `${events.length} of ${state.events.length} events`}
           </span>
         </div>
         <div className="activity-search">
@@ -90,7 +94,13 @@ export function ActivityView({
             placeholder="Search activity..."
           />
         </div>
-        <details className="disclosure activity-filters">
+        <details
+          className="disclosure activity-filters"
+          open={
+            Boolean(from || until || kind !== "All" || entity !== "All") ||
+            undefined
+          }
+        >
           <summary>
             Filter by entity, event or date
             {kind !== "All" || entity !== "All" || from || until
@@ -136,16 +146,28 @@ export function ActivityView({
             <TextField
               type="date"
               label="To date"
+              error={invalidRange}
+              helperText={
+                invalidRange
+                  ? "Choose an end date on or after the start date."
+                  : undefined
+              }
               value={until}
               onChange={(event) => setUntil(event.target.value)}
               slotProps={{ inputLabel: { shrink: true } }}
             />
           </div>
+          {invalidRange && (
+            <Alert severity="warning">
+              The end date is before the start date. Correct the range to view
+              or export activity.
+            </Alert>
+          )}
           <Button onClick={clear} size="small">
             Clear filters
           </Button>
         </details>
-        {events.length ? (
+        {invalidRange ? null : events.length ? (
           <HistoryList events={events} onOpen={onOpen} />
         ) : (
           <EmptyState

@@ -83,7 +83,7 @@
 }
 .nav-item.active {
   border-left-color: var(--zt-ink);
-  background: var(--zt-primary-soft);
+  background: var(--zt-surface-hover);
   font-weight: 700;
 }
 .nav-item b {
@@ -702,8 +702,8 @@
   place-items: center;
   width: 19px;
   height: 19px;
-  background: var(--zt-success-soft);
-  color: var(--zt-success);
+  background: var(--zt-surface);
+  color: var(--zt-body);
   margin-top: 1px;
   flex-shrink: 0;
 }
@@ -811,9 +811,9 @@
   place-items: center;
 }
 .execution-timeline span.done {
-  background: var(--zt-success);
+  background: var(--zt-body);
   color: white;
-  border-color: var(--zt-success);
+  border-color: var(--zt-body);
 }
 .execution-timeline small {
   margin-left: auto;
@@ -1345,7 +1345,7 @@
   padding-top: 2px;
 }
 .brand > svg {
-  color: var(--zt-primary-dark);
+  color: var(--zt-ink);
   width: 28px;
   height: 28px;
 }
@@ -1403,13 +1403,13 @@
   background: var(--zt-surface-hover);
 }
 .nav-item.active {
-  background: var(--zt-primary-soft);
-  color: var(--zt-primary-dark);
+  background: var(--zt-surface-hover);
+  color: var(--zt-ink);
   font-weight: 600;
 }
 .nav-item b {
   font: 600 11px/1 var(--zt-font);
-  background: var(--zt-primary);
+  background: var(--zt-line);
   color: var(--zt-ink);
   border-radius: 10px;
 }
@@ -1527,12 +1527,12 @@
   border-radius: 2px;
 }
 .progress-blocks > span.complete {
-  background: var(--zt-success);
-  border-color: var(--zt-success);
+  background: var(--zt-body);
+  border-color: var(--zt-body);
 }
 .progress-blocks > span.current {
-  background: var(--zt-primary);
-  border-color: var(--zt-primary-dark);
+  background: var(--zt-ink);
+  border-color: var(--zt-ink);
 }
 .table-footer {
   font-family: var(--zt-font);
@@ -1557,8 +1557,8 @@
   border-radius: 4px;
 }
 .stage-path li.current {
-  border-color: var(--zt-primary-border);
-  background: var(--zt-primary-soft);
+  border-color: var(--zt-neutral-border);
+  background: var(--zt-surface);
 }
 .stage-number {
   border-radius: 50%;
@@ -1572,16 +1572,16 @@
 }
 .stage-path li.complete .stage-number {
   color: white;
-  background: var(--zt-success);
+  background: var(--zt-body);
 }
 .stage-path li.current .stage-number {
-  color: var(--zt-ink);
-  background: var(--zt-primary);
+  color: white;
+  background: var(--zt-ink);
 }
 .text-link.MuiButton-root {
   text-transform: none;
   font-size: 12px;
-  color: var(--zt-primary-dark);
+  color: var(--zt-ink);
 }
 .sidebar-bottom {
   border-top-color: var(--zt-line);
@@ -1669,7 +1669,7 @@
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--zt-line);
-  color: var(--zt-primary-dark);
+  color: var(--zt-ink);
 }
 .attachment-button:hover {
   background: var(--zt-surface);
@@ -1708,7 +1708,7 @@
 .history-context {
   display: block;
   margin-top: 5px;
-  color: var(--zt-primary-dark);
+  color: var(--zt-body);
   font-size: 11px;
   line-height: 1.5;
 }
@@ -1739,10 +1739,13 @@
   }
 }
 
-/* Status accents retain explicit labels and accessible foreground colors. */
+/* Compact labels keep semantic colour; surrounding surfaces stay neutral. */
 .status-label.warning .status-dot {
   background: var(--zt-warning-accent);
   box-shadow: 0 0 0 1px var(--zt-warning);
+}
+.status-label.success .status-dot {
+  background: var(--zt-success);
 }
 .status-label.error .status-dot {
   background: var(--zt-error-accent);
@@ -1758,7 +1761,7 @@
   color: var(--zt-ink);
 }
 
-/* Read-only status badges use semantic fills, borders and explicit labels. */
+/* Colour is concentrated in status labels rather than repeated in every row. */
 .status-label {
   max-width: 100%;
   padding: 3px 8px;
@@ -1782,7 +1785,7 @@
   border-color: var(--zt-error-border);
 }
 
-/* Review progress has separate hues and marker shapes for each state. */
+/* Routine progress uses contrast, counts and shapes rather than traffic lights. */
 .review-progress-summary {
   display: inline-flex;
   align-items: center;
@@ -1803,22 +1806,22 @@
   color: var(--zt-slate);
 }
 .form-stepper .MuiStepIcon-root.Mui-completed {
-  color: var(--zt-success);
+  color: var(--zt-body);
 }
 .form-stepper .MuiStepIcon-root.Mui-active {
-  color: var(--zt-warning-accent);
+  color: var(--zt-ink);
 }
 .form-stepper .MuiStepIcon-root.Mui-active .MuiStepIcon-text {
-  fill: var(--zt-ink);
+  fill: white;
 }
 .form-stepper .MuiStepConnector-root.Mui-completed .MuiStepConnector-line {
-  border-color: var(--zt-success);
+  border-color: var(--zt-body);
 }
 .compact-form-progress strong {
   padding: 3px 8px;
-  border: 1px solid var(--zt-warning-accent);
+  border: 1px solid var(--zt-line);
   border-radius: 5px;
-  background: var(--zt-warning-soft);
+  background: var(--zt-surface);
   color: var(--zt-ink);
 }
 .run-progress .MuiLinearProgress-root {
@@ -1826,11 +1829,10 @@
   border-radius: 3px;
 }
 .run-meter.running .MuiLinearProgress-bar {
-  background: var(--zt-warning-accent);
-  box-shadow: inset 0 0 0 1px var(--zt-warning);
+  background: var(--zt-ink);
 }
 .run-meter.completed .MuiLinearProgress-bar {
-  background: var(--zt-success);
+  background: var(--zt-body);
 }
 .run-meter.failed .MuiLinearProgress-bar {
   background: var(--zt-error-accent);
@@ -1840,12 +1842,12 @@
   background: var(--zt-slate);
 }
 .execution-step.running {
-  background: var(--zt-warning-soft);
+  background: var(--zt-surface);
 }
 .execution-step.running > span {
-  background: var(--zt-warning-accent);
-  border-color: var(--zt-warning);
-  color: var(--zt-ink);
+  background: var(--zt-ink);
+  border-color: var(--zt-ink);
+  color: white;
 }
 .execution-step.failed > span {
   background: var(--zt-error-accent);
@@ -1861,9 +1863,9 @@
   border-color: var(--zt-slate);
   background: var(--zt-surface-hover);
 }
-.execution-step.running > small { color: var(--zt-warning); }
+.execution-step.running > small { color: var(--zt-body); }
 .execution-step.failed > small { color: var(--zt-error); }
-.execution-step.complete > small { color: var(--zt-success); }
+.execution-step.complete > small { color: var(--zt-body); }
 .review-progress-legend {
   display: flex;
   flex-wrap: wrap;
@@ -1891,15 +1893,15 @@
 }
 .review-progress-legend .complete,
 .progress-blocks > span.complete {
-  background: var(--zt-success);
-  border-color: var(--zt-success);
+  background: var(--zt-body);
+  border-color: var(--zt-body);
 }
 .review-progress-legend .current,
 .progress-blocks > span.current {
   width: 14px;
   height: 8px;
-  background: var(--zt-warning-accent);
-  border-color: var(--zt-warning);
+  background: var(--zt-ink);
+  border-color: var(--zt-ink);
 }
 .review-progress-legend .pending,
 .progress-blocks > span.pending {
@@ -1907,28 +1909,39 @@
   border-color: var(--zt-slate);
   border-style: dashed;
 }
-.review-progress-legend .blocked,
 .progress-blocks > span.blocked {
   background: var(--zt-error-accent);
   border-color: var(--zt-error);
 }
 .progress-blocks { align-items: center; }
 .stage-path li.current {
-  background: var(--zt-warning-soft);
-  border-color: var(--zt-warning-accent);
+  background: var(--zt-surface);
+  border-color: var(--zt-neutral-border);
 }
 .stage-path li.current .stage-number {
-  color: var(--zt-ink);
-  background: var(--zt-warning-accent);
-  box-shadow: 0 0 0 1px var(--zt-warning);
+  color: white;
+  background: var(--zt-ink);
+  box-shadow: none;
 }
 .stage-path li.current.blocked {
-  background: var(--zt-error-soft);
+  background: white;
   border-color: var(--zt-error-border);
 }
 .stage-path li.current.blocked .stage-number {
+  color: var(--zt-ink);
   background: var(--zt-error-accent);
   box-shadow: 0 0 0 1px var(--zt-error);
+}
+.pipeline-progress[data-status="Changes requested"] .progress-blocks > span.blocked {
+  background: var(--zt-warning-accent);
+  border-color: var(--zt-warning);
+}
+.stage-path[data-status="Changes requested"] li.current.blocked {
+  border-color: var(--zt-warning-accent);
+}
+.stage-path[data-status="Changes requested"] li.current.blocked .stage-number {
+  background: var(--zt-warning-accent);
+  box-shadow: 0 0 0 1px var(--zt-warning);
 }
 .stage-path li.current.not-started {
   background: var(--zt-surface);

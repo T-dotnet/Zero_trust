@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Button,
+  Alert,
   Checkbox,
   FormControlLabel,
   Dialog,
@@ -13,12 +14,16 @@ import {
   STAGES,
   REVIEWERS,
   formatTime,
+  pipelineRevision,
+  reviewEvidenceSources,
+  requiredInputColumns,
   type Pipeline,
   type Role,
 } from "./model";
 import { HistoryList, PageHeader, StagePath, Status } from "./ui";
 import { EvidenceAttachments } from "./Evidence";
 import { DialogActionBar } from "./DialogActionBar";
+import { useSessionDraft } from "./useSessionDraft";
 
 const CHECKS = {
   Ethical: [
@@ -54,7 +59,10 @@ interface Props {
   role: Role;
   setRole: (role: Role) => void;
   onBack: () => void;
-  onReview: (decision: "approve" | "changes" | "reject", note: string) => void;
+  onReview: (
+    decision: "approve" | "changes" | "reject",
+    note: string,
+  ) => Promise<boolean>;
   onPublish: () => void;
   onRevise: () => void;
   onRun: () => void;
@@ -72,21 +80,58 @@ export function ReviewView({
   onNewVersion,
 }: Props) {
   const [checks, setChecks] = useState<boolean[]>([false, false, false]);
-  const [comments, setComments] = useState("");
+  const [comments, setComments, clearDraft, draftStored] = useSessionDraft(
+    `review:${p.id}:${p.version}:${pipelineRevision(p)}:${role}`,
+    "",
+    (value): value is string => typeof value === "string",
+  );
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [confirmReject, setConfirmReject] = useState(false);
+  const [evidenceIndex, setEvidenceIndex] = useState<number | null>(null);
   const stage = STAGES[Math.min(p.stage, 3)];
   const expectedRole = `${stage} reviewer` as Role;
   const activeReview = p.status === "In review";
   const assigned = activeReview && role === expectedRole;
   const checked = checks.filter(Boolean).length;
+  const sources = reviewEvidenceSources(p, stage);
+  const needsBasis = sources.some((source) => !source.available);
   const feedback = p.history.find((event) =>
     /changes requested|rejected/.test(event.title),
   );
+  const submitDecision = async (decision: "approve" | "changes" | "reject") => {
+    if (saving) return;
+    setSaving(true);
+    try {
+      const basis = sources
+        .map(
+          (source, i) =>
+            `${CHECKS[stage][i]}: ${source.available ? `${source.label} — ${source.detail}` : `Demo exception — ${comments.trim()}`}`,
+        )
+        .join("\n");
+      const note =
+        decision === "approve"
+          ? `${comments.trim()}\nEvidence basis · ${p.version}\n${basis}`.trim()
+          : comments.trim();
+      if (await onReview(decision, note)) clearDraft();
+      else
+        setError(
+          "The decision was not saved. Your notes are kept; check the latest submission before trying again.",
+        );
+    } finally {
+      setSaving(false);
+    }
+  };
   const decide = (decision: "approve" | "changes" | "reject") => {
     if (!assigned) return;
     if (decision === "approve" && checked !== 3) {
       setError("Confirm all three review evidence items before approving.");
+      return;
+    }
+    if (decision === "approve" && needsBasis && !comments.trim()) {
+      setError(
+        "Explain the basis for this demo approval where supporting evidence is missing.",
+      );
       return;
     }
     if (decision !== "approve" && !comments.trim()) {
@@ -97,12 +142,14 @@ export function ReviewView({
       setConfirmReject(true);
       return;
     }
-    onReview(decision, comments.trim());
+    void submitDecision(decision);
   };
   const switchRole = (nextRole: Role) => (
     <div className="demo-handoff">
       <span className="eyebrow">Demo controls</span>
-      <p>Continue as <strong>{nextRole}</strong> for the next task.</p>
+      <p>
+        Continue as <strong>{nextRole}</strong> for the next task.
+      </p>
       <Button variant="outlined" size="small" onClick={() => setRole(nextRole)}>
         Switch role
       </Button>
@@ -121,7 +168,10 @@ export function ReviewView({
         title={p.status === "Approved" ? "Pipeline details" : "Pipeline review"}
         description={`${p.name} · ${p.version}`}
       />
-      <div className={`compact-review-status ${activeReview || p.status === "Ready to publish" ? "review-current" : p.status === "Rejected" || p.status === "Changes requested" ? "review-blocked" : p.status === "Approved" ? "review-complete" : "review-pending"}`}>
+      <div
+        data-status={p.status}
+        className={`compact-review-status ${activeReview || p.status === "Ready to publish" ? "review-current" : p.status === "Rejected" || p.status === "Changes requested" ? "review-blocked" : p.status === "Approved" ? "review-complete" : "review-pending"}`}
+      >
         <div>
           <span className="eyebrow">
             {activeReview ? "Current stage" : "Submission status"}
@@ -174,28 +224,49 @@ export function ReviewView({
                   </span>
                 </div>
                 {CHECKS[stage].map((label, i) => (
-                  <FormControlLabel
-                    key={label}
-                    control={
-                      <Checkbox
-                        checked={checks[i]}
-                        onChange={(event) =>
-                          setChecks((values) =>
-                            values.map((v, index) =>
-                              index === i ? event.target.checked : v,
-                            ),
-                          )
-                        }
-                        size="small"
-                      />
-                    }
-                    label={label}
-                  />
+                  <div className="criterion" key={label}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={checks[i]}
+                          onChange={(event) =>
+                            setChecks((values) =>
+                              values.map((v, index) =>
+                                index === i ? event.target.checked : v,
+                              ),
+                            )
+                          }
+                          size="small"
+                        />
+                      }
+                      label={label}
+                    />
+                    <button
+                      className="criterion-source"
+                      onClick={() => setEvidenceIndex(i)}
+                      aria-label={`View evidence for ${label}`}
+                    >
+                      {sources[i].label} ·{" "}
+                      {sources[i].available ? p.version : "not supplied"}
+                    </button>
+                  </div>
                 ))}
               </div>
+              {needsBasis && (
+                <Alert severity="warning">
+                  Some criteria have no supporting evidence. Inspect each source
+                  and record the basis in Review comments to approve a demo
+                  exception. This does not establish production readiness.
+                </Alert>
+              )}
               <TextField
                 label="Review comments"
-                placeholder="Required when requesting changes or rejecting"
+                placeholder={
+                  needsBasis
+                    ? "Explain the basis for any missing-evidence demo exception."
+                    : "Required when requesting changes or rejecting"
+                }
+                slotProps={{ htmlInput: { "aria-required": needsBasis } }}
                 multiline
                 minRows={2}
                 fullWidth
@@ -215,21 +286,40 @@ export function ReviewView({
                 <Button
                   variant="contained"
                   startIcon={<Check size={17} />}
-                  disabled={checked !== 3}
+                  disabled={
+                    saving || checked !== 3 || (needsBasis && !comments.trim())
+                  }
                   onClick={() => decide("approve")}
                 >
                   Approve review
                 </Button>
-                <Button variant="outlined" onClick={() => decide("changes")}>
+                <Button
+                  variant="outlined"
+                  disabled={saving}
+                  onClick={() => decide("changes")}
+                >
                   Request changes
                 </Button>
-                <Button color="error" onClick={() => decide("reject")}>
+                <Button
+                  color="error"
+                  disabled={saving}
+                  onClick={() => decide("reject")}
+                >
                   Reject
                 </Button>
               </div>
+              {comments && (
+                <p className="draft-saved-note" role="status">
+                  {draftStored
+                    ? "Review notes saved in this tab. Evidence checks must be confirmed again when you return."
+                    : "Notes kept in memory. Keep this tab open or copy your notes before leaving."}
+                </p>
+              )}
               <p className="decision-note">
                 {checked < 3
-                  ? "Confirm all three evidence items to enable approval. "
+                  ? needsBasis
+                    ? "Confirm all three evidence items and record a rationale for missing evidence to enable approval. "
+                    : "Confirm all three evidence items to enable approval. "
                   : ""}
                 {p.stage === 3
                   ? "Approval returns this submission to the author for publication."
@@ -238,7 +328,9 @@ export function ReviewView({
             </>
           ) : activeReview ? (
             <>
-              <Status kind="warning">Awaiting {stage.toLowerCase()} review</Status>
+              <Status kind="warning">
+                Awaiting {stage.toLowerCase()} review
+              </Status>
               <h2>
                 {role === "Researcher"
                   ? "Submitted for review"
@@ -317,7 +409,15 @@ export function ReviewView({
             </>
           ) : (
             <>
-              <Status kind={p.status === "Draft" ? "neutral" : "error"}>
+              <Status
+                kind={
+                  p.status === "Draft"
+                    ? "neutral"
+                    : p.status === "Changes requested"
+                      ? "warning"
+                      : "error"
+                }
+              >
                 {p.status}
               </Status>
               <h2>
@@ -339,9 +439,7 @@ export function ReviewView({
               )}
               {role === "Researcher" ? (
                 <Button variant="contained" onClick={onRevise}>
-                  {p.status === "Draft"
-                    ? "Edit draft"
-                    : "Revise & resubmit"}
+                  {p.status === "Draft" ? "Edit draft" : "Revise & resubmit"}
                 </Button>
               ) : (
                 switchRole("Researcher")
@@ -360,6 +458,10 @@ export function ReviewView({
             {[
               ["Author", p.author],
               ["Input", p.input || "Not defined yet"],
+              [
+                "Required columns",
+                requiredInputColumns(p).join(", ") || "Not specified",
+              ],
               ["Output", p.output || "Not defined yet"],
               ["Purpose", p.description || "Not defined yet"],
             ].map(([label, value]) => (
@@ -405,6 +507,51 @@ export function ReviewView({
         <HistoryList events={p.history} />
       </details>
       <Dialog
+        open={evidenceIndex !== null}
+        onClose={() => setEvidenceIndex(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Evidence for {stage} review</DialogTitle>
+        <DialogContent>
+          {evidenceIndex !== null && (
+            <>
+              <h3>{CHECKS[stage][evidenceIndex]}</h3>
+              <p className="micro-copy">
+                {p.name} · {p.version} · {sources[evidenceIndex].label}
+              </p>
+              <Status
+                kind={sources[evidenceIndex].available ? "success" : "warning"}
+              >
+                {sources[evidenceIndex].available
+                  ? "Source available"
+                  : "Evidence not supplied"}
+              </Status>
+              <p className="evidence-source-text">
+                {sources[evidenceIndex].detail}
+              </p>
+              {sources[evidenceIndex].target === "attachments" && (
+                <EvidenceAttachments attachments={p.attachments || []} />
+              )}
+              {!sources[evidenceIndex].available && (
+                <p>
+                  Request changes for real missing evidence, or record an
+                  explicit rationale for a demo-only exception in Review
+                  comments. No automated check is claimed.
+                </p>
+              )}
+            </>
+          )}
+        </DialogContent>
+        <DialogActionBar
+          primary={
+            <Button variant="contained" onClick={() => setEvidenceIndex(null)}>
+              Return to review
+            </Button>
+          }
+        />
+      </Dialog>
+      <Dialog
         open={confirmReject}
         onClose={() => setConfirmReject(false)}
         maxWidth="sm"
@@ -427,9 +574,10 @@ export function ReviewView({
             <Button
               color="error"
               variant="contained"
+              disabled={saving}
               onClick={() => {
                 setConfirmReject(false);
-                onReview("reject", comments.trim());
+                void submitDecision("reject");
               }}
             >
               Confirm rejection

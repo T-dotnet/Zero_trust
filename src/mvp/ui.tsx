@@ -76,7 +76,6 @@ export function ReviewProgressLegend() {
       <span><i className="complete" aria-hidden="true" />Completed</span>
       <span><i className="current" aria-hidden="true" />Current step</span>
       <span><i className="pending" aria-hidden="true" />Pending</span>
-      <span><i className="blocked" aria-hidden="true" />Needs changes</span>
     </div>
   );
 }
@@ -84,7 +83,7 @@ export function PipelineProgress({ pipeline }: { pipeline: Pipeline }) {
   const approved = pipeline.status === "Approved";
   const needsChanges = pipeline.status === "Rejected" || pipeline.status === "Changes requested";
   return (
-    <div className="pipeline-progress">
+    <div className="pipeline-progress" data-status={pipeline.status}>
       <span className="review-progress-summary">
       <span
         className="progress-blocks"
@@ -114,13 +113,13 @@ export function PipelineProgress({ pipeline }: { pipeline: Pipeline }) {
       </span>
       <Status
         kind={
-          approved
+          approved || pipeline.status === "Ready to publish"
             ? "success"
             : pipeline.status === "Rejected"
               ? "error"
               : needsChanges
-                ? "error"
-                : pipeline.status === "In review" || pipeline.status === "Ready to publish"
+                ? "warning"
+                : pipeline.status === "In review"
                   ? "warning"
                   : "neutral"
         }
@@ -140,7 +139,7 @@ export function StagePath({
   return (
     <>
     <ReviewProgressLegend />
-    <ol className={`stage-path ${illustrative ? "illustrative" : ""}`}>
+    <ol className={`stage-path ${illustrative ? "illustrative" : ""}`} data-status={pipeline?.status}>
       {[...STAGES.map((s) => `${s} review`), "Publication"].map((label, i) => {
         const complete =
           pipeline &&

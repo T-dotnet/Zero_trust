@@ -10,6 +10,11 @@ export interface ArtifactPreview {
 
 /** Synthetic fixtures only. Never imply that a model or disclosure scan ran. */
 export function artifactPreview(artifact: Artifact): ArtifactPreview {
+  const preview = previewFixture(artifact);
+  return { ...preview, rows: preview.rows.slice(0, artifact.rows) };
+}
+
+function previewFixture(artifact: Artifact): ArtifactPreview {
   const declared = artifact.output?.toLowerCase() || "";
   // Prefer an explicit output contract over the pipeline's historic name.
   const contract =

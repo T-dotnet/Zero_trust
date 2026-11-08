@@ -192,12 +192,7 @@ test("drafts retain requirements and attachments across editing and reload", asy
     page.getByRole("heading", { name: "Complete your draft", exact: true }),
   ).toBeVisible();
   await page.reload();
-  await page
-    .getByRole("button", {
-      name: "Longitudinal outcome classifier",
-      exact: true,
-    })
-    .click();
+  await expect(page.getByRole("heading", { name: "Complete your draft", exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "Edit draft", exact: true })
     .click();
@@ -378,7 +373,7 @@ test("incompatible dataset formats and non-researcher creation are blocked", asy
     })
     .click();
   await expect(
-    page.getByRole("button", { name: "Start run" }),
+    page.getByRole("button", { name: "Start demo run" }),
   ).toBeDisabled();
   await expect(
     page.getByRole("alert").filter({ hasText: "does not match" }),
@@ -393,7 +388,7 @@ test("incompatible dataset formats and non-researcher creation are blocked", asy
     })
     .click();
   await expect(
-    page.getByRole("button", { name: "Start run" }),
+    page.getByRole("button", { name: "Start demo run" }),
   ).toBeEnabled();
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
 });
@@ -456,7 +451,7 @@ test("running jobs survive reload and produce exactly one output", async ({
       exact: true,
     })
     .click();
-  await page.getByRole("button", { name: "Start run" }).click();
+  await page.getByRole("button", { name: "Start demo run" }).click();
   await expect(
     page.getByRole("table", { name: "Runs", exact: true }),
   ).toContainText("Running");

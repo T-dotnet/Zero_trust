@@ -30,12 +30,15 @@ const attachments = (v: unknown) =>
         integer(a.size, 50_000) &&
         optionalString(a.content),
     ));
+const columnList = (v: unknown) =>
+  v === undefined || (Array.isArray(v) && v.every(text));
 const draftFields = (v: unknown) =>
   object(v) &&
   ["description", "repo", "branch", "category", "input", "output"].every(
     (key) => string(v[key]),
   ) &&
-  attachments(v.attachments);
+  attachments(v.attachments) &&
+  columnList(v.requiredColumns);
 
 export function isWorkspace(value: unknown): value is Workspace {
   if (!object(value) || value.schema !== 1) return false;
@@ -104,6 +107,7 @@ export function isWorkspace(value: unknown): value is Workspace {
         return false;
       return (
         attachments(p.attachments) &&
+        columnList(p.requiredColumns) &&
         (p.revisionDraft === undefined ||
           (["Changes requested", "Rejected"].includes(p.status as string) &&
             draftFields(p.revisionDraft)))
@@ -153,6 +157,11 @@ export function isWorkspace(value: unknown): value is Workspace {
       )
         return false;
       if (!pipelineIds.has(r.pipelineId) || !datasetIds.has(r.datasetId))
+        return false;
+      if (
+        r.retryOf !== undefined &&
+        (!runIds.has(r.retryOf) || r.retryOf === r.id)
+      )
         return false;
       if (r.status === "Completed" && r.progress !== 100) return false;
       if (r.artifactId !== undefined && !artifactIds.has(r.artifactId))

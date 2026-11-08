@@ -4,15 +4,16 @@ import { colors, cssTokens, fontFamily } from "./designTokens";
 export const theme = createTheme({
   palette: {
     primary: {
-      // Small text, form states and selection controls use accessible green.
-      main: colors.primaryDark,
-      dark: colors.primaryDeep,
-      light: colors.primary,
+      // Routine selection and form states stay neutral. Only primary buttons
+      // use the ReadyAI mint fill, through the contained override below.
+      main: colors.ink,
+      dark: colors.ink,
+      light: colors.surfaceHover,
       contrastText: "#ffffff",
     },
     secondary: { main: colors.body },
     action: { active: colors.body },
-    info: { main: colors.primaryDark, light: colors.primarySoft },
+    info: { main: colors.body, light: colors.surface },
     background: { default: "#ffffff", paper: "#ffffff" },
     text: { primary: colors.ink, secondary: colors.muted },
     divider: colors.line,
@@ -36,10 +37,23 @@ export const theme = createTheme({
   },
   shape: { borderRadius: 7 },
   components: {
-    MuiCssBaseline: { styleOverrides: { ":root": cssTokens, ":focus-visible": { outline: `2px solid ${colors.focus}`, outlineOffset: 3 } } },
+    MuiCssBaseline: {
+      styleOverrides: {
+        ":root": cssTokens,
+        ":focus-visible": {
+          outline: `2px solid ${colors.focus}`,
+          outlineOffset: 3,
+        },
+      },
+    },
     MuiButtonBase: {
       styleOverrides: {
-        root: { "&.Mui-focusVisible": { outline: `2px solid ${colors.focus}`, outlineOffset: 3 } },
+        root: {
+          "&.Mui-focusVisible": {
+            outline: `2px solid ${colors.focus}`,
+            outlineOffset: 3,
+          },
+        },
       },
     },
     MuiButton: {
@@ -70,8 +84,10 @@ export const theme = createTheme({
           borderColor: colors.inputBorder,
           color: ownerState.color === "error" ? colors.error : colors.ink,
           "&:hover": {
-            borderColor: ownerState.color === "error" ? colors.error : colors.primaryDark,
-            background: ownerState.color === "error" ? colors.errorSoft : colors.primarySoft,
+            borderColor:
+              ownerState.color === "error" ? colors.error : colors.ink,
+            background:
+              ownerState.color === "error" ? colors.errorSoft : colors.surface,
           },
         }),
       },
@@ -148,14 +164,25 @@ export const theme = createTheme({
       styleOverrides: {
         root: { fontSize: 14, borderRadius: 8 },
         standard: ({ ownerState }) => {
-          const tone = ownerState.severity === "warning"
-            ? { backgroundColor: colors.warningSoft, color: colors.warning }
-            : ownerState.severity === "error"
-              ? { backgroundColor: colors.errorSoft, color: colors.error }
-              : ownerState.severity === "success"
-                ? { backgroundColor: colors.successSoft, color: colors.success }
-                : { backgroundColor: colors.primarySoft, color: colors.ink };
-          return { ...tone, "& .MuiAlert-icon": { color: ownerState.severity === "info" ? colors.primaryDark : tone.color } };
+          const accent =
+            ownerState.severity === "warning"
+              ? colors.warningAccent
+              : ownerState.severity === "error"
+                ? colors.errorAccent
+                : colors.line;
+          const icon =
+            ownerState.severity === "warning"
+              ? colors.warning
+              : ownerState.severity === "error"
+                ? colors.error
+                : colors.body;
+          return {
+            backgroundColor: colors.surface,
+            color: colors.ink,
+            border: `1px solid ${colors.line}`,
+            borderLeft: `3px solid ${accent}`,
+            "& .MuiAlert-icon": { color: icon },
+          };
         },
       },
     },

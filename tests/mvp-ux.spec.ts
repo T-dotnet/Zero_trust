@@ -79,6 +79,8 @@ test("mobile review puts criteria in the first viewport and keeps all four stage
   ).toBeDisabled();
   for (const checkbox of await page.getByRole("checkbox").all())
     await checkbox.check();
+  await expect(page.getByRole("button", { name: "Approve review" })).toBeDisabled();
+  await page.getByLabel("Review comments", { exact: true }).fill("Demo exception: supporting evidence must be supplied before pilot use.");
   await expect(
     page.getByRole("button", { name: "Approve review" }),
   ).toBeEnabled();
@@ -102,9 +104,7 @@ test("incomplete named drafts persist and field-specific errors prevent prematur
     page.getByRole("heading", { name: "Complete your draft", exact: true }),
   ).toBeVisible();
   await page.reload();
-  await page
-    .getByRole("button", { name: "Incomplete research draft", exact: true })
-    .click();
+  await expect(page.getByRole("heading", { name: "Complete your draft", exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "Edit draft", exact: true })
     .click();
@@ -167,9 +167,7 @@ test("revision drafts retain requested changes and edits without prematurely res
   expect(saved.version).toBe("v1.0.0");
   expect(saved.stage).toBe(1);
   await page.reload();
-  await page
-    .getByRole("button", { name: "Patient risk stratification", exact: true })
-    .click();
+  await expect(page.getByRole("heading", { name: "Author action required", exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "Revise & resubmit", exact: true })
     .click();
@@ -264,7 +262,7 @@ test("simulation controls unblock reviews, execution and output while keeping pu
     })
     .click();
   await page
-    .getByRole("button", { name: "Start run", exact: true })
+    .getByRole("button", { name: "Start demo run", exact: true })
     .click();
   await simulate(page);
   await page.locator("summary").filter({ hasText: "Execution events" }).click();
