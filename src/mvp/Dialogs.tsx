@@ -47,6 +47,7 @@ import { WorkspaceDialog } from "./WorkspaceDialog";
 import { DialogActionBar } from "./DialogActionBar";
 import { DiscardWorkDialog } from "./DiscardWorkDialog";
 import { useSessionDraft, useUnsavedWarning } from "./useSessionDraft";
+import { useDemoAction } from "./DemoTools";
 
 const PIPELINE_STEPS = ["Source & purpose", "Requirements", "Review & submit"];
 
@@ -206,6 +207,25 @@ export function PipelineForm({
     setFieldErrors({});
     return true;
   };
+  useDemoAction(
+    "Use example",
+    () => {
+      setForm({
+        name: "Longitudinal outcome classifier",
+        description:
+          "Classifies longitudinal outcomes from synthetic clinical records.",
+        repo: "https://github.com/research/outcome-classifier",
+        branch: "main",
+        category: "ML model",
+        input: "Structured clinical data (CSV)",
+        output: "Outcome classification (CSV)",
+        requiredColumns: "record_id, clinical_note",
+      });
+      setFieldErrors({});
+      setError("");
+    },
+    !source && step === 0,
+  );
   const submit = async (draft: boolean) => {
     if (saving || evidenceBusy || !(draft ? validName() : valid())) return;
     if (!draft && !validRequirements()) return;
@@ -324,28 +344,6 @@ export function PipelineForm({
             <div className="form-stack">
               <div className="form-section-heading">
                 <h3>Pipeline details</h3>
-                {!source && (
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      setForm({
-                        name: "Longitudinal outcome classifier",
-                        description:
-                          "Classifies longitudinal outcomes from synthetic clinical records.",
-                        repo: "https://github.com/research/outcome-classifier",
-                        branch: "main",
-                        category: "ML model",
-                        input: "Structured clinical data (CSV)",
-                        output: "Outcome classification (CSV)",
-                        requiredColumns: "record_id, clinical_note",
-                      });
-                      setFieldErrors({});
-                      setError("");
-                    }}
-                  >
-                    Use example
-                  </Button>
-                )}
               </div>
               {field("name", "Pipeline name", {
                 autoFocus: true,
@@ -656,6 +654,7 @@ export function ImportDialog({
     });
     setError("");
   };
+  useDemoAction("Use sample", sample, !file && !reading);
   const readFile = async (file?: File) => {
     if (!file) return;
     const sequence = ++readSequence.current;
@@ -795,15 +794,6 @@ export function ImportDialog({
                   Choose file
                 </Button>
               </div>
-              <div className="sample-divider">
-                <span>or</span>
-                <Button onClick={sample} size="small">
-                  Use sample
-                </Button>
-              </div>
-              <p className="micro-copy">
-                Loads a synthetic CSV for this walkthrough.
-              </p>
             </>
           )}
           {reading && <p role="status">Reading and validating CSV…</p>}
@@ -1059,23 +1049,32 @@ export function RunDialog({
   );
 }
 
-export function ArtifactDialog({
-  artifact: a,
-  role,
-  setRole,
-  onClose,
-  onReview,
-  notify,
-  onSimulation,
-}: {
+type ArtifactDialogProps = {
   artifact: Artifact;
   role: Role;
-  setRole: (role: Role) => void;
   onClose: () => void;
   onReview: (accept: boolean, comment: string) => Promise<boolean>;
   notify: (message: string) => void;
-  onSimulation: () => void;
-}) {
+};
+
+export function ArtifactDialog(props: ArtifactDialogProps) {
+  return (
+    <WorkspaceDialog open onClose={props.onClose} maxWidth="md" fullWidth>
+      <ArtifactContent
+        key={`${props.artifact.id}-${props.artifact.status}-${props.role}`}
+        {...props}
+      />
+    </WorkspaceDialog>
+  );
+}
+
+function ArtifactContent({
+  artifact: a,
+  role,
+  onClose,
+  onReview,
+  notify,
+}: ArtifactDialogProps) {
   const [draft, setDraft, clearDraft, draftStored] = useSessionDraft(
     `output:${a.id}:${a.version}:${a.status}:${role}`,
     { comment: "", outcome: "" },
@@ -1117,8 +1116,8 @@ export function ArtifactDialog({
         Close
       </Button>
     ) : role !== "Privacy reviewer" ? (
-      <Button variant="contained" onClick={() => setRole("Privacy reviewer")}>
-        Switch role
+      <Button variant="contained" onClick={onClose}>
+        Close
       </Button>
     ) : (
       <Button
@@ -1152,7 +1151,7 @@ export function ArtifactDialog({
       </Button>
     );
   return (
-    <WorkspaceDialog open onClose={onClose} fullWidth maxWidth="md">
+    <>
       <DialogTitle>Artifact review</DialogTitle>
       <DialogContent>
         <div className="detail-identity">
@@ -1319,14 +1318,12 @@ export function ArtifactDialog({
       </DialogContent>
       <DialogActionBar primary={primaryAction}>
         {a.status !== "Validated" && downloadAction}
-        {a.status !== "Not acceptable" && (
+        {(a.status === "Validated" ||
+          (a.status === "Pending review" && role === "Privacy reviewer")) && (
           <Button onClick={onClose}>Close</Button>
         )}
-        <button className="simulation-link" onClick={onSimulation}>
-          Simulation controls
-        </button>
       </DialogActionBar>
-    </WorkspaceDialog>
+    </>
   );
 }
 
@@ -1363,9 +1360,9 @@ export function HelpDialog({
           <li>
             <strong>Complete all four reviews</strong>
             <p>
-              Switch roles in the header. Confirm stage evidence, then approve
-              Ethical, Technical, Privacy, and Security reviews. Try feedback or
-              rejection too.
+              Choose the acting role in the floating demo controls. Confirm
+              stage evidence, then approve Ethical, Technical, Privacy, and
+              Security reviews. Try feedback or rejection too.
             </p>
           </li>
           <li>
@@ -1379,7 +1376,7 @@ export function HelpDialog({
         </ol>
         <Alert severity="info">
           Role switching and execution are simulated. Changes persist in this
-          browser. Reset the demo from the profile menu.
+          browser. Reset the workspace from the floating demo controls.
         </Alert>
       </DialogContent>
       <DialogActionBar

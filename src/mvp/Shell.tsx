@@ -1,30 +1,17 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import {
-  Avatar,
-  Button,
-  Drawer,
-  IconButton,
-  Menu,
-  MenuItem,
-  Select,
-  Tooltip,
-} from "@mui/material";
+import { Avatar, Drawer, IconButton, Tooltip } from "@mui/material";
 import {
   Activity,
-  ArrowUpRight,
-  ChevronDown,
   Database,
-  FileText,
   House,
   Menu as MenuIcon,
   Play,
-  RotateCcw,
   Shield,
   ShieldCheck,
   Workflow,
   X,
 } from "lucide-react";
-import { STAGES, type Page, type Role, actorFor } from "./model";
+import { type Page, type Role, actorFor } from "./model";
 import { colors } from "./designTokens";
 const NAV = [
   ["Overview", House],
@@ -38,28 +25,19 @@ interface Props {
   page: Page;
   setPage: (page: Page) => void;
   role: Role;
-  setRole: (role: Role) => void;
   approvalCount: number;
   children: ReactNode;
-  onReset: () => void;
-  onHelp: () => void;
-  onSimulation: () => void;
   storageAvailable: boolean;
 }
 export function Shell({
   page,
   setPage,
   role,
-  setRole,
   approvalCount,
   children,
-  onReset,
-  onHelp,
-  onSimulation,
   storageAvailable,
 }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const header = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -108,13 +86,6 @@ export function Shell({
       </nav>
       <div className="sidebar-bottom">
         <strong>Clinical Research</strong>
-        <span>MVP prototype</span>
-        <button className="sidebar-help" onClick={onHelp}>
-          <FileText size={14} /> Walkthrough guide <ArrowUpRight size={13} />
-        </button>
-        <button className="simulation-link" onClick={onSimulation}>
-          Simulation controls
-        </button>
       </div>
     </>
   );
@@ -157,36 +128,11 @@ export function Shell({
             </span>
           </div>
           <div className="utility-actions">
-            <Tooltip
-              describeChild
-              title="Interactive UX prototype. Open simulation controls to advance the walkthrough."
-            >
-              <button className="demo-mode" onClick={onSimulation}>
-                Demo mode
-              </button>
-            </Tooltip>
-            <Select
-              aria-label="Acting role"
-              value={role}
-              onChange={(e) => setRole(e.target.value as Role)}
-              size="small"
-              IconComponent={ChevronDown}
-              className="role-select"
-              MenuProps={{ transitionDuration: 0 }}
-            >
-              {(
-                ["Researcher", ...STAGES.map((s) => `${s} reviewer`)] as Role[]
-              ).map((r) => (
-                <MenuItem value={r} key={r}>
-                  {r}
-                </MenuItem>
-              ))}
-            </Select>
-            <Tooltip title={`${actorFor(role)} · workspace options`}>
-              <IconButton
-                aria-label="Workspace options"
-                onClick={(e) => setAnchor(e.currentTarget)}
-                size="small"
+            <span className="current-role">{role}</span>
+            <Tooltip title={`${actorFor(role)}`}>
+              <span
+                className="workspace-avatar"
+                aria-label={`${actorFor(role)} · ${role}`}
               >
                 <Avatar
                   variant="circular"
@@ -208,7 +154,7 @@ export function Shell({
                         .map((s) => s[0])
                         .join("")}
                 </Avatar>
-              </IconButton>
+              </span>
             </Tooltip>
           </div>
         </header>
@@ -224,39 +170,6 @@ export function Shell({
           </span>
         </footer>
       </div>
-      <Menu
-        anchorEl={anchor}
-        open={Boolean(anchor)}
-        onClose={() => setAnchor(null)}
-      >
-        <MenuItem
-          onClick={() => {
-            setAnchor(null);
-            onSimulation();
-          }}
-        >
-          Simulation controls
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setAnchor(null);
-            onHelp();
-          }}
-        >
-          Walkthrough guide
-        </MenuItem>
-        <MenuItem component="a" href="/?view=full" target="_blank">
-          Open original workspace
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setAnchor(null);
-            onReset();
-          }}
-        >
-          <RotateCcw size={15} style={{ marginRight: 10 }} /> Reset demo data
-        </MenuItem>
-      </Menu>
     </div>
   );
 }

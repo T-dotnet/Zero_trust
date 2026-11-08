@@ -1,3 +1,9 @@
+import {
+  openDemo,
+  closeDemo,
+  setDemoRole,
+  demoAction,
+} from "./mvp-demo-helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
@@ -240,10 +246,7 @@ test("support requests record the active reviewer in history and export", async 
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("combobox", { name: "Acting role" }).click();
-  await page
-    .getByRole("option", { name: "Security reviewer", exact: true })
-    .click();
+  await setDemoRole(page, "Security reviewer");
   await page
     .getByRole("navigation")
     .getByRole("button", { name: "Runs & results", exact: true })

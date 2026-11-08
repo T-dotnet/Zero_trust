@@ -57,7 +57,6 @@ const REASONS = {
 interface Props {
   pipeline: Pipeline;
   role: Role;
-  setRole: (role: Role) => void;
   onBack: () => void;
   onReview: (
     decision: "approve" | "changes" | "reject",
@@ -71,7 +70,6 @@ interface Props {
 export function ReviewView({
   pipeline: p,
   role,
-  setRole,
   onBack,
   onReview,
   onPublish,
@@ -144,17 +142,6 @@ export function ReviewView({
     }
     void submitDecision(decision);
   };
-  const switchRole = (nextRole: Role) => (
-    <div className="demo-handoff">
-      <span className="eyebrow">Demo controls</span>
-      <p>
-        Continue as <strong>{nextRole}</strong> for the next task.
-      </p>
-      <Button variant="outlined" size="small" onClick={() => setRole(nextRole)}>
-        Switch role
-      </Button>
-    </div>
-  );
   return (
     <>
       <Button
@@ -365,7 +352,6 @@ export function ReviewView({
                   ? "No author action is needed while this review is pending."
                   : "Only the assigned review role can make this decision."}
               </p>
-              {switchRole(expectedRole)}
             </>
           ) : p.status === "Ready to publish" ? (
             <>
@@ -379,7 +365,9 @@ export function ReviewView({
                   Publish pipeline
                 </Button>
               ) : (
-                switchRole("Researcher")
+                <p className="muted">
+                  The author can publish this approved version.
+                </p>
               )}
               <p className="decision-note">
                 Publication is a separate author action. Review approval alone
@@ -404,7 +392,9 @@ export function ReviewView({
                   </Button>
                 </div>
               ) : (
-                switchRole("Researcher")
+                <p className="muted">
+                  Researchers can configure runs with this version.
+                </p>
               )}
             </>
           ) : (
@@ -442,7 +432,9 @@ export function ReviewView({
                   {p.status === "Draft" ? "Edit draft" : "Revise & resubmit"}
                 </Button>
               ) : (
-                switchRole("Researcher")
+                <p className="muted">
+                  The author can update and resubmit this version.
+                </p>
               )}
               <p className="decision-note">
                 {p.status === "Draft"

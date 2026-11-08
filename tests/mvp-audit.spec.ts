@@ -1,3 +1,9 @@
+import {
+  openDemo,
+  closeDemo,
+  setDemoRole,
+  demoAction,
+} from "./mvp-demo-helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { parseDatasetCsv } from "../src/mvp/csv";
@@ -14,9 +20,7 @@ async function nav(page: Page, name: string) {
   if (mobile) await expect(page.locator(".MuiDrawer-root")).toBeHidden();
 }
 async function role(page: Page, name: string) {
-  await page.getByRole("combobox", { name: "Acting role" }).click();
-  await page.getByRole("option", { name, exact: true }).click();
-  await expect(page.getByRole("listbox")).toBeHidden();
+  await setDemoRole(page, name);
 }
 
 test("invalid replacement file clears the previous valid import", async ({
@@ -27,7 +31,7 @@ test("invalid replacement file clears the previous valid import", async ({
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use sample" }).click();
+  await demoAction(page, "Use sample");
   const submit = page
     .getByRole("dialog")
     .getByRole("button", { name: "Import dataset", exact: true });
@@ -75,7 +79,7 @@ test("quoted multiline CSV records are counted correctly and invalid rows are re
 test("missing processing requirements block submission", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
-  await page.getByRole("button", { name: "Use example" }).click();
+  await demoAction(page, "Use example");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByLabel("Input specification").fill(" ");
   await page.getByLabel("Expected output").fill("");
@@ -174,7 +178,7 @@ test("drafts retain requirements and attachments across editing and reload", asy
 }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
-  await page.getByRole("button", { name: "Use example" }).click();
+  await demoAction(page, "Use example");
   await page.locator("summary").filter({ hasText: "Source settings" }).click();
   await page.getByLabel("Branch or tag").fill("release/audit");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -192,10 +196,10 @@ test("drafts retain requirements and attachments across editing and reload", asy
     page.getByRole("heading", { name: "Complete your draft", exact: true }),
   ).toBeVisible();
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Complete your draft", exact: true })).toBeVisible();
-  await page
-    .getByRole("button", { name: "Edit draft", exact: true })
-    .click();
+  await expect(
+    page.getByRole("heading", { name: "Complete your draft", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Edit draft", exact: true }).click();
   await expect(page.getByLabel("Branch or tag")).toHaveValue("release/audit");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(page.getByLabel("Expected output")).toHaveValue(
@@ -218,18 +222,14 @@ test("reviewers cannot approve out of order and rejection needs a reason", async
     page.getByRole("button", { name: "Approve review" }),
   ).toBeHidden();
   await role(page, "Ethical reviewer");
-  await page
-    .getByRole("button", { name: "Reject", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Reject", exact: true }).click();
   await expect(
     page.getByText("Add a comment explaining what needs to change."),
   ).toBeVisible();
   await page
     .getByLabel("Review comments", { exact: true })
     .fill("Clarify consent scope.");
-  await page
-    .getByRole("button", { name: "Reject", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Reject", exact: true }).click();
   await expect(
     page.getByText("Clarify consent scope.", { exact: true }).first(),
   ).toBeVisible();
@@ -300,9 +300,7 @@ test("catalog filters, empty states, details, and guide cancel actions work", as
     .getByRole("dialog")
     .getByRole("button", { name: "Close", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Walkthrough guide", exact: false })
-    .click();
+  await demoAction(page, "Walkthrough guide");
   await expect(
     page.getByRole("heading", { name: "Explore the MVP" }),
   ).toBeVisible();
@@ -321,9 +319,7 @@ test("validated CSV download has a standard header, sample records, and provenan
   await page
     .getByRole("button", { name: "De-identified clinical notes", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Switch role", exact: true })
-    .click();
+  await setDemoRole(page, "Privacy reviewer");
   await page.getByRole("radio", { name: "Acceptable", exact: true }).check();
   await page.getByRole("button", { name: "Accept output" }).click();
   const download = page.waitForEvent("download");
@@ -398,7 +394,7 @@ test("evidence limits, removal, same-file reattachment, and cancel do not leak d
 }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
-  await page.getByRole("button", { name: "Use example" }).click();
+  await demoAction(page, "Use example");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   const input = page.locator("input[type=file]");
   await input.setInputFiles({
@@ -493,7 +489,7 @@ test("storage warnings recover after a later successful save", async ({
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use sample" }).click();
+  await demoAction(page, "Use sample");
   await page
     .getByRole("dialog")
     .getByRole("button", { name: "Import dataset", exact: true })

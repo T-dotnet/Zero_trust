@@ -1,6 +1,13 @@
+import {
+  openDemo,
+  closeDemo,
+  setDemoRole,
+  demoAction,
+} from "./mvp-demo-helpers";
 import { test, expect, type Page } from "@playwright/test";
 
 async function nav(page: Page, name: string) {
+  await expect(page.locator(".mobile-sidebar")).toHaveCount(0);
   await page
     .getByRole("button", { name: "Open navigation", exact: true })
     .click();
@@ -8,17 +15,12 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation", { name: "Main navigation" })
     .getByRole("button", { name, exact: true })
     .click();
-  await expect(page.locator(".MuiDrawer-root")).toBeHidden();
+  await expect(page.locator(".mobile-sidebar")).toHaveCount(0);
 }
 async function simulation(page: Page) {
-  await page
-    .getByRole("button", { name: "Workspace options", exact: true })
-    .click();
-  await page
-    .getByRole("menuitem", { name: "Simulation controls", exact: true })
-    .click();
+  await openDemo(page);
   await expect(
-    page.getByRole("heading", { name: "Simulation controls", exact: true }),
+    page.getByRole("heading", { name: "Demo controls", exact: true }),
   ).toBeVisible();
 }
 const fontSize = (locator: ReturnType<Page["locator"]>) =>
@@ -87,7 +89,7 @@ test("phone forms and output samples remain readable without horizontal scrollin
   await page.setViewportSize({ width: 320, height: 844 });
   await page.goto("/");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
-  await page.getByRole("button", { name: "Use example", exact: true }).click();
+  await demoAction(page, "Use example");
   expect(
     await fontSize(page.getByLabel("Repository URL")),
   ).toBeGreaterThanOrEqual(16);
@@ -144,7 +146,7 @@ test("the complete solo walkthrough works with the mobile menu, larger controls 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
-  await page.getByRole("button", { name: "Use example", exact: true }).click();
+  await demoAction(page, "Use example");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
@@ -157,9 +159,7 @@ test("the complete solo walkthrough works with the mobile menu, larger controls 
   await page
     .getByRole("button", { name: "Approve remaining", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Done", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Done", exact: true }).click();
   await expect(
     page.getByText("4 of 4 reviews completed", { exact: true }),
   ).toBeVisible();
@@ -199,9 +199,7 @@ test("the complete solo walkthrough works with the mobile menu, larger controls 
     run.getByRole("button", { name: "View output", exact: true }),
   ).toBeVisible({ timeout: 15_000 });
   await run.getByRole("button", { name: "View output", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Switch role", exact: true })
-    .click();
+  await setDemoRole(page, "Privacy reviewer");
   await expect(
     page.getByRole("button", { name: "Choose a decision", exact: true }),
   ).toBeDisabled();
@@ -306,11 +304,12 @@ test("cards and controls adapt to narrower windows and larger reading text", asy
   expect(
     await fontSize(page.locator(".page-heading p")),
   ).toBeGreaterThanOrEqual(20);
-  await page.getByRole("combobox", { name: "Acting role" }).click();
-  await page
-    .getByRole("option", { name: "Technical reviewer", exact: true })
-    .click();
-  const roleLabel = page.locator(".role-select .MuiSelect-select");
+  await setDemoRole(page, "Technical reviewer");
+  await openDemo(page);
+  const roleLabel = page.getByRole("combobox", {
+    name: "Acting role",
+    exact: true,
+  });
   expect(
     await roleLabel.evaluate(
       (element) =>
@@ -319,6 +318,7 @@ test("cards and controls adapt to narrower windows and larger reading text", asy
     ),
   ).toBe(true);
 
+  await closeDemo(page);
   for (const screen of [
     "Overview",
     "Datasets",
@@ -354,7 +354,9 @@ test("cards and controls adapt to narrower windows and larger reading text", asy
   await page.getByRole("button", { name: "Review", exact: true }).click();
   for (const checkbox of await page.getByRole("checkbox").all())
     await checkbox.check();
-  await page.getByLabel("Review comments", { exact: true }).fill("Demo exception: evidence must be supplied before pilot use.");
+  await page
+    .getByLabel("Review comments", { exact: true })
+    .fill("Demo exception: evidence must be supplied before pilot use.");
   await page
     .getByRole("button", { name: "Approve review", exact: true })
     .click();
@@ -386,9 +388,7 @@ test("task forms use the available viewport and keep content separate from foote
     await page
       .getByRole("button", { name: "New pipeline", exact: true })
       .click();
-    await page
-      .getByRole("button", { name: "Use example", exact: true })
-      .click();
+    await demoAction(page, "Use example");
     if (width === 390) {
       await page.getByLabel("Research purpose").focus();
       await page.setViewportSize({ width: 844, height: 390 });

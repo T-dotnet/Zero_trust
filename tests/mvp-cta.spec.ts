@@ -1,3 +1,9 @@
+import {
+  openDemo,
+  closeDemo,
+  setDemoRole,
+  demoAction,
+} from "./mvp-demo-helpers";
 import { test, expect, type Locator, type Page } from "@playwright/test";
 
 async function fullWidth(action: Locator) {
@@ -76,12 +82,10 @@ test("form actions put the primary first in layout and keyboard order at every s
     await page
       .getByRole("button", { name: "New pipeline", exact: true })
       .click();
-    await page
-      .getByRole("button", { name: "Use example", exact: true })
-      .click();
-    await fullWidth(
+    await demoAction(page, "Use example");
+    await expect(
       page.getByRole("button", { name: "Use example", exact: true }),
-    );
+    ).toBeHidden();
     for (const step of [0, 1, 2]) {
       const name = step === 2 ? "Submit for review" : "Continue";
       const { actions, primary } = await primaryFirst(page, name);
@@ -149,8 +153,8 @@ test("output review gives each role a clear primary and keeps recovery actions f
     .filter({ hasText: "RUN-1042" })
     .getByRole("button", { name: "View output", exact: true })
     .click();
-  let bar = await primaryFirst(page, "Switch role");
-  await bar.primary.click();
+  let bar = await primaryFirst(page, "Close");
+  await setDemoRole(page, "Privacy reviewer");
   bar = await primaryFirst(page, "Choose a decision");
   await expect(bar.primary).toBeDisabled();
   await page.getByRole("radio", { name: "Acceptable", exact: true }).check();
@@ -159,19 +163,14 @@ test("output review gives each role a clear primary and keeps recovery actions f
   bar = await primaryFirst(page, "Download sample CSV");
   await bar.actions.getByRole("button", { name: "Close", exact: true }).click();
 
-  await page
-    .getByRole("combobox", { name: "Acting role", exact: true })
-    .click();
-  await page.getByRole("option", { name: "Researcher", exact: true }).click();
+  await setDemoRole(page, "Researcher");
   await page
     .getByRole("row")
     .filter({ hasText: "RUN-1041" })
     .getByRole("button", { name: "Details", exact: true })
     .click();
   bar = await primaryFirst(page, "Configure retry");
-  await page
-    .getByRole("button", { name: "Get help", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Get help", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Describe the issue", exact: true })
     .fill("Synthetic demo input could not be mapped.");
@@ -205,40 +204,23 @@ test("help and confirmation dialogs retain primary priority with larger text", a
   await page.evaluate(() => {
     document.documentElement.style.fontSize = "20px";
   });
-  await page
-    .getByRole("button", { name: "Workspace options", exact: true })
-    .click();
-  await page
-    .getByRole("menuitem", { name: "Walkthrough guide", exact: true })
-    .click();
+  await demoAction(page, "Walkthrough guide");
   let bar = await primaryFirst(page, "Create a pipeline");
   await bar.actions.getByRole("button", { name: "Close", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Workspace options", exact: true })
-    .click();
-  await page
-    .getByRole("menuitem", { name: "Reset demo data", exact: true })
-    .click();
+  await demoAction(page, "Reset demo data");
   bar = await primaryFirst(page, "Reset demo");
   await bar.actions
     .getByRole("button", { name: "Cancel", exact: true })
     .click();
 
-  await page
-    .getByRole("combobox", { name: "Acting role", exact: true })
-    .click();
-  await page
-    .getByRole("option", { name: "Technical reviewer", exact: true })
-    .click();
+  await setDemoRole(page, "Technical reviewer");
   await page
     .getByRole("button", { name: "Patient risk stratification", exact: true })
     .click();
   await page
     .getByRole("textbox", { name: "Review comments", exact: true })
     .fill("The synthetic evidence needs correction.");
-  await page
-    .getByRole("button", { name: "Reject", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Reject", exact: true }).click();
   bar = await primaryFirst(page, "Confirm rejection");
   await bar.actions
     .getByRole("button", { name: "Keep reviewing", exact: true })

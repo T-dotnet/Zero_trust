@@ -236,13 +236,11 @@ interface RunsProps {
   onNewRun: () => void;
   onArtifact: (a: Artifact) => void;
   onRetry: (r: Run) => void;
-  onSimulation: () => void;
   researcher: boolean;
   initialTab?: string;
   initialRunId?: string;
   onViewChange: (view: { tab: string; runId?: string }) => void;
   role: Role;
-  setRole: (role: Role) => void;
   onCancel: (run: Run) => void;
   onReport: (id: string, message: string) => void;
   onResolve: (id: string, resolution: string) => void;
@@ -252,13 +250,11 @@ export function RunsAndResults({
   onNewRun,
   onArtifact,
   onRetry,
-  onSimulation,
   researcher,
   initialTab = "runs",
   initialRunId,
   onViewChange,
   role,
-  setRole,
   onCancel,
   onReport,
   onResolve,
@@ -655,7 +651,6 @@ export function RunsAndResults({
                   key={run.id}
                   run={run}
                   role={role}
-                  setRole={setRole}
                   onReport={(message) => onReport(run.id, message)}
                   onResolve={(resolution) => onResolve(run.id, resolution)}
                 />
@@ -718,15 +713,6 @@ export function RunsAndResults({
             </Button>
           )}
           <Button onClick={() => setSelectedRun(null)}>Close</Button>
-          <button
-            className="simulation-link"
-            onClick={() => {
-              setSelectedRun(null);
-              onSimulation();
-            }}
-          >
-            Simulation controls
-          </button>
         </DialogActionBar>
       </WorkspaceDialog>
     </>

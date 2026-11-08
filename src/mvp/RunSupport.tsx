@@ -5,13 +5,11 @@ import { Status } from "./ui";
 export function RunSupport({
   run,
   role,
-  setRole,
   onReport,
   onResolve,
 }: {
   run: Run;
   role: Role;
-  setRole: (role: Role) => void;
   onReport: (message: string) => void;
   onResolve: (resolution: string) => void;
 }) {
@@ -53,9 +51,9 @@ export function RunSupport({
             </Button>
           </>
         ) : (
-          <Button size="small" onClick={() => setRole("Technical reviewer")}>
-            Switch to support
-          </Button>
+          <p className="muted">
+            A Technical reviewer can resolve this support request.
+          </p>
         )}
         <p className="micro-copy">
           Local demo request. No message is sent to an external team.

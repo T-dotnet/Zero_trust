@@ -23,6 +23,7 @@ import {
 } from "./Dialogs";
 import { ActivityView } from "./ActivityView";
 import { SimulationControls } from "./SimulationControls";
+import { DemoToolsProvider } from "./DemoTools";
 import {
   now,
   pipelineRevision,
@@ -64,13 +65,11 @@ export default function MvpApp() {
   const setArtifactId = (id: string | null) =>
     go((previous) => ({ ...previous, output: id || undefined }));
   const [dialog, setDialog] = useState<
-    "pipeline" | "import" | "run" | "help" | "reset" | "simulation" | null
+    "pipeline" | "import" | "run" | "help" | null
   >(null);
   const datasetContextId = route.dataset;
-  const [simulationContext, setSimulationContext] = useState<{
-    pipelineId?: string | null;
-    artifactId?: string | null;
-  }>({});
+  const [demoOpen, setDemoOpen] = useState(false);
+  const [resetOpen, setResetOpen] = useState(false);
   const [versionSourceId, setVersionSourceId] = useState<string | null>(null);
   const [reviseId, setReviseId] = useState<string | null>(null);
   const [runContext, setRunContext] = useState<{
@@ -100,7 +99,7 @@ export default function MvpApp() {
     document.title = `${identity} · Zero Trust`;
     if (previousOrientation.current === orientation) return;
     previousOrientation.current = orientation;
-    if (route.run || route.dataset || artifactId || dialog) return;
+    if (route.run || route.dataset || artifactId || dialog || demoOpen) return;
     window.scrollTo(0, 0);
     const heading = document.querySelector<HTMLElement>("main h1");
     heading?.setAttribute("tabindex", "-1");
@@ -127,11 +126,6 @@ export default function MvpApp() {
       output: undefined,
       dataset: undefined,
     }));
-  };
-  const openSimulation = () => {
-    setSimulationContext({ pipelineId: selectedPipelineId, artifactId });
-    setArtifactId(null);
-    setDialog("simulation");
   };
   const openEvent = (event: Event) => {
     const pipeline = state.pipelines.find((p) => p.id === event.entityId);
@@ -196,424 +190,430 @@ export default function MvpApp() {
     <WorkspaceNavigation value={navigation}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Shell
-          page={page}
-          setPage={navigate}
-          role={role}
-          setRole={setRole}
-          approvalCount={
-            state.pipelines.filter((p) => pipelineNeedsAction(p, role)).length
-          }
-          onReset={() => setDialog("reset")}
-          onHelp={() =>
-            recoveryData !== null
-              ? setToast(
-                  "Recover your saved workspace before opening the walkthrough.",
-                  "info",
-                )
-              : setDialog("help")
-          }
-          onSimulation={() =>
-            recoveryData !== null
-              ? setToast(
-                  "Recover your saved workspace before using simulation controls.",
-                  "info",
-                )
-              : openSimulation()
-          }
-          storageAvailable={storageAvailable}
-        >
-          {recoveryData !== null ? (
-            <section className="plain-panel" role="alert">
-              <h1>Your saved workspace needs recovery</h1>
-              {recoveryReason === "conflict" ? (
-                <>
-                  <p>
-                    Another tab saved changes while this tab had unsaved work.
-                    Your local changes are still available below. Editing is
-                    paused so neither copy is overwritten.
-                  </p>
-                  <p>
-                    Download your local recovery copy, then load the saved
-                    workspace. We will keep a browser backup of your local copy
-                    first.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p>
-                    We could not read your saved workspace. The original data
-                    has been kept, and editing is paused to protect it.
-                  </p>
-                  <p>
-                    Download a recovery copy before resetting. Reset creates a
-                    fresh demo and keeps a backup in this browser.
-                  </p>
-                </>
-              )}
-              {!storageAvailable && (
-                <p>
-                  Browser storage is unavailable. Download your recovery copy
-                  before trying again.
-                </p>
-              )}
-              <div className="review-actions">
-                <Button
-                  variant="contained"
-                  onClick={() =>
-                    downloadText(
-                      "zero-trust-workspace-recovery.json",
-                      recoveryData,
-                      "application/json",
-                    )
-                  }
-                >
-                  Download recovery copy
-                </Button>
-                {recoveryReason === "conflict" ? (
-                  <Button
-                    variant="outlined"
-                    onClick={async () => {
-                      if (await loadSavedWorkspace()) navigate("Pipelines");
-                    }}
-                  >
-                    Load saved workspace
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => setDialog("reset")}
-                  >
-                    Reset workspace
-                  </Button>
-                )}
-              </div>
-            </section>
-          ) : missingRecord ? (
-            <section className="plain-panel" role="alert">
-              <h1>Record unavailable</h1>
-              <p>
-                This record is not in the current browser workspace. It may have
-                been reset, or the link may belong to another browser.
-              </p>
-              <Button variant="contained" onClick={() => navigate(page)}>
-                View {page.toLowerCase()}
-              </Button>
-            </section>
-          ) : (
-            <>
-              {page === "Pipelines" && <PipelineCatalog {...catalogProps} />}
-              {page === "Overview" && <Overview {...catalogProps} />}
-              {page === "Datasets" && (
-                <Datasets
-                  initialDatasetId={datasetContextId}
-                  onSelect={(id) =>
-                    go((previous) => ({ ...previous, dataset: id }))
-                  }
-                  state={state}
-                  onImport={openImport}
-                  onRun={(d) => openRun(undefined, d)}
-                  researcher={role === "Researcher"}
-                />
-              )}
-              {page === "Approvals" &&
-                (selectedPipeline ? (
-                  <ReviewView
-                    key={`${selectedPipeline.id}-${pipelineRevision(selectedPipeline)}-${role}`}
-                    pipeline={selectedPipeline}
-                    role={role}
-                    setRole={setRole}
-                    onBack={() => setSelectedPipelineId(null)}
-                    onReview={async (decision, note) => {
-                      const accepted = await dispatch({
-                        type: "REVIEW",
-                        id: selectedPipeline.id,
-                        role,
-                        decision,
-                        note,
-                      });
-                      if (!accepted) return false;
-                      setToast(
-                        decision === "approve"
-                          ? `${["Ethical", "Technical", "Privacy", "Security"][selectedPipeline.stage]} review approved.`
-                          : decision === "changes"
-                            ? "Changes requested. The author can revise and resubmit."
-                            : "Submission rejected. The decision and reason are recorded.",
-                      );
-                      return true;
-                    }}
-                    onPublish={() => {
-                      dispatch({
-                        type: "PUBLISH",
-                        id: selectedPipeline.id,
-                        role,
-                      });
-                      setToast("Pipeline published to the approved catalog.");
-                    }}
-                    onRevise={() => {
-                      setReviseId(selectedPipeline.id);
-                      setDialog("pipeline");
-                    }}
-                    onNewVersion={() => {
-                      setReviseId(null);
-                      setVersionSourceId(selectedPipeline.id);
-                      setDialog("pipeline");
-                    }}
-                    onRun={() => openRun(selectedPipeline)}
-                  />
-                ) : (
-                  <Approvals state={state} onOpen={openPipeline} role={role} />
-                ))}
-              {page === "Runs & results" && (
-                <RunsAndResults
-                  initialTab={route.tab}
-                  initialRunId={route.run}
-                  onViewChange={(view) =>
-                    go((previous) => ({
-                      ...previous,
-                      tab: view.tab,
-                      run: view.runId,
-                      status:
-                        (previous.tab || "runs") === view.tab
-                          ? previous.status
-                          : undefined,
-                      search:
-                        (previous.tab || "runs") === view.tab
-                          ? previous.search
-                          : undefined,
-                    }))
-                  }
-                  onSimulation={openSimulation}
-                  state={state}
-                  onNewRun={() => openRun()}
-                  onArtifact={(a) => setArtifactId(a.id)}
-                  onRetry={(r) => {
-                    go((previous) => ({ ...previous, run: undefined }));
-                    openRun(
-                      state.pipelines.find((p) => p.id === r.pipelineId),
-                      state.datasets.find((d) => d.id === r.datasetId),
-                      r.id,
-                    );
-                  }}
-                  researcher={role === "Researcher"}
-                  role={role}
-                  setRole={setRole}
-                  onCancel={(r) => dispatch({ type: "CANCEL_RUN", id: r.id })}
-                  onReport={(id, message) =>
-                    dispatch({ type: "REPORT_ISSUE", id, role, message })
-                  }
-                  onResolve={(id, resolution) =>
-                    dispatch({ type: "RESOLVE_ISSUE", id, role, resolution })
-                  }
-                />
-              )}
-              {page === "Activity log" && (
-                <ActivityView state={state} onOpen={openEvent} />
-              )}
-            </>
-          )}
-        </Shell>
-        {recoveryData === null && dialog === "pipeline" && (
-          <PipelineForm
-            pipelines={state.pipelines}
-            pipeline={state.pipelines.find((p) => p.id === reviseId)}
-            versionSource={state.pipelines.find(
-              (p) => p.id === versionSourceId,
-            )}
-            onClose={() => setDialog(null)}
-            onCreate={async (pipeline, draft) => {
-              const accepted = await dispatch({
-                type: "SUBMIT",
-                pipeline,
-                draft,
-              });
-              if (!accepted) return false;
-              setDialog(null);
-              openPipeline(pipeline);
-              setToast(
-                draft ? "Draft saved." : "Submitted for Ethical review.",
-              );
-              return true;
-            }}
-            onRevise={async (fields, draft, expectedRevision) => {
-              if (!reviseId) return false;
-              const accepted = await dispatch({
-                type: draft ? "SAVE_DRAFT" : "REVISE",
-                id: reviseId,
-                fields,
-                expectedRevision,
-              });
-              if (!accepted) return false;
-              setDialog(null);
-              setToast(
-                draft
-                  ? "Working draft saved. The previous submission and decisions are retained."
-                  : "Revision submitted. All four reviews are required.",
-              );
-              return true;
-            }}
-          />
-        )}
-        {recoveryData === null && dialog === "import" && (
-          <ImportDialog
-            onClose={() => setDialog(null)}
-            onImport={(dataset) => {
-              dispatch({ type: "ADD_DATASET", dataset });
-              setDialog(null);
-              navigate("Datasets");
-              setToast("Dataset registered in this browser.");
-            }}
-          />
-        )}
-        {recoveryData === null && dialog === "run" && (
-          <RunDialog
-            state={state}
-            initialPipelineId={runContext.pipelineId}
-            initialDatasetId={runContext.datasetId}
-            retryRun={state.runs.find((run) => run.id === runContext.retryOf)}
-            onClose={() => setDialog(null)}
-            onStart={async (pipeline, dataset) => {
-              const accepted = await dispatch({
-                type: "START_RUN",
-                run: {
-                  id: uid("RUN").toUpperCase(),
-                  pipelineId: pipeline.id,
-                  pipelineName: pipeline.name,
-                  version: pipeline.version,
-                  datasetId: dataset.id,
-                  datasetName: dataset.name,
-                  status: "Running",
-                  progress: 0,
-                  date: now(),
-                  retryOf: runContext.retryOf,
-                },
-              });
-              if (!accepted) return false;
-              setDialog(null);
-              navigate("Runs & results");
-              setToast(
-                "Demo run started. Output will be ready in a few seconds.",
-              );
-              return true;
-            }}
-          />
-        )}
-        {recoveryData === null && artifact && (
-          <ArtifactDialog
-            key={`${artifact.id}-${artifact.status}-${role}`}
-            onSimulation={openSimulation}
-            artifact={artifact}
+        <DemoToolsProvider open={demoOpen} onOpen={() => setDemoOpen(true)}>
+          <Shell
+            page={page}
+            setPage={navigate}
             role={role}
-            setRole={setRole}
-            onClose={() => setArtifactId(null)}
-            onReview={async (accept, comment) => {
-              const accepted = await dispatch({
-                type: "REVIEW_ARTIFACT",
-                id: artifact.id,
-                role,
-                accept,
-                comment,
-              });
-              if (!accepted) return false;
-              setToast(
-                accept
-                  ? "Artifact validated. Sample download is now available."
-                  : "Artifact marked not acceptable. Download remains unavailable.",
-              );
-              return true;
-            }}
-            notify={setToast}
-          />
-        )}
-        {recoveryData === null && dialog === "simulation" && (
-          <SimulationControls
-            state={state}
-            pipelineId={simulationContext.pipelineId}
-            artifactId={simulationContext.artifactId}
-            dispatch={dispatch}
-            onClose={() => setDialog(null)}
-          />
-        )}
-        {dialog === "help" && (
-          <HelpDialog
-            onClose={() => setDialog(null)}
-            onStart={() => {
-              setRole("Researcher");
-              setVersionSourceId(null);
-              setReviseId(null);
-              setDialog("pipeline");
-            }}
-            onImport={() => {
-              setRole("Researcher");
-              setDialog("import");
-            }}
-            onApprovals={() => {
-              setDialog(null);
-              navigate("Approvals");
-            }}
-          />
-        )}
-        <Dialog
-          open={dialog === "reset"}
-          onClose={() => setDialog(null)}
-          maxWidth="xs"
-          fullWidth
-        >
-          <DialogTitle>Reset demo workspace?</DialogTitle>
-          <DialogContent>
+            approvalCount={
+              state.pipelines.filter((p) => pipelineNeedsAction(p, role)).length
+            }
+            storageAvailable={storageAvailable}
+          >
             {recoveryData !== null ? (
-              "This starts a fresh demo workspace and keeps the unreadable original as a recovery copy in this browser. Download your copy first for safekeeping."
+              <section className="plain-panel" role="alert">
+                <h1>Your saved workspace needs recovery</h1>
+                {recoveryReason === "conflict" ? (
+                  <>
+                    <p>
+                      Another tab saved changes while this tab had unsaved work.
+                      Your local changes are still available below. Editing is
+                      paused so neither copy is overwritten.
+                    </p>
+                    <p>
+                      Download your local recovery copy, then load the saved
+                      workspace. We will keep a browser backup of your local
+                      copy first.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      We could not read your saved workspace. The original data
+                      has been kept, and editing is paused to protect it.
+                    </p>
+                    <p>
+                      Download a recovery copy before resetting. Reset creates a
+                      fresh demo and keeps a backup in this browser.
+                    </p>
+                  </>
+                )}
+                {!storageAvailable && (
+                  <p>
+                    Browser storage is unavailable. Download your recovery copy
+                    before trying again.
+                  </p>
+                )}
+                <div className="review-actions">
+                  <Button
+                    variant="contained"
+                    onClick={() =>
+                      downloadText(
+                        "zero-trust-workspace-recovery.json",
+                        recoveryData,
+                        "application/json",
+                      )
+                    }
+                  >
+                    Download recovery copy
+                  </Button>
+                  {recoveryReason === "conflict" ? (
+                    <Button
+                      variant="outlined"
+                      onClick={async () => {
+                        if (await loadSavedWorkspace()) navigate("Pipelines");
+                      }}
+                    >
+                      Load saved workspace
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => setResetOpen(true)}
+                    >
+                      Reset workspace
+                    </Button>
+                  )}
+                </div>
+              </section>
+            ) : missingRecord ? (
+              <section className="plain-panel" role="alert">
+                <h1>Record unavailable</h1>
+                <p>
+                  This record is not in the current browser workspace. It may
+                  have been reset, or the link may belong to another browser.
+                </p>
+                <Button variant="contained" onClick={() => navigate(page)}>
+                  View {page.toLowerCase()}
+                </Button>
+              </section>
             ) : (
               <>
-                This removes your local demo changes and restores the original
-                synthetic records. No external data is affected.
+                {page === "Pipelines" && <PipelineCatalog {...catalogProps} />}
+                {page === "Overview" && <Overview {...catalogProps} />}
+                {page === "Datasets" && (
+                  <Datasets
+                    initialDatasetId={datasetContextId}
+                    onSelect={(id) =>
+                      go((previous) => ({ ...previous, dataset: id }))
+                    }
+                    state={state}
+                    onImport={openImport}
+                    onRun={(d) => openRun(undefined, d)}
+                    researcher={role === "Researcher"}
+                  />
+                )}
+                {page === "Approvals" &&
+                  (selectedPipeline ? (
+                    <ReviewView
+                      key={`${selectedPipeline.id}-${pipelineRevision(selectedPipeline)}-${role}`}
+                      pipeline={selectedPipeline}
+                      role={role}
+                      onBack={() => setSelectedPipelineId(null)}
+                      onReview={async (decision, note) => {
+                        const accepted = await dispatch({
+                          type: "REVIEW",
+                          id: selectedPipeline.id,
+                          role,
+                          decision,
+                          note,
+                        });
+                        if (!accepted) return false;
+                        setToast(
+                          decision === "approve"
+                            ? `${["Ethical", "Technical", "Privacy", "Security"][selectedPipeline.stage]} review approved.`
+                            : decision === "changes"
+                              ? "Changes requested. The author can revise and resubmit."
+                              : "Submission rejected. The decision and reason are recorded.",
+                        );
+                        return true;
+                      }}
+                      onPublish={() => {
+                        dispatch({
+                          type: "PUBLISH",
+                          id: selectedPipeline.id,
+                          role,
+                        });
+                        setToast("Pipeline published to the approved catalog.");
+                      }}
+                      onRevise={() => {
+                        setReviseId(selectedPipeline.id);
+                        setDialog("pipeline");
+                      }}
+                      onNewVersion={() => {
+                        setReviseId(null);
+                        setVersionSourceId(selectedPipeline.id);
+                        setDialog("pipeline");
+                      }}
+                      onRun={() => openRun(selectedPipeline)}
+                    />
+                  ) : (
+                    <Approvals
+                      state={state}
+                      onOpen={openPipeline}
+                      role={role}
+                    />
+                  ))}
+                {page === "Runs & results" && (
+                  <RunsAndResults
+                    initialTab={route.tab}
+                    initialRunId={route.run}
+                    onViewChange={(view) =>
+                      go((previous) => ({
+                        ...previous,
+                        tab: view.tab,
+                        run: view.runId,
+                        status:
+                          (previous.tab || "runs") === view.tab
+                            ? previous.status
+                            : undefined,
+                        search:
+                          (previous.tab || "runs") === view.tab
+                            ? previous.search
+                            : undefined,
+                      }))
+                    }
+                    state={state}
+                    onNewRun={() => openRun()}
+                    onArtifact={(a) => setArtifactId(a.id)}
+                    onRetry={(r) => {
+                      go((previous) => ({ ...previous, run: undefined }));
+                      openRun(
+                        state.pipelines.find((p) => p.id === r.pipelineId),
+                        state.datasets.find((d) => d.id === r.datasetId),
+                        r.id,
+                      );
+                    }}
+                    researcher={role === "Researcher"}
+                    role={role}
+                    onCancel={(r) => dispatch({ type: "CANCEL_RUN", id: r.id })}
+                    onReport={(id, message) =>
+                      dispatch({ type: "REPORT_ISSUE", id, role, message })
+                    }
+                    onResolve={(id, resolution) =>
+                      dispatch({ type: "RESOLVE_ISSUE", id, role, resolution })
+                    }
+                  />
+                )}
+                {page === "Activity log" && (
+                  <ActivityView state={state} onOpen={openEvent} />
+                )}
               </>
             )}
-          </DialogContent>
-          <DialogActionBar
-            primary={
-              <Button
-                variant="contained"
-                color="error"
-                onClick={async () => {
-                  const accepted = await dispatch({ type: "RESET" });
-                  if (!accepted) {
-                    setToast(
-                      "Reset could not be saved. Your original data is still available. Download a recovery copy and check browser storage.",
-                      "error",
-                    );
-                    return;
-                  }
-                  setDialog(null);
-                  clearSessionDrafts();
-                  setArtifactId(null);
-                  go({ page: "Pipelines", role: "Researcher" });
-                  setToast("Demo workspace reset.");
-                }}
-              >
-                Reset demo
-              </Button>
-            }
+          </Shell>
+          {recoveryData === null && dialog === "pipeline" && (
+            <PipelineForm
+              pipelines={state.pipelines}
+              pipeline={state.pipelines.find((p) => p.id === reviseId)}
+              versionSource={state.pipelines.find(
+                (p) => p.id === versionSourceId,
+              )}
+              onClose={() => setDialog(null)}
+              onCreate={async (pipeline, draft) => {
+                const accepted = await dispatch({
+                  type: "SUBMIT",
+                  pipeline,
+                  draft,
+                });
+                if (!accepted) return false;
+                setDialog(null);
+                openPipeline(pipeline);
+                setToast(
+                  draft ? "Draft saved." : "Submitted for Ethical review.",
+                );
+                return true;
+              }}
+              onRevise={async (fields, draft, expectedRevision) => {
+                if (!reviseId) return false;
+                const accepted = await dispatch({
+                  type: draft ? "SAVE_DRAFT" : "REVISE",
+                  id: reviseId,
+                  fields,
+                  expectedRevision,
+                });
+                if (!accepted) return false;
+                setDialog(null);
+                setToast(
+                  draft
+                    ? "Working draft saved. The previous submission and decisions are retained."
+                    : "Revision submitted. All four reviews are required.",
+                );
+                return true;
+              }}
+            />
+          )}
+          {recoveryData === null && dialog === "import" && (
+            <ImportDialog
+              onClose={() => setDialog(null)}
+              onImport={(dataset) => {
+                dispatch({ type: "ADD_DATASET", dataset });
+                setDialog(null);
+                navigate("Datasets");
+                setToast("Dataset registered in this browser.");
+              }}
+            />
+          )}
+          {recoveryData === null && dialog === "run" && (
+            <RunDialog
+              state={state}
+              initialPipelineId={runContext.pipelineId}
+              initialDatasetId={runContext.datasetId}
+              retryRun={state.runs.find((run) => run.id === runContext.retryOf)}
+              onClose={() => setDialog(null)}
+              onStart={async (pipeline, dataset) => {
+                const accepted = await dispatch({
+                  type: "START_RUN",
+                  run: {
+                    id: uid("RUN").toUpperCase(),
+                    pipelineId: pipeline.id,
+                    pipelineName: pipeline.name,
+                    version: pipeline.version,
+                    datasetId: dataset.id,
+                    datasetName: dataset.name,
+                    status: "Running",
+                    progress: 0,
+                    date: now(),
+                    retryOf: runContext.retryOf,
+                  },
+                });
+                if (!accepted) return false;
+                setDialog(null);
+                navigate("Runs & results");
+                setToast(
+                  "Demo run started. Output will be ready in a few seconds.",
+                );
+                return true;
+              }}
+            />
+          )}
+          {recoveryData === null && artifact && (
+            <ArtifactDialog
+              key={artifact.id}
+              artifact={artifact}
+              role={role}
+              onClose={() => setArtifactId(null)}
+              onReview={async (accept, comment) => {
+                const accepted = await dispatch({
+                  type: "REVIEW_ARTIFACT",
+                  id: artifact.id,
+                  role,
+                  accept,
+                  comment,
+                });
+                if (!accepted) return false;
+                setToast(
+                  accept
+                    ? "Artifact validated. Sample download is now available."
+                    : "Artifact marked not acceptable. Download remains unavailable.",
+                );
+                return true;
+              }}
+              notify={setToast}
+            />
+          )}
+          {dialog === "help" && (
+            <HelpDialog
+              onClose={() => setDialog(null)}
+              onStart={() => {
+                setRole("Researcher");
+                setVersionSourceId(null);
+                setReviseId(null);
+                setDialog("pipeline");
+              }}
+              onImport={() => {
+                setRole("Researcher");
+                setDialog("import");
+              }}
+              onApprovals={() => {
+                setDialog(null);
+                navigate("Approvals");
+              }}
+            />
+          )}
+          <Dialog
+            open={resetOpen}
+            onClose={() => setResetOpen(false)}
+            maxWidth="xs"
+            fullWidth
           >
-            <Button onClick={() => setDialog(null)}>Cancel</Button>
-          </DialogActionBar>
-        </Dialog>
-        <Snackbar
-          open={Boolean(toast.message)}
-          autoHideDuration={4200}
-          onClose={() => setToast("")}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        >
-          <Alert
-            severity={toast.severity}
-            variant="filled"
+            <DialogTitle>Reset demo workspace?</DialogTitle>
+            <DialogContent>
+              {recoveryData !== null ? (
+                "This starts a fresh demo workspace and keeps the unreadable original as a recovery copy in this browser. Download your copy first for safekeeping."
+              ) : (
+                <>
+                  This removes your local demo changes and restores the original
+                  synthetic records. No external data is affected.
+                </>
+              )}
+            </DialogContent>
+            <DialogActionBar
+              primary={
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={async () => {
+                    const accepted = await dispatch({ type: "RESET" });
+                    if (!accepted) {
+                      setToast(
+                        "Reset could not be saved. Your original data is still available. Download a recovery copy and check browser storage.",
+                        "error",
+                      );
+                      return;
+                    }
+                    setDialog(null);
+                    setResetOpen(false);
+                    clearSessionDrafts();
+                    setArtifactId(null);
+                    go({ page: "Pipelines", role: "Researcher" });
+                    setToast("Demo workspace reset.");
+                  }}
+                >
+                  Reset demo
+                </Button>
+              }
+            >
+              <Button onClick={() => setResetOpen(false)}>Cancel</Button>
+            </DialogActionBar>
+          </Dialog>
+          {demoOpen && (
+            <SimulationControls
+              state={state}
+              pipelineId={
+                selectedPipelineId ||
+                state.runs.find((r) => r.id === route.run)?.pipelineId
+              }
+              artifactId={artifactId}
+              dispatch={dispatch}
+              role={role}
+              onRoleChange={setRole}
+              page={page}
+              onNavigate={(next) => {
+                setDemoOpen(false);
+                navigate(next);
+              }}
+              taskOpen={Boolean(
+                dialog || resetOpen || artifactId || route.run || route.dataset,
+              )}
+              recoveryPending={recoveryData !== null}
+              onHelp={() => {
+                setDemoOpen(false);
+                setDialog("help");
+              }}
+              onReset={() => {
+                setDemoOpen(false);
+                setResetOpen(true);
+              }}
+              onClose={() => setDemoOpen(false)}
+            />
+          )}
+          <Snackbar
+            open={Boolean(toast.message)}
+            autoHideDuration={4200}
             onClose={() => setToast("")}
-            sx={{ maxWidth: 420 }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           >
-            {toast.message}
-          </Alert>
-        </Snackbar>
+            <Alert
+              severity={toast.severity}
+              variant="filled"
+              onClose={() => setToast("")}
+              sx={{ maxWidth: 420 }}
+            >
+              {toast.message}
+            </Alert>
+          </Snackbar>
+        </DemoToolsProvider>
       </ThemeProvider>
     </WorkspaceNavigation>
   );

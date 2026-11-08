@@ -1,10 +1,14 @@
+import {
+  openDemo,
+  closeDemo,
+  setDemoRole,
+  demoAction,
+} from "./mvp-demo-helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
 async function role(page: Page, name: string) {
-  await page.getByRole("combobox", { name: "Acting role" }).click();
-  await page.getByRole("option", { name, exact: true }).click();
-  await expect(page.getByRole("listbox")).toBeHidden();
+  await setDemoRole(page, name);
 }
 async function nav(page: Page, name: string) {
   await page
@@ -13,9 +17,9 @@ async function nav(page: Page, name: string) {
     .click();
 }
 async function simulate(page: Page) {
-  await page.getByRole("button", { name: "Demo mode", exact: true }).click();
+  await openDemo(page);
   await expect(
-    page.getByRole("heading", { name: "Simulation controls", exact: true }),
+    page.getByRole("heading", { name: "Demo controls", exact: true }),
   ).toBeVisible();
 }
 
@@ -51,7 +55,7 @@ test("reviewers get their actionable queue and authors see a tracking receipt", 
       name: "Switch role",
       exact: true,
     }),
-  ).toBeVisible();
+  ).toBeHidden();
 });
 
 test("mobile review puts criteria in the first viewport and keeps all four stages discoverable", async ({
@@ -79,8 +83,14 @@ test("mobile review puts criteria in the first viewport and keeps all four stage
   ).toBeDisabled();
   for (const checkbox of await page.getByRole("checkbox").all())
     await checkbox.check();
-  await expect(page.getByRole("button", { name: "Approve review" })).toBeDisabled();
-  await page.getByLabel("Review comments", { exact: true }).fill("Demo exception: supporting evidence must be supplied before pilot use.");
+  await expect(
+    page.getByRole("button", { name: "Approve review" }),
+  ).toBeDisabled();
+  await page
+    .getByLabel("Review comments", { exact: true })
+    .fill(
+      "Demo exception: supporting evidence must be supplied before pilot use.",
+    );
   await expect(
     page.getByRole("button", { name: "Approve review" }),
   ).toBeEnabled();
@@ -104,18 +114,16 @@ test("incomplete named drafts persist and field-specific errors prevent prematur
     page.getByRole("heading", { name: "Complete your draft", exact: true }),
   ).toBeVisible();
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Complete your draft", exact: true })).toBeVisible();
-  await page
-    .getByRole("button", { name: "Edit draft", exact: true })
-    .click();
+  await expect(
+    page.getByRole("heading", { name: "Complete your draft", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Edit draft", exact: true }).click();
   await expect(page.getByLabel("Research purpose")).toHaveValue("");
   await page
     .getByLabel("Research purpose")
     .fill("A partially written purpose.");
   await page.getByRole("button", { name: "Save draft", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Edit draft", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Edit draft", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
     page.getByText("Enter a valid HTTP(S) repository URL.", { exact: true }),
@@ -155,9 +163,7 @@ test("revision drafts retain requested changes and edits without prematurely res
   await page
     .getByLabel("Expected output")
     .fill("Reviewed outcome classification (CSV)");
-  await page
-    .getByRole("button", { name: "Save draft", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Save draft", exact: true }).click();
   const saved = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("zero-trust-mvp-v1")!).pipelines.find(
       (p: { id: string }) => p.id === "pipe-2",
@@ -167,7 +173,9 @@ test("revision drafts retain requested changes and edits without prematurely res
   expect(saved.version).toBe("v1.0.0");
   expect(saved.stage).toBe(1);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Author action required", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Author action required", exact: true }),
+  ).toBeVisible();
   await page
     .getByRole("button", { name: "Revise & resubmit", exact: true })
     .click();
@@ -201,12 +209,9 @@ test("simulation controls unblock reviews, execution and output while keeping pu
   await page
     .getByRole("button", { name: "Adverse event classifier", exact: true })
     .click();
-  await page
-    .locator(".sidebar-bottom")
-    .getByRole("button", { name: "Simulation controls", exact: true })
-    .click();
+  await openDemo(page);
   await expect(
-    page.getByRole("heading", { name: "Simulation controls", exact: true }),
+    page.getByRole("heading", { name: "Demo controls", exact: true }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Approve stage", exact: true })
@@ -227,9 +232,7 @@ test("simulation controls unblock reviews, execution and output while keeping pu
       exact: true,
     }),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Done", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Done", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Ready to publish", exact: true }),
   ).toBeVisible();
@@ -282,9 +285,7 @@ test("simulation controls unblock reviews, execution and output while keeping pu
   await page
     .getByRole("button", { name: "Accept output", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Done", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Done", exact: true }).click();
   const run = page
     .getByRole("table", { name: "Runs", exact: true })
     .getByRole("row")
@@ -317,9 +318,7 @@ test("artifact decisions start neutral, expose a readable limitation and record 
   await completed
     .getByRole("button", { name: "View output", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Switch role", exact: true })
-    .click();
+  await setDemoRole(page, "Privacy reviewer");
   await expect(
     page.getByRole("radio", { name: "Acceptable", exact: true }),
   ).not.toBeChecked();
@@ -354,12 +353,9 @@ test("artifact decisions start neutral, expose a readable limitation and record 
   await expect(
     page.getByRole("button", { name: "Download sample CSV" }),
   ).toBeEnabled();
-  await page
-    .getByRole("dialog")
-    .getByRole("button", { name: "Simulation controls", exact: true })
-    .click();
+  await openDemo(page);
   await expect(
-    page.getByRole("heading", { name: "Simulation controls", exact: true }),
+    page.getByRole("heading", { name: "Demo controls", exact: true }),
   ).toBeVisible();
 });
 
@@ -371,9 +367,7 @@ test("import discloses a sample but persists only metadata and column names", as
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Use sample", exact: true })
-    .click();
+  await demoAction(page, "Use sample");
   await expect(page.locator(".upload-zone")).toHaveCount(0);
   await expect(
     page.getByRole("button", { name: "Replace", exact: true }),

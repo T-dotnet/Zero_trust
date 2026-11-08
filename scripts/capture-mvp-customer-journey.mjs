@@ -18,7 +18,9 @@ try {
  const page=await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});
  page.on('pageerror',e=>manifest.checks.pageErrors.push(e.message));
  page.on('console',msg=>{if(msg.type()==='error')manifest.checks.consoleErrors.push(msg.text());});
- async function role(name){await page.getByRole('combobox',{name:'Acting role'}).click();await page.getByRole('option',{name,exact:true}).click();await expect(page.getByRole('listbox')).toBeHidden();}
+ async function openDemo(){await page.getByRole('button',{name:'Open demo controls',exact:true}).click();}
+ async function role(name){await openDemo();await page.getByRole('combobox',{name:'Acting role'}).click();await page.getByRole('option',{name,exact:true}).click();await expect(page.getByRole('listbox')).toBeHidden();await page.getByRole('button',{name:'Close demo controls',exact:true}).click();}
+ async function demoAction(name){await openDemo();await page.getByRole('button',{name,exact:true}).click();}
  async function nav(name){await page.getByRole('navigation',{name:'Main navigation'}).getByRole('button',{name,exact:true}).click();}
  async function capture(file,title,screen,actor){
   await page.evaluate(()=>document.fonts.ready);
@@ -35,7 +37,7 @@ try {
  await expect(page.getByRole('heading',{name:'Pipelines',exact:true})).toBeVisible();
  await capture('00-pipeline-catalog.png','Initial pipeline catalog','S03','Researcher');
  await nav('Datasets');await page.getByRole('button',{name:'Import dataset',exact:true}).click();
- await page.getByRole('button',{name:'Use sample',exact:true}).click();
+ await demoAction('Use sample');
  await page.getByRole('textbox',{name:/^Dataset name/}).fill('Customer journey · Synthetic cohort');
  await page.getByText('Preview columns and sample rows',{exact:false}).click();
  await expect(page.getByRole('table',{name:'Dataset sample preview'})).toBeVisible();
@@ -43,7 +45,7 @@ try {
  await page.getByRole('dialog').getByRole('button',{name:'Import dataset',exact:true}).click();
  await expect(page.getByRole('button',{name:'Customer journey · Synthetic cohort',exact:true})).toBeVisible();
  await nav('Pipelines');await page.getByRole('button',{name:'New pipeline',exact:true}).click();
- await page.getByRole('button',{name:'Use example',exact:true}).click();
+ await demoAction('Use example');
  await page.getByRole('textbox',{name:/^Pipeline name/}).fill('Customer journey outcome classifier');
  await page.getByRole('button',{name:'Continue',exact:true}).click();
  await page.locator('input[type=file]').setInputFiles({name:'synthetic-method-evidence.md',mimeType:'text/markdown',buffer:Buffer.from('# Demonstration evidence\nSynthetic clinical records only.\nPurpose: demonstrate longitudinal outcome classification.\nInput: CSV with record_id, clinical_note, visit_date.\nOutput: synthetic outcome classification CSV.\nReview context: consent boundaries, runtime contract, minimization and least-privilege assumptions are illustrative. No actual scanner or code execution is claimed.\n')});
@@ -85,7 +87,7 @@ try {
  await capture('11-completed-run.png','Completed run links to output awaiting separate validation','S26','Researcher');
  await page.getByRole('button',{name:'Inspect output',exact:true}).click();
  await expect(page.getByRole('button',{name:'Download sample CSV',exact:true})).toBeDisabled();
- await page.getByRole('button',{name:'Switch role',exact:true}).click();
+ await role('Privacy reviewer');
  await page.getByRole('radio',{name:'Acceptable',exact:true}).check();
  await page.getByLabel('Validation comments',{exact:true}).fill('Synthetic sample assessed against the declared output; acceptable for this demonstration.');
  await capture('12-output-validation.png','Privacy reviewer makes the separate output decision','S34','Privacy reviewer');

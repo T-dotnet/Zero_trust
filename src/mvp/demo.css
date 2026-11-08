@@ -1,0 +1,114 @@
+.demo-launcher.MuiFab-root {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right, 0px));
+  bottom: calc(
+    max(24px, env(safe-area-inset-bottom, 0px)) + var(--demo-footer-height, 0px)
+  );
+  z-index: 1301;
+  width: 52px;
+  height: 52px;
+  min-height: 52px;
+  color: #fff;
+  background: var(--zt-ink);
+  border: 1px solid var(--zt-ink);
+  box-shadow: 0 4px 18px #18212f24;
+}
+.demo-launcher.MuiFab-root:hover {
+  background: var(--zt-body);
+}
+.demo-controls-panel .MuiDrawer-paper {
+  width: min(440px, 100%);
+  max-width: 100%;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: var(--zt-font);
+}
+.demo-controls-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--zt-line);
+  gap: 16px;
+}
+.demo-controls-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+.demo-controls-header .MuiIconButton-root {
+  width: 48px;
+  height: 48px;
+  flex: none;
+}
+.demo-controls-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px;
+}
+.demo-controls-content > p:first-child {
+  margin-top: 0;
+}
+.demo-controls-content .MuiSelect-select {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.demo-controls-content .MuiInputBase-root {
+  font-size: 16px;
+}
+.demo-tools-section {
+  padding-block: 20px;
+  border-top: 1px solid var(--zt-line);
+}
+.demo-tools-section h3 {
+  margin: 0 0 16px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.demo-controls-panel .MuiButton-root {
+  min-height: 48px;
+}
+.demo-tools-fields,
+.demo-tools-actions {
+  display: grid;
+  gap: 16px;
+}
+.demo-tools-actions {
+  margin-top: 16px;
+  gap: 8px;
+}
+.demo-tools-actions .MuiButton-root {
+  min-height: 48px;
+  justify-content: flex-start;
+}
+.demo-controls-content .simulation-section {
+  padding-top: 20px;
+}
+.current-role {
+  color: var(--zt-body);
+  font-size: 14px;
+}
+.workspace-avatar {
+  display: inline-flex;
+}
+.mvp-app .workspace-footer {
+  padding-bottom: 100px;
+}
+@media (max-width: 599px), (max-width: 900px) and (max-height: 479px) {
+  .demo-launcher.MuiFab-root {
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(
+      max(16px, env(safe-area-inset-bottom, 0px)) +
+        var(--demo-footer-height, 0px)
+    );
+  }
+  .MuiDialog-root .demo-launcher-host .MuiDialogContent-root {
+    padding-bottom: 88px;
+  }
+}
+@media (max-width: 900px) {
+  .demo-controls-panel .MuiButton-root {
+    font-size: 1rem;
+  }
+}

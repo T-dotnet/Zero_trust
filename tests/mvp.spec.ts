@@ -1,9 +1,13 @@
+import {
+  openDemo,
+  closeDemo,
+  setDemoRole,
+  demoAction,
+} from "./mvp-demo-helpers";
 import { test, expect, type Page } from "@playwright/test";
 
 async function role(page: Page, name: string) {
-  await page.getByRole("combobox", { name: "Acting role" }).click();
-  await page.getByRole("option", { name, exact: true }).click();
-  await expect(page.getByRole("listbox")).toBeHidden();
+  await setDemoRole(page, name);
 }
 test("new pipeline passes all four reviews, publishes, runs, and produces a validated download", async ({
   page,
@@ -13,7 +17,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
   await page.goto("/");
   await expect(page).toHaveTitle("Pipelines · Zero Trust");
   await page.getByRole("button", { name: "New pipeline", exact: true }).click();
-  await page.getByRole("button", { name: "Use example" }).click();
+  await demoAction(page, "Use example");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
@@ -29,7 +33,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
     await role(page, `${stage} reviewer`);
     await expect(
       page.getByRole("button", {
-        name: 'Approve review',
+        name: "Approve review",
         exact: true,
       }),
     ).toBeDisabled();
@@ -43,7 +47,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
       .fill(`${stage} evidence reviewed.`);
     await page
       .getByRole("button", {
-        name: 'Approve review',
+        name: "Approve review",
         exact: true,
       })
       .click();
@@ -61,7 +65,9 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
   await page
     .getByRole("button", { name: "Configure run", exact: true })
     .click();
-  await page.getByRole("combobox", { name: "Source dataset", exact: true }).click();
+  await page
+    .getByRole("combobox", { name: "Source dataset", exact: true })
+    .click();
   await page
     .getByRole("option", {
       name: "Clinical notes · November cohort (CSV)",
@@ -84,9 +90,7 @@ test("new pipeline passes all four reviews, publishes, runs, and produces a vali
   await expect(
     page.getByRole("button", { name: "Download sample CSV" }),
   ).toBeDisabled();
-  await page
-    .getByRole("button", { name: "Switch role", exact: true })
-    .click();
+  await setDemoRole(page, "Privacy reviewer");
   await page
     .getByLabel("Validation comments")
     .fill("Sample reviewed and accepted.");
@@ -178,7 +182,7 @@ test("mobile navigation, dataset import, search, and reset work without page ove
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use sample" }).click();
+  await demoAction(page, "Use sample");
   await page.getByLabel("Dataset name").fill("MVP imported cohort");
   await page
     .getByRole("dialog")
@@ -190,8 +194,7 @@ test("mobile navigation, dataset import, search, and reset work without page ove
   await expect(
     page.getByRole("button", { name: "MVP imported cohort", exact: true }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Workspace options" }).click();
-  await page.getByRole("menuitem", { name: "Reset demo data" }).click();
+  await demoAction(page, "Reset demo data");
   await page.getByRole("button", { name: "Reset demo", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Pipelines", exact: true }),
@@ -276,9 +279,7 @@ test("failed run support can be resolved and logs exported before retry and canc
     .getByLabel("Describe the issue")
     .fill("Please check the input mapping.");
   await page.getByRole("button", { name: "Create request" }).click();
-  await page
-    .getByRole("button", { name: "Switch to support" })
-    .click();
+  await setDemoRole(page, "Technical reviewer");
   await page
     .getByLabel("Resolution notes")
     .fill("Demo input mapping confirmed.");
@@ -296,14 +297,27 @@ test("failed run support can be resolved and logs exported before retry and canc
     .filter({ hasText: "RUN-1041" })
     .getByRole("button", { name: "Details", exact: true })
     .click();
-  await page.getByRole("button", { name: "Configure retry", exact: true }).click();
-  await page.getByRole("combobox", { name: "Source dataset", exact: true }).click();
-  await page.getByRole("option", { name: "Clinical notes · November cohort (CSV)", exact: true }).click();
-  await page.getByRole("button", { name: "Start demo run", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Configure retry", exact: true })
+    .click();
+  await page
+    .getByRole("combobox", { name: "Source dataset", exact: true })
+    .click();
+  await page
+    .getByRole("option", {
+      name: "Clinical notes · November cohort (CSV)",
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("button", { name: "Start demo run", exact: true })
+    .click();
   const attempt = page.getByRole("row").filter({ hasText: "Running" });
   await attempt.getByRole("button", { name: "Details", exact: true }).click();
   await page.getByRole("button", { name: "Cancel run", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Configure retry", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Configure retry", exact: true }),
+  ).toBeVisible();
   await expect(page.getByRole("dialog")).toContainText("RUN-1041");
 });
 
@@ -319,9 +333,7 @@ test("unacceptable outputs require a reason and remain blocked from download; de
   await page
     .getByRole("button", { name: "De-identified clinical notes", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Switch role", exact: true })
-    .click();
+  await setDemoRole(page, "Privacy reviewer");
   await page
     .getByRole("radio", { name: "Not acceptable", exact: true })
     .check();

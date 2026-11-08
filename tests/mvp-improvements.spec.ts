@@ -1,9 +1,13 @@
+import {
+  openDemo,
+  closeDemo,
+  setDemoRole,
+  demoAction,
+} from "./mvp-demo-helpers";
 import { test, expect, type Page } from "@playwright/test";
 
 async function role(page: Page, name: string) {
-  await page.getByRole("combobox", { name: "Acting role" }).click();
-  await page.getByRole("option", { name, exact: true }).click();
-  await expect(page.getByRole("listbox")).toBeHidden();
+  await setDemoRole(page, name);
 }
 async function nav(page: Page, name: string) {
   await page
@@ -86,9 +90,11 @@ test("review notes survive navigation and refresh, remain role scoped, and never
     notes,
   );
   await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(0);
+  await openDemo(page);
   await expect(page.getByRole("combobox", { name: "Acting role" })).toHaveText(
     "Technical reviewer",
   );
+  await closeDemo(page);
 });
 
 test("closing an output keeps its assessment draft without recording a decision", async ({
@@ -140,7 +146,7 @@ test("Escape and Cancel protect a selected import until explicit discard", async
   await page
     .getByRole("button", { name: "Import dataset", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use sample", exact: true }).click();
+  await demoAction(page, "Use sample");
   await page
     .getByRole("textbox", { name: /Dataset name/ })
     .fill("Protected study notes");
